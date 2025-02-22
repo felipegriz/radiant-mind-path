@@ -131,7 +131,7 @@ const Index = () => {
             {
               icon: Target,
               title: "RE-CONDICIONAMIENTO MENTAL",
-              description: "Aprende técnicas comprobadas para alcanzar tus metas y transformar tu realidad.",
+              description: "Aprende a reprogramar tu mente para cambiar tu vida para siempre",
             },
             {
               icon: Heart,
