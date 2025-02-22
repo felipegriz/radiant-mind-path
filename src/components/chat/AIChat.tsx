@@ -65,7 +65,7 @@ export const AIChat = () => {
   return (
     <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto glass-card rounded-xl overflow-hidden">
       <div className="p-4 border-b border-white/10 bg-background/50">
-        <h2 className="text-xl font-semibold text-white">FELIPE AI - Tu Asistente Personal</h2>
+        <h2 className="text-xl font-semibold text-white">FELIPE AI - Tu Coach Personal</h2>
       </div>
       
       <ScrollArea className="flex-grow p-4" ref={scrollAreaRef}>
