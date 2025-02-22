@@ -2,10 +2,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BookOpen, GraduationCap, Calendar, MessageCircle, FileText, PlayCircle } from "lucide-react";
+import { BookOpen, GraduationCap, Calendar, MessageCircle, FileText, PlayCircle, Mail, Phone } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { AIChat } from "@/components/chat/AIChat";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const resources = [
   {
@@ -39,6 +46,9 @@ const StudentArea = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [fullName, setFullName] = useState("");
   const [nickname, setNickname] = useState("");
+  const whatsappNumber = "17869925648";
+  const whatsappUrl = `https://wa.me/${whatsappNumber}`;
+  const emailAddress = "contacto@felipegriz.com";
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -150,9 +160,23 @@ const StudentArea = () => {
             <p className="text-gray-300 mb-6">
               Nuestro equipo está aquí para apoyarte en tu proceso de aprendizaje
             </p>
-            <button className="bg-accent hover:bg-accent/80 text-background px-8 py-3 rounded-full text-lg font-medium transition-colors">
-              Contactar Soporte
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="bg-accent hover:bg-accent/80 text-background px-8 py-3 rounded-full text-lg font-medium transition-colors">
+                  Contactar Soporte
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-[200px]">
+                <DropdownMenuItem onClick={() => window.open(whatsappUrl, '_blank')} className="cursor-pointer">
+                  <Phone className="mr-2 h-4 w-4" />
+                  <span>WhatsApp</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => window.location.href = `mailto:${emailAddress}`} className="cursor-pointer">
+                  <Mail className="mr-2 h-4 w-4" />
+                  <span>Email</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </motion.div>
       </div>
