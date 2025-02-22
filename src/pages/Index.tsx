@@ -76,18 +76,19 @@ const Index = () => {
         </div>
       </nav>
 
-      <div className="hero-gradient py-20">
+      <div className="hero-gradient pt-12 pb-20">
         {/* Hero Section */}
-        <section className="container mx-auto px-4 text-center space-y-8 animate-fade-up">
+        <section className="container mx-auto px-4 text-center space-y-6 animate-fade-up">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="space-y-4"
           >
-            <span className="px-6 py-2 bg-gray-800 inline-block rounded-full text-sm font-medium text-white mb-6">
+            <span className="px-6 py-2 bg-gray-800 inline-block rounded-full text-sm font-medium text-white">
               FELIPE GRIZ
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient mb-6 flex flex-col">
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient flex flex-col gap-1">
               <span>Creando</span>
               <span>Super Humanos</span>
               <span>con Vidas</span>
@@ -95,7 +96,7 @@ const Index = () => {
               <span>a Través del</span>
               <span>Crecimiento Personal</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto pt-2">
               Te acompaño en el camino hacia tu mejor versión, con herramientas y estrategias probadas para alcanzar tu máximo potencial.
             </p>
           </motion.div>
