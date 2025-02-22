@@ -14,6 +14,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [nickname, setNickname] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -57,6 +58,7 @@ const Login = () => {
         options: {
           data: {
             full_name: fullName,
+            nickname: nickname,
           },
         },
       });
@@ -94,15 +96,26 @@ const Login = () => {
 
         <form onSubmit={isRegister ? handleSignUp : handleLogin} className="space-y-4">
           {isRegister && (
-            <div>
-              <Input
-                type="text"
-                placeholder="Nombre completo"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-              />
-            </div>
+            <>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="¿Cómo te gusta que te digan?"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Input
+                  type="text"
+                  placeholder="Nombre completo"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  required
+                />
+              </div>
+            </>
           )}
 
           <div>
@@ -147,6 +160,7 @@ const Login = () => {
                 setEmail("");
                 setPassword("");
                 setFullName("");
+                setNickname("");
               }}
               disabled={isLoading}
             >
