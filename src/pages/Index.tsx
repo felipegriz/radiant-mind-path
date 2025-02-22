@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Brain, Target, Heart, ChevronDown } from "lucide-react";
+import { Brain, Target, Heart, ChevronDown, Users, Star, Clock } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -152,6 +152,53 @@ const Index = () => {
               <p className="text-[#C8C8C9]">{feature.description}</p>
             </motion.div>
           ))}
+        </section>
+
+        {/* Statistics Section */}
+        <section className="py-24">
+          <div className="grid md:grid-cols-3 gap-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <div className="flex justify-center mb-4">
+                <Users className="w-12 h-12 text-white" />
+              </div>
+              <h3 className="text-4xl font-bold text-white mb-2">10,000+</h3>
+              <p className="text-gray-400">Estudiantes Impactados</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <div className="flex justify-center mb-4">
+                <Star className="w-12 h-12 text-white" />
+              </div>
+              <h3 className="text-4xl font-bold text-white mb-2">98%</h3>
+              <p className="text-gray-400">Tasa de Satisfacción</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <div className="flex justify-center mb-4">
+                <Clock className="w-12 h-12 text-white" />
+              </div>
+              <h3 className="text-4xl font-bold text-white mb-2">15+</h3>
+              <p className="text-gray-400">Años de Experiencia</p>
+            </motion.div>
+          </div>
         </section>
 
         {/* Quote Section */}
