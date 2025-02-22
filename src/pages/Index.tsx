@@ -56,7 +56,7 @@ const Index = () => {
 
               {[
                 "Recursos",
-                "Blog",
+                "Cursos Gratis",
                 "Sobre Mí",
                 "Contacto"
               ].map((item) => (
