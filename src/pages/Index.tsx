@@ -28,7 +28,7 @@ const Index = () => {
               ].map((item) => (
                 <button
                   key={item}
-                  className="px-4 py-2 text-primary/80 hover:text-primary transition-colors rounded-md text-sm font-medium"
+                  className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium"
                 >
                   {item}
                 </button>
