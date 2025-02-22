@@ -80,7 +80,7 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="px-6 py-2 bg-white/10 inline-block rounded-full text-sm font-medium text-white mb-6">
+            <span className="px-6 py-2 bg-gray-800 inline-block rounded-full text-sm font-medium text-white mb-6">
               FELIPE GRIZ
             </span>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient mb-6">
