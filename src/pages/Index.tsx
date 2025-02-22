@@ -88,8 +88,8 @@ const Index = () => {
               FELIPE GRIZ
             </span>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient mb-6">
-              Transformando Vidas a Través del
-              <br /> Desarrollo Personal
+              Creando Super Humanos con Vidas
+              <br /> Extraordinarias a Través del Crecimiento Personal
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Te acompaño en el camino hacia tu mejor versión, con herramientas y estrategias probadas para alcanzar tu máximo potencial.
