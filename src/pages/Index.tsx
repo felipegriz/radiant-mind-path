@@ -130,7 +130,7 @@ const Index = () => {
             },
             {
               icon: Target,
-              title: "Estrategias de Alto Impacto",
+              title: "RE-CONDICIONAMIENTO MENTAL",
               description: "Aprende técnicas comprobadas para alcanzar tus metas y transformar tu realidad.",
             },
             {
