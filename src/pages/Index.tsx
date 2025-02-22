@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Brain, Target, Heart, ChevronDown } from "lucide-react";
 import {
@@ -87,7 +88,7 @@ const Index = () => {
             <span className="px-6 py-2 bg-gray-800 inline-block rounded-full text-sm font-medium text-white">
               FELIPE GRIZ
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient flex flex-col gap-1">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gradient flex flex-col gap-1">
               <span>Creando</span>
               <span>Super Humanos Con</span>
               <span>Vidas Extraordinarias</span>
