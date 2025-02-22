@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Brain, Target, Heart, ChevronDown, Users, Star, Clock } from "lucide-react";
 import {
@@ -23,9 +22,9 @@ const Index = () => {
   ];
 
   const eventosInmersion = [
-    "DESPERTAR 360",
-    "CITA CON LO IMPOSIBLE",
-    "MISSION MASTERY"
+    { name: "DESPERTAR 360", path: "/events/despertar-360" },
+    { name: "CITA CON LO IMPOSIBLE", path: "/events/cita-con-lo-imposible" },
+    { name: "MISSION MASTERY", path: "/events/mission-mastery" }
   ];
 
   return (
@@ -48,10 +47,11 @@ const Index = () => {
                 <DropdownMenuContent className="bg-background/95 backdrop-blur-sm border border-white/10">
                   {eventosInmersion.map((evento) => (
                     <DropdownMenuItem
-                      key={evento}
+                      key={evento.name}
                       className="text-gray-300 hover:text-white hover:bg-white/5 cursor-pointer"
+                      onClick={() => window.location.href = evento.path}
                     >
-                      {evento}
+                      {evento.name}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
