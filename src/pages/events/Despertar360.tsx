@@ -34,9 +34,9 @@ const Despertar360 = () => {
     };
 
     const loadPrice = async () => {
-      const { data: { data: prices }, error } = await supabase
+      const { data: prices, error } = await supabase
         .from('event_prices')
-        .select('price_amount')
+        .select('*')
         .eq('event_name', 'despertar-360')
         .eq('is_active', true)
         .single();
