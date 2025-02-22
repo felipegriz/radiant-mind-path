@@ -11,6 +11,9 @@ import CitaConLoImposible from "./pages/events/CitaConLoImposible";
 import MissionMastery from "./pages/events/MissionMastery";
 import StudentArea from "./pages/StudentArea";
 import Contacto from "./pages/Contacto";
+import SuperHumano from "./pages/coaching-consultoria/SuperHumano";
+import SilverPartnership from "./pages/coaching-consultoria/SilverPartnership";
+import GreyPlatinum from "./pages/coaching-consultoria/GreyPlatinum";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +30,9 @@ const App = () => (
           <Route path="/events/mission-mastery" element={<MissionMastery />} />
           <Route path="/student-area" element={<StudentArea />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/coaching-consultoria/super-humano" element={<SuperHumano />} />
+          <Route path="/coaching-consultoria/silver-partnership" element={<SilverPartnership />} />
+          <Route path="/coaching-consultoria/grey-platinum" element={<GreyPlatinum />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
