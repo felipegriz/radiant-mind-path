@@ -135,7 +135,7 @@ const Index = () => {
             },
             {
               icon: Heart,
-              title: "Desarrollo Integral",
+              title: "MENTORÍA & COACHING AVANZADO",
               description: "Optimiza todas las áreas de tu vida para lograr un crecimiento completo y duradero.",
             },
           ].map((feature, index) => (
