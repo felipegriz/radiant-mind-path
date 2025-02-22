@@ -125,7 +125,7 @@ const Index = () => {
           {[
             {
               icon: Brain,
-              title: "Mentalidad de Éxito",
+              title: "INMERSIÓN",
               description: "Desarrolla una mentalidad ganadora y supera las barreras mentales que te limitan.",
             },
             {
