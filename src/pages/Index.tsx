@@ -34,6 +34,10 @@ const Index = () => {
                 Inicio
               </button>
               
+              <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+                Eventos
+              </button>
+
               <DropdownMenu>
                 <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center">
                   Programas <ChevronDown className="ml-1 h-4 w-4" />
@@ -51,7 +55,6 @@ const Index = () => {
               </DropdownMenu>
 
               {[
-                "Eventos",
                 "Recursos",
                 "Blog",
                 "Sobre Mí",
