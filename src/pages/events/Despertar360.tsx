@@ -1,10 +1,12 @@
 
 import { motion } from "framer-motion";
 import { CalendarDays, MapPin, Users, Clock } from "lucide-react";
+import Navbar from "@/components/layout/Navbar";
 
 const Despertar360 = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Navbar />
       <div className="hero-gradient">
         <div className="container mx-auto px-4 py-16">
           <motion.div
