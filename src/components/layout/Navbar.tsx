@@ -70,7 +70,7 @@ const Navbar = () => {
               to="/coaching-consultoria" 
               className="bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors rounded-md text-sm font-medium"
             >
-              Coaching y Consultoría
+              COACHING & CONSULTORÍA
             </Link>
 
             <Link 
