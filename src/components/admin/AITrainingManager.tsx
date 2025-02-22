@@ -6,11 +6,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2 } from "lucide-react";
+
+type ContentCategory = 'curso' | 'metodologia' | 'frase' | 'ejemplo_coaching' | 'principio';
 
 interface TrainingContent {
   id: string;
-  category: 'curso' | 'metodologia' | 'frase' | 'ejemplo_coaching' | 'principio';
+  category: ContentCategory;
+  title: string;
+  content: string;
+  keywords: string[];
+  active: boolean;
+  created_at: string;
+}
+
+interface NewContent {
+  category: ContentCategory;
   title: string;
   content: string;
   keywords: string[];
@@ -20,7 +31,7 @@ interface TrainingContent {
 export const AITrainingManager = () => {
   const [contents, setContents] = useState<TrainingContent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [newContent, setNewContent] = useState<Partial<TrainingContent>>({
+  const [newContent, setNewContent] = useState<NewContent>({
     category: 'curso',
     title: '',
     content: '',
@@ -37,7 +48,15 @@ export const AITrainingManager = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setContents(data || []);
+      
+      // Asegurar que los datos cumplan con el tipo TrainingContent
+      const typedData = (data || []).map(item => ({
+        ...item,
+        category: item.category as ContentCategory,
+        keywords: item.keywords || []
+      }));
+      
+      setContents(typedData);
     } catch (error) {
       console.error('Error loading contents:', error);
       toast({
@@ -56,15 +75,27 @@ export const AITrainingManager = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!newContent.title || !newContent.content) {
+      toast({
+        title: "Error",
+        description: "Por favor completa todos los campos requeridos.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const keywordsArray = newContent.keywords?.toString().split(',').map(k => k.trim()) || [];
-      
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('ai_training_content')
-        .insert([{ ...newContent, keywords: keywordsArray }])
-        .select();
+        .insert({
+          category: newContent.category,
+          title: newContent.title,
+          content: newContent.content,
+          keywords: newContent.keywords,
+          active: newContent.active
+        });
 
       if (error) throw error;
 
@@ -127,7 +158,7 @@ export const AITrainingManager = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Select
               value={newContent.category}
-              onValueChange={(value: TrainingContent['category']) => 
+              onValueChange={(value: ContentCategory) => 
                 setNewContent(prev => ({ ...prev, category: value }))
               }
             >
@@ -147,6 +178,7 @@ export const AITrainingManager = () => {
               placeholder="Título"
               value={newContent.title}
               onChange={(e) => setNewContent(prev => ({ ...prev, title: e.target.value }))}
+              required
             />
           </div>
 
@@ -155,12 +187,16 @@ export const AITrainingManager = () => {
             value={newContent.content}
             onChange={(e) => setNewContent(prev => ({ ...prev, content: e.target.value }))}
             className="min-h-[150px]"
+            required
           />
 
           <Input
             placeholder="Keywords (separadas por comas)"
-            value={newContent.keywords?.join(', ')}
-            onChange={(e) => setNewContent(prev => ({ ...prev, keywords: e.target.value.split(',').map(k => k.trim()) }))}
+            value={newContent.keywords.join(', ')}
+            onChange={(e) => setNewContent(prev => ({ 
+              ...prev, 
+              keywords: e.target.value.split(',').map(k => k.trim()).filter(k => k)
+            }))}
           />
 
           <Button type="submit" disabled={isLoading} className="w-full">
