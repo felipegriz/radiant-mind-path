@@ -34,7 +34,7 @@ const Index = () => {
                 </button>
               ))}
             </div>
-            <button className="bg-blue-600 hover:bg-blue-700 transition-colors text-white px-6 py-2 rounded-full text-sm font-medium">
+            <button className="bg-accent hover:bg-accent/80 transition-colors text-white px-6 py-2 rounded-full text-sm font-medium">
               Comienza Ahora
             </button>
           </div>

@@ -7,25 +7,25 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --background: 220 13% 10%;
+    --foreground: 220 13% 95%;
+    --card: 220 13% 15%;
+    --card-foreground: 220 13% 95%;
+    --popover: 220 13% 15%;
+    --popover-foreground: 220 13% 95%;
+    --primary: 220 13% 95%;
+    --primary-foreground: 220 13% 10%;
+    --secondary: 220 13% 30%;
+    --secondary-foreground: 220 13% 95%;
+    --muted: 220 13% 20%;
+    --muted-foreground: 220 13% 70%;
+    --accent: 220 13% 25%;
+    --accent-foreground: 220 13% 95%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --destructive-foreground: 220 13% 95%;
+    --border: 220 13% 20%;
+    --input: 220 13% 20%;
+    --ring: 220 13% 30%;
     --radius: 0.75rem;
   }
 
@@ -39,7 +39,7 @@
   }
 
   .glass-card {
-    @apply bg-secondary/80 backdrop-blur-sm border border-white/10 shadow-lg;
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg;
   }
 
   .hover-lift {
@@ -47,11 +47,17 @@
   }
 
   .hero-gradient {
-    background: linear-gradient(90deg, hsla(221, 45%, 73%, 1) 0%, hsla(220, 78%, 29%, 1) 100%);
+    background: linear-gradient(90deg, 
+      hsl(220, 13%, 15%) 0%,
+      hsl(220, 13%, 10%) 100%
+    );
   }
 
   .text-gradient {
-    background: linear-gradient(to right, #accbee 0%, #e7f0fd 100%);
+    background: linear-gradient(to right, 
+      hsl(220, 13%, 95%) 0%,
+      hsl(220, 13%, 75%) 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
