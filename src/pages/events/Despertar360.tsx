@@ -3,14 +3,20 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CalendarDays, MapPin, Users, Clock, Lock, BookOpen, PlayCircle, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { loadStripe } from "@stripe/stripe-js";
 import Navbar from "@/components/layout/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+
+const stripePromise = loadStripe("pk_test_51Op7kfLsUYD3w5DwwooYfzIZaKnZ4XKr5aKuCVU9NeM2WJaD2Vhq94mzwEwqn4H1fxD5bDVmaf6Yh19NoSkhiWYe00wvDQG3ZH");
 
 const Despertar360 = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -27,6 +33,46 @@ const Despertar360 = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    try {
+      const response = await fetch(
+        'https://awbrvqrtqxwomnevipdt.supabase.co/functions/v1/create-checkout',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Error al procesar el pago');
+      }
+
+      const { sessionId } = await response.json();
+      const stripe = await stripePromise;
+      
+      if (!stripe) {
+        throw new Error('Error al cargar Stripe');
+      }
+
+      const { error } = await stripe.redirectToCheckout({ sessionId });
+      
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo procesar el pago. Por favor, intenta de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const studentResources = [
     {
@@ -197,9 +243,13 @@ const Despertar360 = () => {
           transition={{ duration: 0.6 }}
           className="text-center mt-16"
         >
-          <button className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors">
-            Reserva Tu Lugar Ahora
-          </button>
+          <Button 
+            onClick={handlePayment}
+            disabled={isProcessing}
+            className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors"
+          >
+            {isProcessing ? "Procesando..." : "Reserva Tu Lugar Ahora - $999 USD"}
+          </Button>
         </motion.div>
       </div>
     </div>
