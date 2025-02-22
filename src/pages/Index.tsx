@@ -1,6 +1,12 @@
 
 import { motion } from "framer-motion";
-import { Brain, Target, Heart } from "lucide-react";
+import { Brain, Target, Heart, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Index = () => {
   const fadeInUp = {
@@ -9,6 +15,13 @@ const Index = () => {
     transition: { duration: 0.6 }
   };
 
+  const programas = [
+    "ACCIONADORES",
+    "ACTITUD DE PLENITUD",
+    "INFO-EMPRENDIMIENTO",
+    "AI MASTERY"
+  ];
+
   return (
     <div className="min-h-screen w-full bg-background">
       {/* Navigation Bar */}
@@ -16,10 +29,28 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             <span className="text-xl font-bold text-white">FELIPE GRIZ</span>
-            <div className="hidden md:flex space-x-1">
+            <div className="hidden md:flex items-center space-x-1">
+              <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+                Inicio
+              </button>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center">
+                  Programas <ChevronDown className="ml-1 h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-background/95 backdrop-blur-sm border border-white/10">
+                  {programas.map((programa) => (
+                    <DropdownMenuItem
+                      key={programa}
+                      className="text-gray-300 hover:text-white hover:bg-white/5 cursor-pointer"
+                    >
+                      {programa}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {[
-                "Inicio",
-                "Programas",
                 "Eventos",
                 "Recursos",
                 "Blog",
