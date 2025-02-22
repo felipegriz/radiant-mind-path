@@ -18,7 +18,7 @@ const Contacto = () => {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 text-center">Contacto</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 text-center">Contáctanos</h1>
           
           <div className="grid md:grid-cols-2 gap-8">
             <motion.div
