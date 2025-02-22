@@ -49,6 +49,29 @@ const Despertar360 = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      
+      {!isLoading && (
+        <div className="container mx-auto px-4">
+          <div className="flex justify-end py-4">
+            {isAuthenticated ? (
+              <Button 
+                onClick={() => document.getElementById('studentPortal')?.scrollIntoView({ behavior: 'smooth' })}
+                className="bg-accent hover:bg-accent/80 text-background px-6 py-2 rounded-full text-sm font-bold transition-colors"
+              >
+                Portal del Estudiante
+              </Button>
+            ) : (
+              <Button 
+                onClick={() => navigate('/auth/login')}
+                className="bg-accent hover:bg-accent/80 text-background px-6 py-2 rounded-full text-sm font-bold transition-colors"
+              >
+                Acceder al Portal
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="hero-gradient">
         <div className="container mx-auto px-4 py-16">
           <motion.div
@@ -131,55 +154,40 @@ const Despertar360 = () => {
           </motion.div>
         </div>
 
-        {!isLoading && (
+        {!isLoading && isAuthenticated && (
           <motion.div
+            id="studentPortal"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="mt-16"
           >
-            {isAuthenticated ? (
-              <div className="glass-card p-8 rounded-2xl">
-                <div className="text-center mb-12">
-                  <h2 className="text-3xl font-bold text-white mb-4">Portal del Estudiante</h2>
-                  <p className="text-gray-300">
-                    Accede a todos los recursos exclusivos del evento Despertar 360
-                  </p>
-                </div>
-                
-                <div className="grid md:grid-cols-3 gap-8">
-                  {studentResources.map((resource, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className="glass-card p-6 rounded-xl hover-lift cursor-pointer"
-                    >
-                      <div className="flex flex-col items-center text-center">
-                        <resource.icon className="w-12 h-12 text-accent mb-4" />
-                        <h3 className="text-xl font-semibold text-white mb-2">{resource.title}</h3>
-                        <p className="text-gray-300">{resource.description}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="glass-card p-8 rounded-2xl max-w-2xl mx-auto text-center">
-                <Lock className="w-12 h-12 text-white mx-auto mb-6" />
-                <h2 className="text-2xl font-bold text-white mb-4">Acceso Exclusivo para Estudiantes</h2>
-                <p className="text-gray-300 mb-6">
-                  Inicia sesión para acceder a todos los recursos exclusivos del evento Despertar 360
+            <div className="glass-card p-8 rounded-2xl">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-white mb-4">Portal del Estudiante</h2>
+                <p className="text-gray-300">
+                  Accede a todos los recursos exclusivos del evento Despertar 360
                 </p>
-                <Button 
-                  onClick={() => navigate('/auth/login')}
-                  className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors"
-                >
-                  Iniciar Sesión
-                </Button>
               </div>
-            )}
+              
+              <div className="grid md:grid-cols-3 gap-8">
+                {studentResources.map((resource, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="glass-card p-6 rounded-xl hover-lift cursor-pointer"
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <resource.icon className="w-12 h-12 text-accent mb-4" />
+                      <h3 className="text-xl font-semibold text-white mb-2">{resource.title}</h3>
+                      <p className="text-gray-300">{resource.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </motion.div>
         )}
 
