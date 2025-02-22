@@ -148,7 +148,7 @@ const Index = () => {
               className="glass-card rounded-2xl p-8 hover-lift"
             >
               <feature.icon className="w-12 h-12 text-white mb-4" />
-              <h3 className="text-xl font-semibold mb-4 text-white">{feature.title}</h3>
+              <h3 className="text-xl font-semibold mb-5 text-white">{feature.title}</h3>
               <p className="text-[#C8C8C9]">{feature.description}</p>
             </motion.div>
           ))}
