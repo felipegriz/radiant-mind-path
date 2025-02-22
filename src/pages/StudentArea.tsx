@@ -38,6 +38,7 @@ const StudentArea = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [fullName, setFullName] = useState("");
+  const [nickname, setNickname] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -51,12 +52,13 @@ const StudentArea = () => {
       // Obtener el perfil del usuario
       const { data: profile, error } = await supabase
         .from('profiles')
-        .select('full_name')
+        .select('full_name, nickname')
         .eq('id', session.user.id)
         .single();
 
-      if (profile?.full_name) {
+      if (profile) {
         setFullName(profile.full_name);
+        setNickname(profile.nickname);
       }
       
       setIsLoading(false);
@@ -93,7 +95,7 @@ const StudentArea = () => {
               <GraduationCap className="w-16 h-16 text-white" />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              {fullName ? `¡Bienvenido, ${fullName}!` : "Área de Estudiantes"}
+              {nickname ? `¡Bienvenido, ${nickname}!` : "Área de Estudiantes"}
             </h1>
             <p className="text-xl text-gray-300 mb-8">
               Bienvenido al espacio exclusivo para estudiantes de Felipe Griz
