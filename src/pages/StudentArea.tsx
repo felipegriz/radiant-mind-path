@@ -37,6 +37,7 @@ const resources = [
 const StudentArea = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [fullName, setFullName] = useState("");
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -45,6 +46,17 @@ const StudentArea = () => {
       if (!session) {
         navigate('/auth/login');
         return;
+      }
+
+      // Obtener el perfil del usuario
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', session.user.id)
+        .single();
+
+      if (profile?.full_name) {
+        setFullName(profile.full_name);
       }
       
       setIsLoading(false);
@@ -80,7 +92,9 @@ const StudentArea = () => {
             <div className="flex justify-center mb-6">
               <GraduationCap className="w-16 h-16 text-white" />
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">Área de Estudiantes</h1>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              {fullName ? `¡Bienvenido, ${fullName}!` : "Área de Estudiantes"}
+            </h1>
             <p className="text-xl text-gray-300 mb-8">
               Bienvenido al espacio exclusivo para estudiantes de Felipe Griz
             </p>

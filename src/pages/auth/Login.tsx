@@ -13,6 +13,7 @@ const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -53,6 +54,11 @@ const Login = () => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+        },
       });
 
       if (error) throw error;
@@ -62,7 +68,7 @@ const Login = () => {
         description: "Por favor, verifica tu correo electrónico.",
       });
       
-      setIsRegister(false); // Volver al formulario de login
+      setIsRegister(false);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -87,6 +93,18 @@ const Login = () => {
         </h1>
 
         <form onSubmit={isRegister ? handleSignUp : handleLogin} className="space-y-4">
+          {isRegister && (
+            <div>
+              <Input
+                type="text"
+                placeholder="Nombre completo"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+              />
+            </div>
+          )}
+
           <div>
             <Input
               type="email"
@@ -128,6 +146,7 @@ const Login = () => {
                 setIsRegister(!isRegister);
                 setEmail("");
                 setPassword("");
+                setFullName("");
               }}
               disabled={isLoading}
             >
