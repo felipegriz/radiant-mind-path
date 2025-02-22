@@ -41,8 +41,9 @@ const Index = () => {
               </button>
               
               <DropdownMenu>
-                <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center">
-                  Eventos de Inmersión <ChevronDown className="ml-1 h-4 w-4" />
+                <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center flex-col leading-tight">
+                  <span className="whitespace-nowrap">Eventos de</span>
+                  <span className="whitespace-nowrap flex items-center">Inmersión <ChevronDown className="ml-1 h-4 w-4" /></span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="bg-background/95 backdrop-blur-sm border border-white/10">
                   {eventosInmersion.map((evento) => (
