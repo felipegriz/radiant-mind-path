@@ -10,8 +10,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -52,6 +54,11 @@ const Login = () => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            username,
+          },
+        },
       });
 
       if (error) throw error;
@@ -60,6 +67,8 @@ const Login = () => {
         title: "¡Registro exitoso!",
         description: "Por favor, verifica tu correo electrónico.",
       });
+      
+      setIsRegister(false); // Volver al formulario de login
     } catch (error: any) {
       toast({
         title: "Error",
@@ -80,10 +89,23 @@ const Login = () => {
         className="glass-card w-full max-w-md p-8 rounded-2xl"
       >
         <h1 className="text-3xl font-bold text-white text-center mb-8">
-          Área de Estudiantes
+          {isRegister ? "Crear cuenta" : "Iniciar sesión"}
         </h1>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={isRegister ? handleSignUp : handleLogin} className="space-y-4">
+          {isRegister && (
+            <div>
+              <Input
+                type="text"
+                placeholder="Nombre de usuario"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                minLength={3}
+              />
+            </div>
+          )}
+
           <div>
             <Input
               type="email"
@@ -101,6 +123,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
           </div>
 
@@ -113,17 +136,22 @@ const Login = () => {
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
               ) : null}
-              Iniciar Sesión
+              {isRegister ? "Registrarse" : "Iniciar Sesión"}
             </Button>
 
             <Button
               type="button"
               variant="outline"
               className="w-full"
-              onClick={handleSignUp}
+              onClick={() => {
+                setIsRegister(!isRegister);
+                setEmail("");
+                setPassword("");
+                setUsername("");
+              }}
               disabled={isLoading}
             >
-              Registrarse
+              {isRegister ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate"}
             </Button>
           </div>
         </form>
