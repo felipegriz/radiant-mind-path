@@ -39,13 +39,13 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-background/95 backdrop-blur-sm border border-white/10">
                 {eventosInmersion.map((evento) => (
-                  <DropdownMenuItem
+                  <Link
                     key={evento.name}
-                    className="text-gray-300 hover:text-white hover:bg-white/5 cursor-pointer"
-                    onClick={() => window.location.href = evento.path}
+                    to={evento.path}
+                    className="text-gray-300 hover:text-white hover:bg-white/5 cursor-pointer block px-4 py-2"
                   >
                     {evento.name}
-                  </DropdownMenuItem>
+                  </Link>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
