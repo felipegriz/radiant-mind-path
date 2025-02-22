@@ -73,8 +73,8 @@ const Navbar = () => {
               Área de Estudiantes
             </Link>
 
-            <Link to="/recursos" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
-              Recursos
+            <Link to="/grey-training" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              GREY TRAINING ACADEMY
             </Link>
 
             <Link to="/cursos-gratis" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
