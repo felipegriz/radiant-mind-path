@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { BookOpen, GraduationCap, Calendar, MessageCircle, FileText, PlayCircle } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
+import { AIChat } from "@/components/chat/AIChat";
 
 const resources = [
   {
@@ -76,6 +77,16 @@ const StudentArea = () => {
             </motion.a>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="mt-16"
+        >
+          <AIChat />
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
