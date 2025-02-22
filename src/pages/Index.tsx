@@ -11,6 +11,36 @@ const Index = () => {
 
   return (
     <div className="min-h-screen w-full bg-background">
+      {/* Navigation Bar */}
+      <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
+            <span className="text-xl font-bold text-primary">FELIPE GRIZ</span>
+            <div className="hidden md:flex space-x-1">
+              {[
+                "Inicio",
+                "Programas",
+                "Eventos",
+                "Recursos",
+                "Blog",
+                "Sobre Mí",
+                "Contacto"
+              ].map((item) => (
+                <button
+                  key={item}
+                  className="px-4 py-2 text-primary/80 hover:text-primary transition-colors rounded-md text-sm font-medium"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+            <button className="bg-blue-600 hover:bg-blue-700 transition-colors text-white px-6 py-2 rounded-full text-sm font-medium">
+              Comienza Ahora
+            </button>
+          </div>
+        </div>
+      </nav>
+
       <div className="hero-gradient py-20">
         {/* Hero Section */}
         <section className="container mx-auto px-4 text-center space-y-8 animate-fade-up">
