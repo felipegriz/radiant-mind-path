@@ -1,5 +1,5 @@
 
-import { serve } from "https://deno.fresh.dev/std@v1/http/server.ts";
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { Stripe } from "https://esm.sh/stripe@13.10.0?target=deno";
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
