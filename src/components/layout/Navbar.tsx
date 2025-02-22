@@ -21,6 +21,12 @@ const eventosInmersion = [
   { name: "MISSION MASTERY", path: "/events/mission-mastery" }
 ];
 
+const coachingOptions = [
+  { name: "SÚPER HUMANO", path: "/coaching-consultoria/super-humano" },
+  { name: "SILVER PARTNERSHIP", path: "/coaching-consultoria/silver-partnership" },
+  { name: "GREY PLATINUM", path: "/coaching-consultoria/grey-platinum" }
+];
+
 const Navbar = () => {
   return (
     <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
@@ -66,12 +72,22 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link 
-              to="/coaching-consultoria" 
-              className="bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors rounded-md text-sm font-medium"
-            >
-              COACHING & CONSULTORÍA
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors rounded-md text-sm font-medium inline-flex items-center">
+                COACHING & CONSULTORÍA <ChevronDown className="ml-1 h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-background/95 backdrop-blur-sm border border-white/10">
+                {coachingOptions.map((option) => (
+                  <Link
+                    key={option.name}
+                    to={option.path}
+                    className="text-gray-300 hover:text-white hover:bg-white/5 cursor-pointer block px-4 py-2"
+                  >
+                    {option.name}
+                  </Link>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <Link 
               to="/student-area" 
