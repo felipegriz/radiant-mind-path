@@ -15,7 +15,7 @@ const Index = () => {
       <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <span className="text-xl font-bold text-primary">FELIPE GRIZ</span>
+            <span className="text-xl font-bold text-white">FELIPE GRIZ</span>
             <div className="hidden md:flex space-x-1">
               {[
                 "Inicio",
@@ -49,14 +49,14 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="px-6 py-2 bg-white/10 inline-block rounded-full text-sm font-medium text-primary mb-6">
+            <span className="px-6 py-2 bg-white/10 inline-block rounded-full text-sm font-medium text-white mb-6">
               FELIPE GRIZ
             </span>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient mb-6">
               Transformando Vidas a Través del
               <br /> Desarrollo Personal
             </h1>
-            <p className="text-xl text-primary/90 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Te acompaño en el camino hacia tu mejor versión, con herramientas y estrategias probadas para alcanzar tu máximo potencial.
             </p>
           </motion.div>
@@ -91,9 +91,9 @@ const Index = () => {
               viewport={{ once: true }}
               className="glass-card rounded-2xl p-8 hover-lift"
             >
-              <feature.icon className="w-12 h-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-3 text-primary">{feature.title}</h3>
-              <p className="text-primary/80">{feature.description}</p>
+              <feature.icon className="w-12 h-12 text-white mb-4" />
+              <h3 className="text-xl font-semibold mb-3 text-white">{feature.title}</h3>
+              <p className="text-gray-300">{feature.description}</p>
             </motion.div>
           ))}
         </section>
@@ -106,10 +106,10 @@ const Index = () => {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <blockquote className="text-3xl md:text-4xl font-medium text-primary italic">
+            <blockquote className="text-3xl md:text-4xl font-medium text-white italic">
               "El éxito no es un destino, es un viaje constante de crecimiento y superación personal."
             </blockquote>
-            <p className="mt-6 text-primary/80 text-xl">Felipe Griz</p>
+            <p className="mt-6 text-gray-300 text-xl">Felipe Griz</p>
           </motion.div>
         </section>
       </div>
