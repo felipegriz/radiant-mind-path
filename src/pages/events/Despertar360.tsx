@@ -16,16 +16,32 @@ const Despertar360 = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [price, setPrice] = useState<number | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setIsAuthenticated(!!session);
-      setIsLoading(false);
     };
 
-    checkAuth();
+    const loadPrice = async () => {
+      const { data, error } = await supabase
+        .from('event_prices')
+        .select('price_amount')
+        .eq('event_name', 'despertar-360')
+        .eq('is_active', true)
+        .single();
+
+      if (error) {
+        console.error('Error loading price:', error);
+        return;
+      }
+
+      setPrice(data.price_amount);
+    };
+
+    Promise.all([checkAuth(), loadPrice()]).then(() => setIsLoading(false));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsAuthenticated(!!session);
@@ -91,6 +107,10 @@ const Despertar360 = () => {
       description: "Profundiza tu aprendizaje con ejercicios guiados"
     }
   ];
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -245,10 +265,10 @@ const Despertar360 = () => {
         >
           <Button 
             onClick={handlePayment}
-            disabled={isProcessing}
+            disabled={isProcessing || !price}
             className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors"
           >
-            {isProcessing ? "Procesando..." : "Reserva Tu Lugar Ahora - $999 USD"}
+            {isProcessing ? "Procesando..." : price ? `Reserva Tu Lugar Ahora - $${(price / 100).toFixed(2)} USD` : "Cargando..."}
           </Button>
         </motion.div>
       </div>
