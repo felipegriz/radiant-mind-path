@@ -10,6 +10,7 @@ import Despertar360 from "./pages/events/Despertar360";
 import CitaConLoImposible from "./pages/events/CitaConLoImposible";
 import MissionMastery from "./pages/events/MissionMastery";
 import StudentArea from "./pages/StudentArea";
+import Contacto from "./pages/Contacto";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
           <Route path="/events/mission-mastery" element={<MissionMastery />} />
           <Route path="/student-area" element={<StudentArea />} />
+          <Route path="/contacto" element={<Contacto />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
