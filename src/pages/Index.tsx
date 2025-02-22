@@ -106,8 +106,11 @@ const Index = () => {
             <span className="px-6 py-2 bg-gray-800 inline-block rounded-full text-sm font-medium text-white">
               FELIPE GRIZ
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gradient">
-              Creando Super Humanos A Través Del Crecimiento Personal
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gradient flex flex-col gap-1">
+              <span>Creando</span>
+              <span>Super Humanos</span>
+              <span>A Través Del</span>
+              <span>Crecimiento Personal</span>
             </h1>
             <p className="text-xl text-gray-500 max-w-3xl mx-auto pt-2">
               Aprende la mentalidad y las mejores estrategias de las mentes más brillantes del mundo
