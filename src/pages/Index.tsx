@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Brain, Target, Heart, ChevronDown } from "lucide-react";
 import {
@@ -90,10 +89,9 @@ const Index = () => {
             </span>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient flex flex-col gap-1">
               <span>Creando</span>
-              <span>Super Humanos</span>
-              <span>con Vidas</span>
-              <span>Extraordinarias</span>
-              <span>a Través del</span>
+              <span>Super Humanos Con</span>
+              <span>Vidas Extraordinarias</span>
+              <span>A Través Del</span>
               <span>Crecimiento Personal</span>
             </h1>
             <p className="text-xl text-gray-500 max-w-3xl mx-auto pt-2">
