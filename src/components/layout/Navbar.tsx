@@ -73,6 +73,13 @@ const Navbar = () => {
               Área de Estudiantes
             </Link>
 
+            <Link 
+              to="/coaching-consultoria" 
+              className="bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors rounded-md text-sm font-medium"
+            >
+              Coaching y Consultoría
+            </Link>
+
             <Link to="/grey-training" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               GREY TRAINING ACADEMY
             </Link>
