@@ -16,6 +16,10 @@ interface EventPrice {
   is_active: boolean;
 }
 
+interface UserRole {
+  role: string;
+}
+
 const EventPricing = () => {
   const [price, setPrice] = useState<EventPrice | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +39,7 @@ const EventPricing = () => {
         .from('user_roles')
         .select('role')
         .eq('user_id', session.user.id)
-        .eq('role', 'admin');
+        .eq('role', 'admin') as { data: UserRole[] | null, error: Error | null };
 
       if (!roles || roles.length === 0) {
         window.location.href = '/';
@@ -55,7 +59,7 @@ const EventPricing = () => {
       .select('*')
       .eq('event_name', 'despertar-360')
       .eq('is_active', true)
-      .single();
+      .single() as { data: EventPrice | null, error: Error | null };
 
     if (error) {
       toast({
@@ -84,7 +88,7 @@ const EventPricing = () => {
     const { error } = await supabase
       .from('event_prices')
       .update({ price_amount: price.price_amount })
-      .eq('id', price.id);
+      .eq('id', price.id) as { error: Error | null };
 
     if (error) {
       toast({

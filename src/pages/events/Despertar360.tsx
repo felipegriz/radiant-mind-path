@@ -11,6 +11,10 @@ import { useToast } from "@/components/ui/use-toast";
 
 const stripePromise = loadStripe("pk_test_51Op7kfLsUYD3w5DwwooYfzIZaKnZ4XKr5aKuCVU9NeM2WJaD2Vhq94mzwEwqn4H1fxD5bDVmaf6Yh19NoSkhiWYe00wvDQG3ZH");
 
+interface EventPrice {
+  price_amount: number;
+}
+
 const Despertar360 = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,14 +35,16 @@ const Despertar360 = () => {
         .select('price_amount')
         .eq('event_name', 'despertar-360')
         .eq('is_active', true)
-        .single();
+        .single() as { data: EventPrice | null, error: Error | null };
 
       if (error) {
         console.error('Error loading price:', error);
         return;
       }
 
-      setPrice(data.price_amount);
+      if (data) {
+        setPrice(data.price_amount);
+      }
     };
 
     Promise.all([checkAuth(), loadPrice()]).then(() => setIsLoading(false));
