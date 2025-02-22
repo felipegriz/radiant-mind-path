@@ -27,7 +27,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="text-xl font-bold text-white whitespace-nowrap">FELIPE GRIZ</Link>
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-4">
             <Link to="/" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Inicio
             </Link>
@@ -66,23 +66,28 @@ const Navbar = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link to="/student-area" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+            <Link 
+              to="/student-area" 
+              className="bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors rounded-md text-sm font-medium"
+            >
               Área de Estudiantes
             </Link>
 
-            {[
-              "Recursos",
-              "Cursos Gratis",
-              "Sobre Mí",
-              "Contacto"
-            ].map((item) => (
-              <button
-                key={item}
-                className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium"
-              >
-                {item}
-              </button>
-            ))}
+            <Link to="/recursos" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Recursos
+            </Link>
+
+            <Link to="/cursos-gratis" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Cursos Gratis
+            </Link>
+
+            <Link to="/sobre-mi" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Sobre Mí
+            </Link>
+
+            <Link to="/contacto" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Contacto
+            </Link>
           </div>
           <button className="bg-accent hover:bg-accent/80 transition-colors text-white px-6 py-2 rounded-full text-sm font-medium">
             Comienza Ahora
