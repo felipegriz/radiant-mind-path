@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 const programas = [
   "ACCIONADORES",
@@ -25,11 +26,11 @@ const Navbar = () => {
     <nav className="bg-background/95 backdrop-blur-sm sticky top-0 z-50 border-b border-white/10">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <span className="text-xl font-bold text-white whitespace-nowrap">FELIPE GRIZ</span>
+          <Link to="/" className="text-xl font-bold text-white whitespace-nowrap">FELIPE GRIZ</Link>
           <div className="hidden md:flex items-center space-x-1">
-            <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+            <Link to="/" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Inicio
-            </button>
+            </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center flex-col leading-tight">
@@ -64,6 +65,10 @@ const Navbar = () => {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+
+            <Link to="/student-area" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Área de Estudiantes
+            </Link>
 
             {[
               "Recursos",
