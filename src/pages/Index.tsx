@@ -181,8 +181,8 @@ const Index = () => {
               <div className="flex justify-center mb-4">
                 <Star className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-4xl font-bold text-white mb-2">98%</h3>
-              <p className="text-gray-400">Tasa de Satisfacción</p>
+              <h3 className="text-4xl font-bold text-white mb-2">300+</h3>
+              <p className="text-gray-400">Eventos Realizados</p>
             </motion.div>
 
             <motion.div
