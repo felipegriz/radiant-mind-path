@@ -136,7 +136,7 @@ const Index = () => {
             {
               icon: Heart,
               title: "MENTORÍA & COACHING AVANZADO",
-              description: "Optimiza todas las áreas de tu vida para lograr un crecimiento completo y duradero.",
+              description: "Trabaja de la mano de uno de los Top ten Coaches de habla hispana para transformar tu vida y tu negocio",
             },
           ].map((feature, index) => (
             <motion.div
