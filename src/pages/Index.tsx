@@ -113,7 +113,7 @@ const Index = () => {
               <span>Crecimiento Personal</span>
             </h1>
             <p className="text-xl text-gray-500 max-w-3xl mx-auto pt-2">
-              Te acompaño en el camino hacia tu mejor versión, con herramientas y estrategias probadas para alcanzar tu máximo potencial.
+              Aprende la mentalidad y las mejores estrategias de las mentes más brillantes del mundo
             </p>
           </motion.div>
         </section>
