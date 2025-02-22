@@ -76,7 +76,7 @@ const Index = () => {
         </div>
       </nav>
 
-      <div className="hero-gradient pt-12 pb-20">
+      <div className="hero-gradient pt-12 pb-32">
         {/* Hero Section */}
         <section className="container mx-auto px-4 text-center space-y-6 animate-fade-up">
           <motion.div
@@ -103,9 +103,9 @@ const Index = () => {
         </section>
       </div>
 
-      <div className="container mx-auto px-4 -mt-20">
+      <div className="container mx-auto px-4 -mt-40">
         {/* Features Section */}
-        <section className="grid md:grid-cols-3 gap-8 pt-8">
+        <section className="grid md:grid-cols-3 gap-8">
           {[
             {
               icon: Brain,
