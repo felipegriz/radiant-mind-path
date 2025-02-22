@@ -12,7 +12,11 @@ import { useToast } from "@/components/ui/use-toast";
 const stripePromise = loadStripe("pk_test_51Op7kfLsUYD3w5DwwooYfzIZaKnZ4XKr5aKuCVU9NeM2WJaD2Vhq94mzwEwqn4H1fxD5bDVmaf6Yh19NoSkhiWYe00wvDQG3ZH");
 
 interface EventPrice {
+  id: string;
+  event_name: string;
   price_amount: number;
+  currency: string;
+  is_active: boolean;
 }
 
 const Despertar360 = () => {
@@ -30,20 +34,20 @@ const Despertar360 = () => {
     };
 
     const loadPrice = async () => {
-      const { data, error } = await supabase
+      const { data: { data: prices }, error } = await supabase
         .from('event_prices')
         .select('price_amount')
         .eq('event_name', 'despertar-360')
         .eq('is_active', true)
-        .single() as { data: EventPrice | null, error: Error | null };
+        .single();
 
       if (error) {
         console.error('Error loading price:', error);
         return;
       }
 
-      if (data) {
-        setPrice(data.price_amount);
+      if (prices) {
+        setPrice(prices.price_amount);
       }
     };
 
@@ -130,14 +134,14 @@ const Despertar360 = () => {
                 onClick={() => document.getElementById('studentPortal')?.scrollIntoView({ behavior: 'smooth' })}
                 className="bg-accent hover:bg-accent/80 text-background px-6 py-2 rounded-full text-sm font-bold transition-colors"
               >
-                Portal del Estudiante
+                Portal de Graduados Despertar
               </Button>
             ) : (
               <Button 
                 onClick={() => navigate('/auth/login')}
                 className="bg-accent hover:bg-accent/80 text-background px-6 py-2 rounded-full text-sm font-bold transition-colors"
               >
-                Acceder al Portal
+                Acceder al Portal de Graduados Despertar
               </Button>
             )}
           </div>
