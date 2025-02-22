@@ -8,13 +8,7 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
-    https: {
-      // Configuración por defecto de HTTPS
-      cert: undefined,
-      key: undefined,
-      ca: undefined
-    },
+    port: 8080
   },
   plugins: [
     react(),
