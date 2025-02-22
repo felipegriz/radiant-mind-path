@@ -119,7 +119,7 @@ const Index = () => {
         </section>
       </div>
 
-      <div className="container mx-auto px-4 -mt-40">
+      <div className="container mx-auto px-4 -mt-28">
         {/* Features Section */}
         <section className="grid md:grid-cols-3 gap-8">
           {[
