@@ -87,9 +87,13 @@ const Index = () => {
             <span className="px-6 py-2 bg-gray-800 inline-block rounded-full text-sm font-medium text-white mb-6">
               FELIPE GRIZ
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient mb-6">
-              Creando Super Humanos con Vidas
-              <br /> Extraordinarias a Través del Crecimiento Personal
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-gradient mb-6 flex flex-col">
+              <span>Creando</span>
+              <span>Super Humanos</span>
+              <span>con Vidas</span>
+              <span>Extraordinarias</span>
+              <span>a Través del</span>
+              <span>Crecimiento Personal</span>
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Te acompaño en el camino hacia tu mejor versión, con herramientas y estrategias probadas para alcanzar tu máximo potencial.
