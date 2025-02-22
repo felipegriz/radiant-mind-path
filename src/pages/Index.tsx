@@ -126,7 +126,7 @@ const Index = () => {
             {
               icon: Brain,
               title: "INMERSIÓN",
-              description: "Desarrolla una mentalidad ganadora y supera las barreras mentales que te limitan.",
+              description: "Formato de alto impacto que garantiza la retención de la información y tu transformación",
             },
             {
               icon: Target,
@@ -149,7 +149,7 @@ const Index = () => {
             >
               <feature.icon className="w-12 h-12 text-white mb-4" />
               <h3 className="text-xl font-semibold mb-3 text-white">{feature.title}</h3>
-              <p className="text-gray-300">{feature.description}</p>
+              <p className="text-[#C8C8C9]">{feature.description}</p>
             </motion.div>
           ))}
         </section>
