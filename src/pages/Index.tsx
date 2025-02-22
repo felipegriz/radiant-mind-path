@@ -15,14 +15,14 @@ const Index = () => {
         {/* Hero Section */}
         <section className="text-center space-y-6 animate-fade-up">
           <span className="px-4 py-2 bg-accent inline-block rounded-full text-sm font-medium text-secondary-foreground">
-            Bienvenido a Tu Viaje
+            FELIPE GRIZ
           </span>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-primary">
-            Transforma Tu Vida a Través del
+            Transformando Vidas a Través del
             <br /> Desarrollo Personal
           </h1>
           <p className="text-lg text-secondary max-w-2xl mx-auto">
-            Descubre las herramientas, conocimientos y guía que necesitas para liberar tu máximo potencial y crear cambios positivos duraderos.
+            Te acompaño en el camino hacia tu mejor versión, con herramientas y estrategias probadas para alcanzar tu máximo potencial.
           </p>
         </section>
 
@@ -31,18 +31,18 @@ const Index = () => {
           {[
             {
               icon: Brain,
-              title: "Crecimiento Consciente",
-              description: "Desarrolla una mayor autoconciencia e inteligencia emocional a través de prácticas guiadas.",
+              title: "Mentalidad de Éxito",
+              description: "Desarrolla una mentalidad ganadora y supera las barreras mentales que te limitan.",
             },
             {
               icon: Target,
-              title: "Logro de Objetivos",
-              description: "Establece metas significativas y crea planes de acción para alcanzar tu máximo potencial.",
+              title: "Estrategias de Alto Impacto",
+              description: "Aprende técnicas comprobadas para alcanzar tus metas y transformar tu realidad.",
             },
             {
               icon: Heart,
-              title: "Bienestar Personal",
-              description: "Equilibra tu bienestar físico, mental y emocional para una vida óptima.",
+              title: "Desarrollo Integral",
+              description: "Optimiza todas las áreas de tu vida para lograr un crecimiento completo y duradero.",
             },
           ].map((feature, index) => (
             <motion.div
@@ -63,9 +63,9 @@ const Index = () => {
         {/* Quote Section */}
         <section className="text-center max-w-4xl mx-auto">
           <blockquote className="text-2xl font-medium text-primary italic">
-            "La única persona en la que estás destinado a convertirte es la persona que decides ser."
+            "El éxito no es un destino, es un viaje constante de crecimiento y superación personal."
           </blockquote>
-          <p className="mt-4 text-secondary">Ralph Waldo Emerson</p>
+          <p className="mt-4 text-secondary">Felipe Griz</p>
         </section>
       </div>
     </div>
