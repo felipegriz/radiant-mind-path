@@ -15,14 +15,14 @@ const Index = () => {
         {/* Hero Section */}
         <section className="text-center space-y-6 animate-fade-up">
           <span className="px-4 py-2 bg-accent inline-block rounded-full text-sm font-medium text-secondary-foreground">
-            Welcome to Your Journey
+            Bienvenido a Tu Viaje
           </span>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-primary">
-            Transform Your Life Through
-            <br /> Personal Development
+            Transforma Tu Vida a Través del
+            <br /> Desarrollo Personal
           </h1>
           <p className="text-lg text-secondary max-w-2xl mx-auto">
-            Discover the tools, insights, and guidance you need to unlock your full potential and create lasting positive change.
+            Descubre las herramientas, conocimientos y guía que necesitas para liberar tu máximo potencial y crear cambios positivos duraderos.
           </p>
         </section>
 
@@ -31,18 +31,18 @@ const Index = () => {
           {[
             {
               icon: Brain,
-              title: "Mindful Growth",
-              description: "Develop deeper self-awareness and emotional intelligence through guided practices.",
+              title: "Crecimiento Consciente",
+              description: "Desarrolla una mayor autoconciencia e inteligencia emocional a través de prácticas guiadas.",
             },
             {
               icon: Target,
-              title: "Goal Achievement",
-              description: "Set meaningful goals and create actionable plans to reach your highest potential.",
+              title: "Logro de Objetivos",
+              description: "Establece metas significativas y crea planes de acción para alcanzar tu máximo potencial.",
             },
             {
               icon: Heart,
-              title: "Personal Wellness",
-              description: "Balance your physical, mental, and emotional well-being for optimal living.",
+              title: "Bienestar Personal",
+              description: "Equilibra tu bienestar físico, mental y emocional para una vida óptima.",
             },
           ].map((feature, index) => (
             <motion.div
@@ -63,7 +63,7 @@ const Index = () => {
         {/* Quote Section */}
         <section className="text-center max-w-4xl mx-auto">
           <blockquote className="text-2xl font-medium text-primary italic">
-            "The only person you are destined to become is the person you decide to be."
+            "La única persona en la que estás destinado a convertirte es la persona que decides ser."
           </blockquote>
           <p className="mt-4 text-secondary">Ralph Waldo Emerson</p>
         </section>
