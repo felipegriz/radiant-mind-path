@@ -35,7 +35,7 @@ const Index = () => {
               </button>
               
               <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium flex flex-col leading-tight">
-                <span>Eventos de</span>
+                <span className="whitespace-nowrap">Eventos de</span>
                 <span>Inmersión</span>
               </button>
 
