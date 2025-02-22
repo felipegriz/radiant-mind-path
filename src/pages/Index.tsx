@@ -112,7 +112,7 @@ const Index = () => {
               <span>A Través Del</span>
               <span>Crecimiento Personal</span>
             </h1>
-            <p className="text-xl text-gray-500 max-w-3xl mx-auto pt-2">
+            <p className="text-xl text-gray-500 max-w-4xl mx-auto pt-2 whitespace-nowrap">
               Aprende la mentalidad y las mejores estrategias de las mentes más brillantes del mundo
             </p>
           </motion.div>
