@@ -96,7 +96,7 @@ const Index = () => {
               <span>a Través del</span>
               <span>Crecimiento Personal</span>
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto pt-2">
+            <p className="text-xl text-gray-500 max-w-3xl mx-auto pt-2">
               Te acompaño en el camino hacia tu mejor versión, con herramientas y estrategias probadas para alcanzar tu máximo potencial.
             </p>
           </motion.div>
