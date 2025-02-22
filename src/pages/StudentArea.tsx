@@ -1,8 +1,11 @@
 
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BookOpen, GraduationCap, Calendar, MessageCircle, FileText, PlayCircle } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { AIChat } from "@/components/chat/AIChat";
+import { supabase } from "@/integrations/supabase/client";
 
 const resources = [
   {
@@ -32,6 +35,36 @@ const resources = [
 ];
 
 const StudentArea = () => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate('/auth/login');
+        return;
+      }
+      
+      setIsLoading(false);
+    };
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        navigate('/auth/login');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
+  if (isLoading) {
+    return <div className="min-h-screen bg-background" />;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

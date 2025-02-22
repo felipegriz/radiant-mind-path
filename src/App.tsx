@@ -10,6 +10,7 @@ import Despertar360 from "./pages/events/Despertar360";
 import CitaConLoImposible from "./pages/events/CitaConLoImposible";
 import MissionMastery from "./pages/events/MissionMastery";
 import StudentArea from "./pages/StudentArea";
+import Login from "./pages/auth/Login";
 import Contacto from "./pages/Contacto";
 import SuperHumano from "./pages/coaching-consultoria/SuperHumano";
 import SilverPartnership from "./pages/coaching-consultoria/SilverPartnership";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
           <Route path="/events/mission-mastery" element={<MissionMastery />} />
           <Route path="/student-area" element={<StudentArea />} />
+          <Route path="/auth/login" element={<Login />} />
           <Route path="/contacto" element={<Contacto />} />
           <Route path="/coaching-consultoria/super-humano" element={<SuperHumano />} />
           <Route path="/coaching-consultoria/silver-partnership" element={<SilverPartnership />} />
