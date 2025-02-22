@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Brain, Target, Heart, ChevronDown } from "lucide-react";
 import {
@@ -21,6 +22,12 @@ const Index = () => {
     "AI MASTERY"
   ];
 
+  const eventosInmersion = [
+    "DESPERTAR 360",
+    "CITA CON LO IMPOSIBLE",
+    "MISSION MASTERY"
+  ];
+
   return (
     <div className="min-h-screen w-full bg-background">
       {/* Navigation Bar */}
@@ -33,10 +40,21 @@ const Index = () => {
                 Inicio
               </button>
               
-              <button className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium flex flex-col leading-tight">
-                <span className="whitespace-nowrap">Eventos de</span>
-                <span>Inmersión</span>
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center">
+                  Eventos de Inmersión <ChevronDown className="ml-1 h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-background/95 backdrop-blur-sm border border-white/10">
+                  {eventosInmersion.map((evento) => (
+                    <DropdownMenuItem
+                      key={evento}
+                      className="text-gray-300 hover:text-white hover:bg-white/5 cursor-pointer"
+                    >
+                      {evento}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               <DropdownMenu>
                 <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center">
