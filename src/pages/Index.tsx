@@ -125,7 +125,7 @@ const Index = () => {
           {[
             {
               icon: Brain,
-              title: "INMERSIÓN",
+              title: "SEMINARIOS DE INMERSIÓN",
               description: "Formato de alto impacto que garantiza la retención de la información y tu transformación",
             },
             {
