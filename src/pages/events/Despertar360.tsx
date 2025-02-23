@@ -83,9 +83,7 @@ const Despertar360 = () => {
     try {
       const { data: checkoutResponse, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
-          priceId: selectedPrice.id,
-          eventName: selectedPrice.ticket_description,
-          priceAmount: selectedPrice.price_amount,
+          event_name: selectedPrice.event_name,
         }
       });
 
