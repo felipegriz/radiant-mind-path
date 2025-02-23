@@ -17,7 +17,9 @@ import { FinalCTASection } from "@/components/events/despertar360/FinalCTASectio
 import { GraduatesButton } from "@/components/events/despertar360/GraduatesButton";
 import type { EventPrice } from "@/types/event";
 
-const stripePromise = loadStripe("pk_live_51Op7kfLsUYD3w5DwMzYhZj6XHnQnPHYD4pD4M0JqaPY6qPnLHwgaTzAPKwRgxGNV2eK8UjZo3FWPQ0rhSWH6OZ8U00pPHXMtmG");
+const stripePromise = loadStripe("pk_live_51Op7kfLsUYD3w5DwMzYhZj6XHnQnPHYD4pD4M0JqaPY6qPnLHwgaTzAPKwRgxGNV2eK8UjZo3FWPQ0rhSWH6OZ8U00pPHXMtmG", {
+  locale: 'es'
+});
 
 const Despertar360 = () => {
   const navigate = useNavigate();
@@ -85,32 +87,39 @@ const Despertar360 = () => {
     try {
       console.log('Iniciando proceso de pago para:', selectedPrice.event_name);
       
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
+      const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
           event_name: selectedPrice.event_name,
+          priceId: selectedPrice.id
         }
       });
 
-      console.log('Respuesta de create-checkout:', { data, error });
+      console.log('Respuesta detallada de create-checkout:', { checkoutData, checkoutError });
 
-      if (error) {
-        throw new Error(error.message || 'Error al crear la sesión de pago');
+      if (checkoutError || !checkoutData) {
+        console.error('Error al crear la sesión de checkout:', checkoutError);
+        throw new Error(checkoutError?.message || 'Error al crear la sesión de pago');
       }
 
-      if (!data?.sessionId) {
+      if (!checkoutData.sessionId) {
+        console.error('No se recibió sessionId en la respuesta:', checkoutData);
         throw new Error('No se recibió el ID de la sesión de pago');
       }
 
       const stripe = await stripePromise;
       if (!stripe) {
+        console.error('Error al inicializar Stripe');
         throw new Error('No se pudo inicializar Stripe');
       }
 
+      console.log('Iniciando redirección a Stripe con sessionId:', checkoutData.sessionId);
+      
       const { error: stripeError } = await stripe.redirectToCheckout({ 
-        sessionId: data.sessionId 
+        sessionId: checkoutData.sessionId 
       });
 
       if (stripeError) {
+        console.error('Error en redirectToCheckout:', stripeError);
         throw stripeError;
       }
 
