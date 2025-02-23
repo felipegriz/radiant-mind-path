@@ -126,6 +126,19 @@ const Despertar360 = () => {
     <div className="min-h-screen bg-white">
       <Navbar />
       
+      {/* Botón de Graduados (Fuera del contenedor del hero para posicionamiento absoluto) */}
+      {isAuthenticated && (
+        <div className="absolute top-24 right-4 z-10">
+          <Button 
+            variant="secondary"
+            onClick={() => navigate("/student-area")}
+            className="shadow-lg"
+          >
+            Acceder al Área de Graduados
+          </Button>
+        </div>
+      )}
+      
       {/* Hook Section - Gancho Inicial */}
       <div className="bg-[#1A1F2C] text-white py-20">
         <div className="container mx-auto px-4">
@@ -135,15 +148,6 @@ const Despertar360 = () => {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto text-center"
           >
-            {isAuthenticated && (
-              <Button 
-                variant="secondary"
-                className="mb-8"
-                onClick={() => navigate("/student-area")}
-              >
-                Acceder al Área de Graduados
-              </Button>
-            )}
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               DESCUBRE EL SECRETO QUE EL 95% DE LAS PERSONAS IGNORAN PARA ALCANZAR SU MÁXIMO POTENCIAL
             </h1>
