@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -127,7 +128,7 @@ const Despertar360 = () => {
   };
 
   const scrollToPricing = () => {
-    const pricingSection = document.querySelector('.bg-[#1A1F2C]');
+    const pricingSection = document.querySelector('.pricing-section');
     pricingSection?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -158,7 +159,7 @@ const Despertar360 = () => {
       <TestimonialsSection />
       <GuaranteeSection />
 
-      <div className="bg-[#1A1F2C] py-16">
+      <div className="bg-[#1A1F2C] pricing-section py-16">
         <div className="container mx-auto px-4">
           <PricingSection
             prices={prices}
