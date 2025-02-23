@@ -17,6 +17,12 @@ serve(async (req) => {
   }
 
   try {
+    const { priceId, eventName } = await req.json();
+
+    if (!priceId || !eventName) {
+      throw new Error('Missing required parameters');
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -24,10 +30,12 @@ serve(async (req) => {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: 'Despertar 360',
-              description: 'Seminario intensivo de transformación personal',
+              name: eventName === 'despertar-360-platinum' ? 'Entrada Platinum' :
+                    eventName === 'despertar-360-vip' ? 'Entrada VIP' : 'Entrada General',
+              description: 'Acceso al evento Despertar 360',
             },
-            unit_amount: 99900, // $999.00 USD
+            unit_amount: eventName === 'despertar-360-platinum' ? 39900 :
+                        eventName === 'despertar-360-vip' ? 29900 : 19900,
           },
           quantity: 1,
         },
@@ -42,6 +50,7 @@ serve(async (req) => {
       status: 200,
     });
   } catch (error) {
+    console.error('Error:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,

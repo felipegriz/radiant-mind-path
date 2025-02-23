@@ -82,37 +82,32 @@ const Despertar360 = () => {
 
     setIsProcessing(true);
     try {
-      const response = await fetch(
-        'https://awbrvqrtqxwomnevipdt.supabase.co/functions/v1/create-checkout',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            priceId: selectedPrice.id,
-            eventName: selectedPrice.event_name,
-          }),
+      const { data: checkoutResponse, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
+        body: {
+          priceId: selectedPrice.id,
+          eventName: selectedPrice.event_name,
         }
-      );
+      });
 
-      if (!response.ok) {
+      if (checkoutError) {
         throw new Error('Error al procesar el pago');
       }
 
-      const { sessionId } = await response.json();
       const stripe = await stripePromise;
       
       if (!stripe) {
         throw new Error('Error al cargar Stripe');
       }
 
-      const { error } = await stripe.redirectToCheckout({ sessionId });
+      const { error } = await stripe.redirectToCheckout({ 
+        sessionId: checkoutResponse.sessionId 
+      });
       
       if (error) {
         throw error;
       }
     } catch (error) {
+      console.error('Payment error:', error);
       toast({
         variant: "destructive",
         title: "Error",
