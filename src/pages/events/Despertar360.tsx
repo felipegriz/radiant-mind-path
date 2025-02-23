@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import Navbar from "@/components/layout/Navbar";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,11 +23,30 @@ const stripePromise = loadStripe("pk_live_51Op7kfLsUYD3w5DwMzYhZj6XHnQnPHYD4pD4M
 
 const Despertar360 = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [processingPriceId, setProcessingPriceId] = useState<string | null>(null);
   const [prices, setPrices] = useState<EventPrice[]>([]);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const checkStripeError = () => {
+      const hasStripeError = searchParams.get('stripe_error');
+      if (hasStripeError) {
+        toast({
+          variant: "destructive",
+          title: "Error en el proceso de pago",
+          description: "La sesión de pago ha expirado o no es válida. Por favor, intenta realizar la compra nuevamente.",
+          duration: 5000,
+        });
+        // Limpiar el parámetro de error de la URL
+        navigate('/events/despertar-360', { replace: true });
+      }
+    };
+
+    checkStripeError();
+  }, [searchParams, toast, navigate]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -119,7 +138,8 @@ const Despertar360 = () => {
 
       if (stripeError) {
         console.error('Error de Stripe:', stripeError);
-        throw stripeError;
+        navigate('/events/despertar-360?stripe_error=true', { replace: true });
+        return;
       }
 
     } catch (error) {
@@ -128,6 +148,7 @@ const Despertar360 = () => {
         variant: "destructive",
         title: "Error en el proceso de pago",
         description: "Hubo un problema al procesar tu pago. Por favor, intenta de nuevo en unos momentos o contacta a soporte si el problema persiste.",
+        duration: 5000,
       });
       setProcessingPriceId(null);
     }
