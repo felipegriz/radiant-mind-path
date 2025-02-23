@@ -40,7 +40,7 @@ const Despertar360 = () => {
         {
           id: "general",
           event_name: "despertar-360-general",
-          price_amount: 15000, // $150.00
+          price_amount: 5000, // $50.00
           currency: "USD",
           is_active: true,
           ticket_description: "GENERAL",
@@ -49,7 +49,7 @@ const Despertar360 = () => {
         {
           id: "vip",
           event_name: "despertar-360-vip",
-          price_amount: 20000, // $200.00
+          price_amount: 15000, // $150.00
           currency: "USD",
           is_active: true,
           ticket_description: "VIP",

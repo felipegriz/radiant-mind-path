@@ -4,7 +4,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-Deno.serve(async (req) => {
+const handler = async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -66,4 +66,6 @@ Deno.serve(async (req) => {
       }
     );
   }
-});
+};
+
+Deno.serve(handler);
