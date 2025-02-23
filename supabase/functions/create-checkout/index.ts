@@ -14,9 +14,9 @@ const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
 
 // Mapeo de eventos a IDs de precios de Stripe
 const STRIPE_PRICE_IDS = {
-  'despertar-360-general': 'price_1Op8UjLsUYD3w5DwVbxxxxxxxGEN', // Reemplazar con tu ID de precio real
-  'despertar-360-vip': 'price_1Op8UjLsUYD3w5DwVbxxxxxxxVIP',    // Reemplazar con tu ID de precio real
-  'despertar-360-platinum': 'price_1Op8UjLsUYD3w5DwVbxxxxxxxPLAT' // Reemplazar con tu ID de precio real
+  'despertar-360-general': 'price_1QpbniLMf9X10TxuPxNFb3dE', // ID real de la entrada general
+  'despertar-360-vip': 'price_pendiente_vip',                // Pendiente de actualizar
+  'despertar-360-platinum': 'price_pendiente_platinum'       // Pendiente de actualizar
 };
 
 serve(async (req) => {
