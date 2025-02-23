@@ -35,6 +35,9 @@ export const PricingSection = ({
 
   const handlePayment = async (price: EventPrice) => {
     try {
+      console.log('Iniciando proceso de pago para:', price.ticket_description);
+      console.log('ID de precio Stripe:', STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS]);
+
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
           priceId: STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS],
@@ -43,13 +46,18 @@ export const PricingSection = ({
         },
       });
 
+      console.log('Respuesta de create-checkout:', { data, error });
+
       if (error) {
+        console.error('Error al crear la sesión:', error);
         throw error;
       }
 
       if (data?.url) {
+        console.log('Redirigiendo a:', data.url);
         window.location.href = data.url;
       } else {
+        console.error('No se recibió URL de sesión');
         toast({
           variant: "destructive",
           title: "Error",
