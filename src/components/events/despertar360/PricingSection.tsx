@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -22,8 +21,6 @@ export const PricingSection = ({
   onPayment,
   processingPriceId: initialProcessingPriceId
 }: PricingSectionProps) => {
-  const [processingPriceId] = useState<string | null>(initialProcessingPriceId);
-
   // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
   const orderedPrices = [...prices].sort((a, b) => {
     const order = { general: 1, vip: 2, platinum: 3 };
@@ -69,10 +66,8 @@ export const PricingSection = ({
               <a 
                 href={STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS]}
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full px-4 py-2 rounded-full text-lg font-bold"
-                target="_self"
-                rel="noopener noreferrer"
               >
-                {processingPriceId === price.id ? 'Procesando...' : 'Comprar Ahora'}
+                Comprar Ahora
               </a>
             </div>
           </motion.div>
