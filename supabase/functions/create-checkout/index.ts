@@ -2,7 +2,9 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { Stripe } from "https://esm.sh/stripe@13.10.0?target=deno";
 
+// Asegurarnos de usar la clave de prueba de Stripe
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
+  apiVersion: '2023-10-16', // Especificar versión de la API
   httpClient: Stripe.createFetchHttpClient(),
 });
 
@@ -12,16 +14,21 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
 
   try {
     const { priceId, eventName } = await req.json();
+    console.log('Received request:', { priceId, eventName }); // Debug log
 
     if (!priceId || !eventName) {
       throw new Error('Missing required parameters');
     }
+
+    // Log the Stripe key mode being used (without revealing the actual key)
+    console.log('Stripe mode:', stripe.getClientSecretKey().startsWith('sk_test_') ? 'test' : 'live');
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -45,12 +52,14 @@ serve(async (req) => {
       cancel_url: `${req.headers.get('origin')}/events/despertar-360`,
     });
 
+    console.log('Session created:', { sessionId: session.id }); // Debug log
+
     return new Response(JSON.stringify({ sessionId: session.id }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     });
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error creating checkout session:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,
