@@ -7,6 +7,8 @@ const corsHeaders = {
 };
 
 const handler = async (req: Request) => {
+  console.log('Iniciando función create-checkout');
+  
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -14,17 +16,21 @@ const handler = async (req: Request) => {
   try {
     const stripeKey = Deno.env.get('STRIPE_SECRET_KEY');
     if (!stripeKey) {
+      console.error('Error: Missing Stripe secret key');
       throw new Error('Missing Stripe secret key');
     }
 
     const stripe = new Stripe(stripeKey, {
       apiVersion: '2023-10-16',
+      httpClient: Stripe.createFetchHttpClient(),
     });
 
     const { event_name, price_amount } = await req.json();
-    console.log('Creating session for:', { event_name, price_amount });
+    console.log('Datos recibidos:', { event_name, price_amount });
 
-    const origin = req.headers.get('origin') || 'http://localhost:3000';
+    const origin = req.headers.get('origin') || 'https://2b4b6960-3aca-4278-9261-37a1a21f9176.lovableproject.com';
+    console.log('Origin URL:', origin);
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -44,9 +50,12 @@ const handler = async (req: Request) => {
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/events/despertar-360`,
       locale: 'es',
+      allow_promotion_codes: true,
+      billing_address_collection: 'required',
+      customer_creation: 'always',
     });
 
-    console.log('Session created:', session.id);
+    console.log('Sesión creada exitosamente:', session.id);
 
     return new Response(
       JSON.stringify({ sessionId: session.id }),
@@ -59,10 +68,11 @@ const handler = async (req: Request) => {
     );
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error detallado:', error);
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : 'Unknown error occurred',
+        details: error instanceof Error ? error.stack : undefined,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
