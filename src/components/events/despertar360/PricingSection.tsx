@@ -5,23 +5,15 @@ import type { EventPrice } from "@/types/event";
 
 interface PricingSectionProps {
   prices: EventPrice[];
-  onPayment: (selectedPrice: EventPrice) => void;
-  processingPriceId: string | null;
 }
 
-// Enlaces directos de pago de Stripe
 const STRIPE_PAYMENT_LINKS = {
   general: "https://buy.stripe.com/4gw29F7bM4nX6l26qW",
   vip: "https://buy.stripe.com/00gdSn9jU07H38Q16L",
   platinum: "https://buy.stripe.com/aEU15B1RsaMldNu9Di"
 };
 
-export const PricingSection = ({
-  prices,
-  onPayment,
-  processingPriceId: initialProcessingPriceId
-}: PricingSectionProps) => {
-  // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
+export const PricingSection = ({ prices }: PricingSectionProps) => {
   const orderedPrices = [...prices].sort((a, b) => {
     const order = { general: 1, vip: 2, platinum: 3 };
     const aOrder = order[a.id as keyof typeof order] || 0;
@@ -64,7 +56,11 @@ export const PricingSection = ({
             </div>
             <div className="mt-auto">
               <a 
-                href={STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS]}
+                href={STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS]} 
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS];
+                }}
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full px-4 py-2 rounded-full text-lg font-bold"
               >
                 Comprar Ahora
