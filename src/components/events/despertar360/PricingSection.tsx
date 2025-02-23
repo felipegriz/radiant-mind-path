@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { EventPrice } from "@/types/event";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 interface PricingSectionProps {
   prices: EventPrice[];
@@ -13,11 +11,11 @@ interface PricingSectionProps {
   processingPriceId: string | null;
 }
 
-// IDs de precio de Stripe
-const STRIPE_PRICE_IDS = {
-  general: "price_1QpbniLMf9X10TxuPxNFb3dE",
-  vip: "price_1QvVnrLMf9X10TxuvN6PVKA5",
-  platinum: "price_1QvVqBLMf9X10TxuctBAazPc"
+// Enlaces directos de pago de Stripe
+const STRIPE_PAYMENT_LINKS = {
+  general: "https://buy.stripe.com/4gw29F7bM4nX6l26qW",
+  vip: "https://buy.stripe.com/00gdSn9jU07H38Q16L",
+  platinum: "https://buy.stripe.com/aEU15B1RsaMldNu9Di"
 };
 
 export const PricingSection = ({
@@ -25,7 +23,6 @@ export const PricingSection = ({
   onPayment,
   processingPriceId: initialProcessingPriceId
 }: PricingSectionProps) => {
-  const { toast } = useToast();
   const [processingPriceId, setProcessingPriceId] = useState<string | null>(initialProcessingPriceId);
 
   // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
@@ -36,51 +33,13 @@ export const PricingSection = ({
     return aOrder - bOrder;
   });
 
-  const handlePayment = async (price: EventPrice) => {
-    try {
-      setProcessingPriceId(price.id);
-      onPayment(price);
-
-      console.log('Iniciando proceso de pago para:', price.ticket_description);
-      
-      const priceId = STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS];
-      console.log('ID de precio Stripe:', priceId);
-
-      if (!priceId) {
-        throw new Error('ID de precio no válido');
-      }
-
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: {
-          priceId,
-          successUrl: `${window.location.origin}/success`,
-          cancelUrl: `${window.location.origin}/events/despertar-360`,
-        },
-      });
-
-      if (error) {
-        console.error('Error al invocar la función:', error);
-        throw error;
-      }
-
-      console.log('Respuesta de la función:', data);
-
-      if (data?.url) {
-        console.log('Redirigiendo a:', data.url);
-        // Usar window.open para asegurarnos que funciona en iOS
-        window.open(data.url, '_self');
-      } else {
-        throw new Error('No se recibió URL de sesión');
-      }
-    } catch (error) {
-      console.error('Error al crear la sesión de pago:', error);
-      toast({
-        variant: "destructive",
-        title: "Error en el proceso de pago",
-        description: error instanceof Error ? error.message : "Hubo un problema al procesar tu solicitud. Por favor, intenta de nuevo.",
-      });
-    } finally {
-      setProcessingPriceId(null);
+  const handlePayment = (price: EventPrice) => {
+    setProcessingPriceId(price.id);
+    onPayment(price);
+    
+    const paymentLink = STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS];
+    if (paymentLink) {
+      window.open(paymentLink, '_self');
     }
   };
 
