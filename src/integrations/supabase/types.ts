@@ -39,6 +39,57 @@ export type Database = {
         }
         Relationships: []
       }
+      enrollments: {
+        Row: {
+          created_at: string | null
+          enrollment_date: string | null
+          id: string
+          notes: string | null
+          payment_plan: string | null
+          program_id: string | null
+          status: Database["public"]["Enums"]["enrollment_status"] | null
+          student_id: string | null
+          total_amount: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          enrollment_date?: string | null
+          id?: string
+          notes?: string | null
+          payment_plan?: string | null
+          program_id?: string | null
+          status?: Database["public"]["Enums"]["enrollment_status"] | null
+          student_id?: string | null
+          total_amount?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          enrollment_date?: string | null
+          id?: string
+          notes?: string | null
+          payment_plan?: string | null
+          program_id?: string | null
+          status?: Database["public"]["Enums"]["enrollment_status"] | null
+          student_id?: string | null
+          total_amount?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrollments_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enrollments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_prices: {
         Row: {
           created_at: string
@@ -93,6 +144,256 @@ export type Database = {
         }
         Relationships: []
       }
+      program_modules: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          program_id: string | null
+          sequence_order: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          program_id?: string | null
+          sequence_order?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          program_id?: string | null
+          sequence_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "program_modules_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      program_sessions: {
+        Row: {
+          created_at: string | null
+          duration_minutes: number | null
+          id: string
+          is_recurring: boolean | null
+          location: string | null
+          max_participants: number | null
+          program_id: string | null
+          recurring_day: string | null
+          recurring_time: string | null
+          session_date: string | null
+          session_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          max_participants?: number | null
+          program_id?: string | null
+          recurring_day?: string | null
+          recurring_time?: string | null
+          session_date?: string | null
+          session_type: string
+        }
+        Update: {
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          max_participants?: number | null
+          program_id?: string | null
+          recurring_day?: string | null
+          recurring_time?: string | null
+          session_date?: string | null
+          session_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "program_sessions_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      programs: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          duration_months: number | null
+          id: string
+          is_premium: boolean | null
+          name: string
+          pillar: Database["public"]["Enums"]["program_pillar"]
+          status: Database["public"]["Enums"]["program_status"] | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          duration_months?: number | null
+          id?: string
+          is_premium?: boolean | null
+          name: string
+          pillar: Database["public"]["Enums"]["program_pillar"]
+          status?: Database["public"]["Enums"]["program_status"] | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          duration_months?: number | null
+          id?: string
+          is_premium?: boolean | null
+          name?: string
+          pillar?: Database["public"]["Enums"]["program_pillar"]
+          status?: Database["public"]["Enums"]["program_status"] | null
+        }
+        Relationships: []
+      }
+      session_attendance: {
+        Row: {
+          attendance_date: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          session_id: string | null
+          status: string | null
+          student_id: string | null
+        }
+        Insert: {
+          attendance_date?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          session_id?: string | null
+          status?: string | null
+          student_id?: string | null
+        }
+        Update: {
+          attendance_date?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          session_id?: string | null
+          status?: string | null
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_attendance_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "program_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_attendance_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_progress: {
+        Row: {
+          completion_date: string | null
+          created_at: string | null
+          enrollment_id: string | null
+          id: string
+          module_id: string | null
+          notes: string | null
+          status: string | null
+        }
+        Insert: {
+          completion_date?: string | null
+          created_at?: string | null
+          enrollment_id?: string | null
+          id?: string
+          module_id?: string | null
+          notes?: string | null
+          status?: string | null
+        }
+        Update: {
+          completion_date?: string | null
+          created_at?: string | null
+          enrollment_id?: string | null
+          id?: string
+          module_id?: string | null
+          notes?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_progress_enrollment_id_fkey"
+            columns: ["enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "program_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      students: {
+        Row: {
+          created_at: string | null
+          email: string
+          enrollment_date: string | null
+          full_name: string
+          id: string
+          last_contact: string | null
+          notes: string | null
+          phone: string | null
+          source: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          enrollment_date?: string | null
+          full_name: string
+          id?: string
+          last_contact?: string | null
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          enrollment_date?: string | null
+          full_name?: string
+          id?: string
+          last_contact?: string | null
+          notes?: string | null
+          phone?: string | null
+          source?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -122,7 +423,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      enrollment_status: "active" | "completed" | "cancelled" | "pending"
+      program_pillar: "inmersion" | "recondicionamiento" | "personalizacion"
+      program_status: "active" | "inactive" | "coming_soon"
     }
     CompositeTypes: {
       [_ in never]: never
