@@ -6,7 +6,7 @@ import type { EventPrice } from "@/types/event";
 
 interface PricingSectionProps {
   prices: EventPrice[];
-  onPayment: () => void;
+  onPayment: (selectedPrice: EventPrice) => void;
   isProcessing: boolean;
 }
 
@@ -50,7 +50,7 @@ export const PricingSection = ({
             </div>
             <div className="mt-auto">
               <Button 
-                onClick={onPayment}
+                onClick={() => onPayment(price)}
                 disabled={isProcessing}
                 className="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-full text-lg font-bold transition-colors"
               >
