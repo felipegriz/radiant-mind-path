@@ -128,8 +128,10 @@ const Despertar360 = () => {
   };
 
   const scrollToPricing = () => {
-    const pricingSection = document.querySelector('.pricing-section');
-    pricingSection?.scrollIntoView({ behavior: 'smooth' });
+    const pricingSection = document.getElementById('pricing-section');
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   if (isLoading) {
@@ -159,7 +161,7 @@ const Despertar360 = () => {
       <TestimonialsSection />
       <GuaranteeSection />
 
-      <div className="bg-[#1A1F2C] pricing-section py-16">
+      <div id="pricing-section" className="bg-[#1A1F2C] py-16">
         <div className="container mx-auto px-4">
           <PricingSection
             prices={prices}

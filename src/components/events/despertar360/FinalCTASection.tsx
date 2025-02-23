@@ -8,7 +8,7 @@ interface FinalCTASectionProps {
 
 export const FinalCTASection = ({ onRegisterClick }: FinalCTASectionProps) => {
   return (
-    <div className="bg-[#1A1F2C] text-white py-16">
+    <section className="bg-[#1A1F2C] text-white py-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -25,12 +25,13 @@ export const FinalCTASection = ({ onRegisterClick }: FinalCTASectionProps) => {
           </p>
           <Button 
             onClick={onRegisterClick}
+            size="lg"
             className="bg-primary hover:bg-primary/80 text-white px-8 py-4 rounded-full text-lg font-bold transition-colors"
           >
             ¡RESERVA TU LUGAR AHORA!
           </Button>
         </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
