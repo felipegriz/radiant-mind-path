@@ -15,6 +15,14 @@ export const PricingSection = ({
   onPayment,
   isProcessing
 }: PricingSectionProps) => {
+  // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
+  const orderedPrices = [...prices].sort((a, b) => {
+    const order = { general: 1, vip: 2, platinum: 3 };
+    const aOrder = order[a.id as keyof typeof order] || 0;
+    const bOrder = order[b.id as keyof typeof order] || 0;
+    return aOrder - bOrder;
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,7 +32,7 @@ export const PricingSection = ({
     >
       <h2 className="text-3xl font-bold text-primary text-center mb-8">Elige tu Entrada</h2>
       <div className="grid md:grid-cols-3 gap-8 mb-8">
-        {prices.map((price) => (
+        {orderedPrices.map((price) => (
           <motion.div
             key={price.id}
             initial={{ opacity: 0, y: 20 }}

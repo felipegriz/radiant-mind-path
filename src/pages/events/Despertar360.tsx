@@ -26,6 +26,7 @@ const Despertar360 = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingPriceId, setProcessingPriceId] = useState<string | null>(null);
   const [prices, setPrices] = useState<EventPrice[]>([]);
   const { toast } = useToast();
 
@@ -36,15 +37,14 @@ const Despertar360 = () => {
     };
 
     const loadPrices = async () => {
-      // Crear precios fijos localmente
       const fixedPrices: EventPrice[] = [
         {
-          id: "platinum",
-          event_name: "despertar-360-platinum",
-          price_amount: 30000, // $300.00 (cambio de precio aquí)
+          id: "general",
+          event_name: "despertar-360-general",
+          price_amount: 15000, // $150.00
           currency: "USD",
           is_active: true,
-          ticket_description: "VIP PLATINO",
+          ticket_description: "GENERAL",
           valid_until: new Date(2024, 11, 31).toISOString()
         },
         {
@@ -57,12 +57,12 @@ const Despertar360 = () => {
           valid_until: new Date(2024, 11, 31).toISOString()
         },
         {
-          id: "general",
-          event_name: "despertar-360-general",
-          price_amount: 15000, // $150.00
+          id: "platinum",
+          event_name: "despertar-360-platinum",
+          price_amount: 30000, // $300.00
           currency: "USD",
           is_active: true,
-          ticket_description: "GENERAL",
+          ticket_description: "VIP PLATINO",
           valid_until: new Date(2024, 11, 31).toISOString()
         }
       ];
@@ -78,10 +78,10 @@ const Despertar360 = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [toast]);
+  }, []);
 
   const handlePayment = async (selectedPrice: EventPrice) => {
-    setIsProcessing(true);
+    setProcessingPriceId(selectedPrice.id);
     try {
       console.log('Iniciando proceso de pago para:', selectedPrice.event_name);
       
@@ -128,8 +128,7 @@ const Despertar360 = () => {
         title: "Error en el proceso de pago",
         description: error.message || "Hubo un problema al procesar el pago. Por favor, intenta de nuevo.",
       });
-    } finally {
-      setIsProcessing(false);
+      setProcessingPriceId(null);
     }
   };
 
@@ -170,7 +169,7 @@ const Despertar360 = () => {
           <PricingSection
             prices={prices}
             onPayment={handlePayment}
-            isProcessing={isProcessing}
+            isProcessing={!!processingPriceId}
           />
         </div>
       </div>
