@@ -7,13 +7,13 @@ import type { EventPrice } from "@/types/event";
 interface PricingSectionProps {
   prices: EventPrice[];
   onPayment: (selectedPrice: EventPrice) => void;
-  isProcessing: boolean;
+  processingPriceId: string | null;
 }
 
 export const PricingSection = ({
   prices,
   onPayment,
-  isProcessing
+  processingPriceId
 }: PricingSectionProps) => {
   // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
   const orderedPrices = [...prices].sort((a, b) => {
@@ -59,10 +59,10 @@ export const PricingSection = ({
             <div className="mt-auto">
               <Button 
                 onClick={() => onPayment(price)}
-                disabled={isProcessing}
+                disabled={processingPriceId === price.id}
                 className="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-full text-lg font-bold transition-colors"
               >
-                {isProcessing ? "Procesando..." : `Reservar - $${(price.price_amount / 100).toFixed(2)} ${price.currency}`}
+                {processingPriceId === price.id ? "Procesando..." : `Reservar - $${(price.price_amount / 100).toFixed(2)} ${price.currency}`}
               </Button>
             </div>
           </motion.div>

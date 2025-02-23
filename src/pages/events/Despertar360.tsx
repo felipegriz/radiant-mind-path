@@ -25,7 +25,6 @@ const Despertar360 = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [processingPriceId, setProcessingPriceId] = useState<string | null>(null);
   const [prices, setPrices] = useState<EventPrice[]>([]);
   const { toast } = useToast();
@@ -169,7 +168,7 @@ const Despertar360 = () => {
           <PricingSection
             prices={prices}
             onPayment={handlePayment}
-            isProcessing={!!processingPriceId}
+            processingPriceId={processingPriceId}
           />
         </div>
       </div>

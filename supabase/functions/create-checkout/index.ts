@@ -8,6 +8,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -30,7 +31,7 @@ serve(async (req) => {
               name: `Entrada ${event_name}`,
               description: 'Despertar 360',
             },
-            unit_amount: price_amount, // El precio viene en centavos
+            unit_amount: price_amount,
           },
           quantity: 1,
         },
@@ -43,14 +44,25 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ sessionId: session.id }), 
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json'
+        } 
+      }
     );
 
   } catch (error) {
     console.error('Error en create-checkout:', error);
     return new Response(
       JSON.stringify({ error: error.message }), 
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json'
+        },
+        status: 500
+      }
     );
   }
 });
