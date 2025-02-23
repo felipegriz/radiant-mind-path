@@ -1,25 +1,18 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { CalendarDays, MapPin, Users, Clock, Lock, BookOpen, PlayCircle, FileText, Crown, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import Navbar from "@/components/layout/Navbar";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { EventFeatures } from "@/components/events/despertar360/EventFeatures";
+import { StudentResources } from "@/components/events/despertar360/StudentResources";
+import { PricingSection } from "@/components/events/despertar360/PricingSection";
+import type { EventPrice } from "@/types/event";
 
 const stripePromise = loadStripe("pk_test_51Op7kfLsUYD3w5DwwooYfzIZaKnZ4XKr5aKuCVU9NeM2WJaD2Vhq94mzwEwqn4H1fxD5bDVmaf6Yh19NoSkhiWYe00wvDQG3ZH");
-
-interface EventPrice {
-  id: string;
-  event_name: string;
-  price_amount: number;
-  currency: string;
-  is_active: boolean;
-  ticket_description: string;
-  valid_until: string;
-}
 
 const Despertar360 = () => {
   const navigate = useNavigate();
@@ -56,7 +49,6 @@ const Despertar360 = () => {
 
       if (data) {
         setPrices(data);
-        // Seleccionar el ticket general por defecto
         const generalTicket = data.find(price => price.event_name === 'despertar-360-general');
         if (generalTicket) {
           setSelectedPrice(generalTicket);
@@ -126,24 +118,6 @@ const Despertar360 = () => {
     }
   };
 
-  const studentResources = [
-    {
-      icon: PlayCircle,
-      title: "Videos del Evento",
-      description: "Accede a las grabaciones de todas las sesiones"
-    },
-    {
-      icon: FileText,
-      title: "Material Complementario",
-      description: "Descarga guías y recursos exclusivos"
-    },
-    {
-      icon: BookOpen,
-      title: "Ejercicios Prácticos",
-      description: "Profundiza tu aprendizaje con ejercicios guiados"
-    }
-  ];
-
   if (isLoading) {
     return null;
   }
@@ -191,157 +165,17 @@ const Despertar360 = () => {
       </div>
 
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 gap-12">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-3xl font-bold text-white mb-6">Sobre el Evento</h2>
-            <p className="text-gray-300 mb-6">
-              DESPERTAR 360 es un seminario intensivo de tres días diseñado para ayudarte a romper 
-              limitaciones, transformar creencias y acceder a estados elevados de consciencia. 
-              A través de técnicas avanzadas de programación mental y ejercicios prácticos, 
-              descubrirás herramientas poderosas para manifestar la vida que deseas.
-            </p>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="flex items-center space-x-3">
-                <CalendarDays className="w-6 h-6 text-white" />
-                <span className="text-gray-300">3 días intensivos</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Users className="w-6 h-6 text-white" />
-                <span className="text-gray-300">Grupo reducido</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <MapPin className="w-6 h-6 text-white" />
-                <span className="text-gray-300">Ubicación Premium</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Clock className="w-6 h-6 text-white" />
-                <span className="text-gray-300">Inmersión Total</span>
-              </div>
-            </div>
-          </motion.div>
+        <EventFeatures />
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="glass-card p-8 rounded-2xl"
-          >
-            <h3 className="text-2xl font-bold text-white mb-6">¿Qué Aprenderás?</h3>
-            <ul className="space-y-4 text-gray-300">
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                Técnicas avanzadas de meditación y mindfulness
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                Herramientas de programación mental y PNL
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                Métodos para elevar tu frecuencia vibracional
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                Prácticas para manifestación consciente
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                Estrategias para mantener estados elevados
-              </li>
-            </ul>
-          </motion.div>
-        </div>
+        {!isLoading && isAuthenticated && <StudentResources />}
 
-        {!isLoading && isAuthenticated && (
-          <motion.div
-            id="studentPortal"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mt-16"
-          >
-            <div className="glass-card p-8 rounded-2xl">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-white mb-4">Portal del Estudiante</h2>
-                <p className="text-gray-300">
-                  Accede a todos los recursos exclusivos del evento Despertar 360
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-3 gap-8">
-                {studentResources.map((resource, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="glass-card p-6 rounded-xl hover-lift cursor-pointer"
-                  >
-                    <div className="flex flex-col items-center text-center">
-                      <resource.icon className="w-12 h-12 text-accent mb-4" />
-                      <h3 className="text-xl font-semibold text-white mb-2">{resource.title}</h3>
-                      <p className="text-gray-300">{resource.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mt-16"
-        >
-          <h2 className="text-3xl font-bold text-white text-center mb-8">Elige tu Entrada</h2>
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {prices.map((price) => (
-              <motion.div
-                key={price.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className={`glass-card p-6 rounded-xl cursor-pointer transition-all ${
-                  selectedPrice?.id === price.id ? 'ring-2 ring-accent' : ''
-                }`}
-                onClick={() => setSelectedPrice(price)}
-              >
-                <div className="flex flex-col items-center text-center">
-                  {price.event_name.includes('platinum') ? (
-                    <Crown className="w-12 h-12 text-accent mb-4" />
-                  ) : price.event_name.includes('vip') ? (
-                    <Star className="w-12 h-12 text-accent mb-4" />
-                  ) : (
-                    <Users className="w-12 h-12 text-accent mb-4" />
-                  )}
-                  <h3 className="text-xl font-semibold text-white mb-2">{price.ticket_description}</h3>
-                  <p className="text-2xl font-bold text-accent mb-2">
-                    ${(price.price_amount / 100).toFixed(2)} {price.currency}
-                  </p>
-                  <p className="text-sm text-gray-300">
-                    Válido hasta el {new Date(price.valid_until).toLocaleDateString()}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Button 
-              onClick={handlePayment}
-              disabled={isProcessing || !selectedPrice}
-              className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors"
-            >
-              {isProcessing ? "Procesando..." : selectedPrice ? `Reserva Tu Lugar Ahora - $${(selectedPrice.price_amount / 100).toFixed(2)} ${selectedPrice.currency}` : "Selecciona una entrada"}
-            </Button>
-          </div>
-        </motion.div>
+        <PricingSection
+          prices={prices}
+          selectedPrice={selectedPrice}
+          setSelectedPrice={setSelectedPrice}
+          onPayment={handlePayment}
+          isProcessing={isProcessing}
+        />
       </div>
     </div>
   );
