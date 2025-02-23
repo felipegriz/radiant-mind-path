@@ -72,6 +72,11 @@ const Despertar360 = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const handlePayment = (selectedPrice: EventPrice) => {
+    setProcessingPriceId(selectedPrice.id);
+    // La lógica del pago ahora está en el PricingSection
+  };
+
   const scrollToPricing = () => {
     const pricingSection = document.getElementById('pricing-section');
     if (pricingSection) {
@@ -110,7 +115,7 @@ const Despertar360 = () => {
         <div className="container mx-auto px-4">
           <PricingSection
             prices={prices}
-            onPayment={() => {}}
+            onPayment={handlePayment}
             processingPriceId={processingPriceId}
           />
         </div>

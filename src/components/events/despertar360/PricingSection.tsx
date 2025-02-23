@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,9 +22,11 @@ const STRIPE_PRICE_IDS = {
 
 export const PricingSection = ({
   prices,
-  processingPriceId
+  onPayment,
+  processingPriceId: initialProcessingPriceId
 }: PricingSectionProps) => {
   const { toast } = useToast();
+  const [processingPriceId, setProcessingPriceId] = useState<string | null>(initialProcessingPriceId);
 
   // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
   const orderedPrices = [...prices].sort((a, b) => {
@@ -35,6 +38,9 @@ export const PricingSection = ({
 
   const handlePayment = async (price: EventPrice) => {
     try {
+      setProcessingPriceId(price.id);
+      onPayment(price);
+
       console.log('Iniciando proceso de pago para:', price.ticket_description);
       
       const priceId = STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS];
@@ -51,6 +57,8 @@ export const PricingSection = ({
           cancelUrl: `${window.location.origin}/events/despertar-360`,
         },
       });
+
+      console.log('Respuesta de la función:', { data, error });
 
       if (error) {
         console.error('Error al invocar la función:', error);
@@ -70,6 +78,8 @@ export const PricingSection = ({
         title: "Error en el proceso de pago",
         description: error instanceof Error ? error.message : "Hubo un problema al procesar tu solicitud. Por favor, intenta de nuevo.",
       });
+    } finally {
+      setProcessingPriceId(null);
     }
   };
 
@@ -110,9 +120,10 @@ export const PricingSection = ({
               <Button 
                 onClick={() => handlePayment(price)}
                 disabled={processingPriceId === price.id}
-                className="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-full text-lg font-bold transition-colors"
+                variant="default"
+                className="w-full px-4 py-2 rounded-full text-lg font-bold"
               >
-                Comprar Ahora
+                {processingPriceId === price.id ? 'Procesando...' : 'Comprar Ahora'}
               </Button>
             </div>
           </motion.div>
