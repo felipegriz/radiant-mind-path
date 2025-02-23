@@ -20,6 +20,7 @@ serve(async (req) => {
 
   try {
     const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    console.log('Verificando configuración de Stripe');
     console.log('¿Existe STRIPE_SECRET_KEY?:', !!stripeSecretKey);
 
     if (!stripeSecretKey) {
@@ -29,32 +30,46 @@ serve(async (req) => {
     const { event_name } = await req.json();
     console.log('Nombre del evento recibido:', event_name);
 
-    const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2023-10-16',
-      httpClient: Stripe.createFetchHttpClient(),
-    });
-
-    // Try to retrieve price directly from Stripe first
-    let stripePrice;
+    // Configurar Stripe con manejo de errores detallado
+    let stripe;
     try {
-      const price = await stripe.prices.retrieve('price_1QpbniLMf9X10TxuPxNFb3dE');
-      console.log('Precio encontrado en Stripe:', price);
-      stripePrice = price.id;
+      stripe = new Stripe(stripeSecretKey, {
+        apiVersion: '2023-10-16',
+        httpClient: Stripe.createFetchHttpClient(),
+      });
+      console.log('Stripe inicializado correctamente');
     } catch (error) {
-      console.error('Error al obtener precio de Stripe:', error);
-      throw new Error('Error al verificar el precio en Stripe');
+      console.error('Error al inicializar Stripe:', error);
+      throw new Error('Error al inicializar la conexión con Stripe');
     }
+
+    // Mapeo de precios con manejo de errores específico
+    const STRIPE_PRICE_IDS = {
+      'despertar-360-general': 'price_1QpbniLMf9X10TxuPxNFb3dE',
+      'despertar-360-vip': 'price_1QvVnrLMf9X10TxuvN6PVKA5',
+      'despertar-360-platinum': 'price_1QvVqBLMf9X10TxuctBAazPc'
+    };
+
+    const stripePrice = STRIPE_PRICE_IDS[event_name];
+    console.log('Precio seleccionado:', { event_name, priceId: stripePrice });
 
     if (!stripePrice) {
-      throw new Error('No se pudo obtener el precio de Stripe');
+      throw new Error(`No se encontró un precio configurado para: ${event_name}`);
     }
 
-    console.log('Creando sesión de Stripe...');
-    
+    // Verificar que el precio existe en Stripe
+    try {
+      await stripe.prices.retrieve(stripePrice);
+      console.log('Precio verificado en Stripe');
+    } catch (error) {
+      console.error('Error al verificar el precio en Stripe:', error);
+      throw new Error('El precio especificado no existe en Stripe');
+    }
+
     const origin = req.headers.get('origin') || 'http://localhost:3000';
     console.log('URL de origen:', origin);
 
-    // Intenta crear la sesión con el precio verificado
+    console.log('Creando sesión de checkout...');
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -69,9 +84,11 @@ serve(async (req) => {
       client_reference_id: event_name,
       locale: 'es',
       allow_promotion_codes: true,
-      submit_type: 'pay',
-      billing_address_collection: 'auto',
       customer_creation: 'always',
+      billing_address_collection: 'auto',
+      payment_intent_data: {
+        setup_future_usage: 'off_session',
+      },
     });
 
     console.log('Sesión creada exitosamente:', {
