@@ -36,26 +36,38 @@ const Despertar360 = () => {
     };
 
     const loadPrices = async () => {
-      const { data, error } = await supabase
-        .from('event_prices')
-        .select('*')
-        .like('event_name', 'despertar-360%')
-        .eq('is_active', true)
-        .order('price_amount');
+      // Crear precios fijos localmente
+      const fixedPrices: EventPrice[] = [
+        {
+          id: "platinum",
+          event_name: "despertar-360-platinum",
+          price_amount: 30000, // $300.00
+          currency: "USD",
+          is_active: true,
+          ticket_description: "VIP PLATINO",
+          valid_until: new Date(2024, 11, 31).toISOString() // Válido hasta fin de año
+        },
+        {
+          id: "vip",
+          event_name: "despertar-360-vip",
+          price_amount: 20000, // $200.00
+          currency: "USD",
+          is_active: true,
+          ticket_description: "VIP",
+          valid_until: new Date(2024, 11, 31).toISOString()
+        },
+        {
+          id: "general",
+          event_name: "despertar-360-general",
+          price_amount: 15000, // $150.00
+          currency: "USD",
+          is_active: true,
+          ticket_description: "GENERAL",
+          valid_until: new Date(2024, 11, 31).toISOString()
+        }
+      ];
 
-      if (error) {
-        console.error('Error loading prices:', error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "No se pudieron cargar los precios del evento. Por favor, intenta más tarde.",
-        });
-        return;
-      }
-
-      if (data) {
-        setPrices(data);
-      }
+      setPrices(fixedPrices);
       setIsLoading(false);
     };
 
@@ -75,7 +87,8 @@ const Despertar360 = () => {
       
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
-          event_name: selectedPrice.event_name
+          event_name: selectedPrice.event_name,
+          price_amount: selectedPrice.price_amount
         }
       });
 
@@ -156,7 +169,7 @@ const Despertar360 = () => {
         <div className="container mx-auto px-4">
           <PricingSection
             prices={prices}
-            onPayment={() => handlePayment(prices[0])}
+            onPayment={handlePayment}
             isProcessing={isProcessing}
           />
         </div>

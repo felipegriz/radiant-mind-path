@@ -17,15 +17,21 @@ serve(async (req) => {
       apiVersion: '2023-10-16',
     });
 
-    const { event_name } = await req.json();
-    console.log('Creando sesión de checkout para:', event_name);
+    const { event_name, price_amount } = await req.json();
+    console.log('Creando sesión de checkout para:', event_name, 'precio:', price_amount);
 
-    // Mapeo simplificado de precios
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'price_1QpbniLMf9X10TxuPxNFb3dE', // Precio fijo para pruebas
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `Entrada ${event_name}`,
+              description: 'Despertar 360',
+            },
+            unit_amount: price_amount, // El precio viene en centavos
+          },
           quantity: 1,
         },
       ],
@@ -44,7 +50,7 @@ serve(async (req) => {
     console.error('Error en create-checkout:', error);
     return new Response(
       JSON.stringify({ error: error.message }), 
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
     );
   }
 });
