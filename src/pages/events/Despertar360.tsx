@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -84,6 +83,11 @@ const Despertar360 = () => {
     try {
       console.log('Iniciando proceso de pago para:', selectedPrice.event_name);
       
+      const stripe = await stripePromise;
+      if (!stripe) {
+        throw new Error('Error al inicializar Stripe');
+      }
+
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
           event_name: selectedPrice.event_name,
@@ -91,37 +95,28 @@ const Despertar360 = () => {
         }
       });
 
-      console.log('Respuesta detallada de create-checkout:', { checkoutData, checkoutError });
+      console.log('Respuesta del servidor:', { checkoutData, checkoutError });
 
       if (checkoutError || !checkoutData) {
-        console.error('Error al crear la sesión de checkout:', checkoutError);
         throw new Error(checkoutError?.message || 'Error al crear la sesión de pago');
       }
 
       if (!checkoutData.sessionId) {
-        console.error('No se recibió sessionId en la respuesta:', checkoutData);
         throw new Error('No se recibió el ID de la sesión de pago');
       }
 
-      const stripe = await stripePromise;
-      if (!stripe) {
-        console.error('Error al inicializar Stripe');
-        throw new Error('No se pudo inicializar Stripe');
-      }
-
-      console.log('Iniciando redirección a Stripe con sessionId:', checkoutData.sessionId);
+      console.log('Redirigiendo a Stripe con sessionId:', checkoutData.sessionId);
       
       const { error: stripeError } = await stripe.redirectToCheckout({ 
         sessionId: checkoutData.sessionId 
       });
 
       if (stripeError) {
-        console.error('Error en redirectToCheckout:', stripeError);
         throw stripeError;
       }
 
     } catch (error) {
-      console.error('Error detallado del pago:', error);
+      console.error('Error en el proceso de pago:', error);
       toast({
         variant: "destructive",
         title: "Error en el proceso de pago",
