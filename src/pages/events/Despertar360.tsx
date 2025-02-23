@@ -38,7 +38,7 @@ const Despertar360 = () => {
       const { data, error } = await supabase
         .from('event_prices')
         .select('*')
-        .in('event_name', ['despertar-360-general', 'despertar-360-vip', 'despertar-360-platinum'])
+        .like('event_name', 'despertar-360%')
         .eq('is_active', true)
         .order('price_amount');
 
