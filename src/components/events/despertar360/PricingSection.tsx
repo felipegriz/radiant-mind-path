@@ -10,9 +10,14 @@ interface PricingSectionProps {
   processingPriceId: string | null;
 }
 
+const STRIPE_LINKS = {
+  general: "https://buy.stripe.com/test_28o5m321L0Yc1r2cMM",
+  vip: "https://buy.stripe.com/test_28o5m321L0Yc1r2cNN",
+  platinum: "https://buy.stripe.com/test_28o5m321L0Yc1r2cOO"
+};
+
 export const PricingSection = ({
   prices,
-  onPayment,
   processingPriceId
 }: PricingSectionProps) => {
   // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
@@ -22,6 +27,13 @@ export const PricingSection = ({
     const bOrder = order[b.id as keyof typeof order] || 0;
     return aOrder - bOrder;
   });
+
+  const handlePayment = (priceId: string) => {
+    const paymentLink = STRIPE_LINKS[priceId as keyof typeof STRIPE_LINKS];
+    if (paymentLink) {
+      window.location.href = paymentLink;
+    }
+  };
 
   return (
     <motion.div
@@ -58,11 +70,11 @@ export const PricingSection = ({
             </div>
             <div className="mt-auto">
               <Button 
-                onClick={() => onPayment(price)}
+                onClick={() => handlePayment(price.id)}
                 disabled={processingPriceId === price.id}
                 className="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-full text-lg font-bold transition-colors"
               >
-                {processingPriceId === price.id ? "Procesando..." : `Reservar - $${(price.price_amount / 100).toFixed(2)} ${price.currency}`}
+                Comprar Ahora
               </Button>
             </div>
           </motion.div>
