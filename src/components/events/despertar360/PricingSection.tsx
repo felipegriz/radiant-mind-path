@@ -44,30 +44,22 @@ export const PricingSection = ({
         throw new Error('ID de precio no válido');
       }
 
-      const response = await fetch(`https://awbrvqrtqxwomnevipdt.supabase.co/functions/v1/create-checkout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: {
           priceId,
           successUrl: `${window.location.origin}/success`,
           cancelUrl: `${window.location.origin}/events/despertar-360`,
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error en la respuesta:', errorData);
-        throw new Error(errorData.error || 'Error al crear la sesión de pago');
+      if (error) {
+        console.error('Error al invocar la función:', error);
+        throw error;
       }
 
-      const { url } = await response.json();
-
-      if (url) {
-        console.log('Redirigiendo a:', url);
-        window.location.href = url;
+      if (data?.url) {
+        console.log('Redirigiendo a:', data.url);
+        window.location.href = data.url;
       } else {
         throw new Error('No se recibió URL de sesión');
       }
