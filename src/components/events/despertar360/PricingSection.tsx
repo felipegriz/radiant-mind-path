@@ -50,24 +50,36 @@ export const PricingSection = ({
         throw new Error('ID de precio no válido');
       }
 
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: {
-          priceId,
-          successUrl: `${window.location.origin}/success`,
-          cancelUrl: `${window.location.origin}/events/despertar-360`,
-        },
-      });
+      // Usar fetch directamente con los headers necesarios
+      const response = await fetch(
+        `${supabase.functions.url}/create-checkout`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`,
+          },
+          body: JSON.stringify({
+            priceId,
+            successUrl: `${window.location.origin}/success`,
+            cancelUrl: `${window.location.origin}/events/despertar-360`,
+          }),
+        }
+      );
 
-      console.log('Respuesta de la función:', { data, error });
-
-      if (error) {
-        console.error('Error al invocar la función:', error);
-        throw error;
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error en la respuesta:', errorData);
+        throw new Error('Error al crear la sesión de pago');
       }
+
+      const data = await response.json();
+      console.log('Respuesta de la función:', data);
 
       if (data?.url) {
         console.log('Redirigiendo a:', data.url);
-        window.location.href = data.url;
+        // Usar window.location.assign para una redirección más controlada
+        window.location.assign(data.url);
       } else {
         throw new Error('No se recibió URL de sesión');
       }
