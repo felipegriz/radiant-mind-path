@@ -8,34 +8,39 @@ const DashboardStats = () => {
   const { data: stats, isLoading } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: async () => {
-      const { data: totalStudents } = await supabase
+      const { count: totalStudents } = await supabase
         .from('students')
-        .select('id', { count: 'exact' });
+        .select('*', { count: 'exact', head: true });
 
-      const { data: activeEnrollments } = await supabase
+      const { count: activeEnrollments } = await supabase
         .from('enrollments')
-        .select('id', { count: 'exact' })
+        .select('*', { count: 'exact', head: true })
         .eq('status', 'active');
 
-      const { data: upcomingSessions } = await supabase
+      const { count: upcomingSessions } = await supabase
         .from('program_sessions')
-        .select('id', { count: 'exact' })
+        .select('*', { count: 'exact', head: true })
         .gte('session_date', new Date().toISOString());
 
-      const { data: premiumStudents } = await supabase
+      // First get premium program IDs
+      const { data: premiumPrograms } = await supabase
+        .from('programs')
+        .select('id')
+        .eq('is_premium', true);
+
+      const premiumProgramIds = premiumPrograms?.map(p => p.id) || [];
+      
+      const { count: premiumStudents } = await supabase
         .from('enrollments')
-        .select('id', { count: 'exact' })
+        .select('*', { count: 'exact', head: true })
         .eq('status', 'active')
-        .in('program_id', (await supabase
-          .from('programs')
-          .select('id')
-          .eq('is_premium', true)).data?.map(p => p.id) || []);
+        .in('program_id', premiumProgramIds);
 
       return {
-        totalStudents: totalStudents?.count || 0,
-        activeEnrollments: activeEnrollments?.count || 0,
-        upcomingSessions: upcomingSessions?.count || 0,
-        premiumStudents: premiumStudents?.count || 0
+        totalStudents: totalStudents || 0,
+        activeEnrollments: activeEnrollments || 0,
+        upcomingSessions: upcomingSessions || 0,
+        premiumStudents: premiumStudents || 0
       };
     }
   });
