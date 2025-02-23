@@ -26,13 +26,27 @@ serve(async (req) => {
       throw new Error('La clave secreta de Stripe no está configurada');
     }
 
-    const { event_name, priceId } = await req.json();
-    console.log('Datos recibidos:', { event_name, priceId });
+    const { event_name } = await req.json();
+    console.log('Nombre del evento recibido:', event_name);
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-10-16',
       httpClient: Stripe.createFetchHttpClient(),
     });
+
+    // Mapeo de eventos a IDs de precios de Stripe
+    const STRIPE_PRICE_IDS = {
+      'despertar-360-general': 'price_1QpbniLMf9X10TxuPxNFb3dE',
+      'despertar-360-vip': 'price_1QvVnrLMf9X10TxuvN6PVKA5',
+      'despertar-360-platinum': 'price_1QvVqBLMf9X10TxuctBAazPc'
+    };
+
+    const stripePrice = STRIPE_PRICE_IDS[event_name];
+    console.log('ID del precio de Stripe:', stripePrice);
+
+    if (!stripePrice) {
+      throw new Error(`Precio no encontrado para el evento: ${event_name}`);
+    }
 
     console.log('Creando sesión de Stripe...');
     
@@ -43,15 +57,16 @@ serve(async (req) => {
       payment_method_types: ['card'],
       line_items: [
         {
-          price: 'price_1QpbniLMf9X10TxuPxNFb3dE', // Precio fijo para pruebas
+          price: stripePrice,
           quantity: 1,
         },
       ],
       mode: 'payment',
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/events/despertar-360`,
-      client_reference_id: `${event_name}_${priceId}`,
+      client_reference_id: event_name,
       locale: 'es',
+      allow_promotion_codes: true,
     });
 
     console.log('Sesión creada exitosamente:', {
