@@ -34,18 +34,19 @@ serve(async (req) => {
       httpClient: Stripe.createFetchHttpClient(),
     });
 
-    // Mapeo de eventos a IDs de precios de Stripe
-    const STRIPE_PRICE_IDS = {
-      'despertar-360-general': 'price_1QpbniLMf9X10TxuPxNFb3dE',
-      'despertar-360-vip': 'price_1QvVnrLMf9X10TxuvN6PVKA5',
-      'despertar-360-platinum': 'price_1QvVqBLMf9X10TxuctBAazPc'
-    };
-
-    const stripePrice = STRIPE_PRICE_IDS[event_name];
-    console.log('ID del precio de Stripe:', stripePrice);
+    // Try to retrieve price directly from Stripe first
+    let stripePrice;
+    try {
+      const price = await stripe.prices.retrieve('price_1QpbniLMf9X10TxuPxNFb3dE');
+      console.log('Precio encontrado en Stripe:', price);
+      stripePrice = price.id;
+    } catch (error) {
+      console.error('Error al obtener precio de Stripe:', error);
+      throw new Error('Error al verificar el precio en Stripe');
+    }
 
     if (!stripePrice) {
-      throw new Error(`Precio no encontrado para el evento: ${event_name}`);
+      throw new Error('No se pudo obtener el precio de Stripe');
     }
 
     console.log('Creando sesión de Stripe...');
@@ -53,6 +54,7 @@ serve(async (req) => {
     const origin = req.headers.get('origin') || 'http://localhost:3000';
     console.log('URL de origen:', origin);
 
+    // Intenta crear la sesión con el precio verificado
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -67,6 +69,9 @@ serve(async (req) => {
       client_reference_id: event_name,
       locale: 'es',
       allow_promotion_codes: true,
+      submit_type: 'pay',
+      billing_address_collection: 'auto',
+      customer_creation: 'always',
     });
 
     console.log('Sesión creada exitosamente:', {
