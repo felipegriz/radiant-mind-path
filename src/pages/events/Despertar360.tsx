@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { CalendarDays, MapPin, Users, Clock, Lock, BookOpen, PlayCircle, FileText } from "lucide-react";
+import { CalendarDays, MapPin, Users, Clock, Lock, BookOpen, PlayCircle, FileText, Crown, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import Navbar from "@/components/layout/Navbar";
@@ -17,6 +17,8 @@ interface EventPrice {
   price_amount: number;
   currency: string;
   is_active: boolean;
+  ticket_description: string;
+  valid_until: string;
 }
 
 const Despertar360 = () => {
@@ -24,7 +26,8 @@ const Despertar360 = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [price, setPrice] = useState<EventPrice | null>(null);
+  const [prices, setPrices] = useState<EventPrice[]>([]);
+  const [selectedPrice, setSelectedPrice] = useState<EventPrice | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -33,30 +36,35 @@ const Despertar360 = () => {
       setIsAuthenticated(!!session);
     };
 
-    const loadPrice = async () => {
+    const loadPrices = async () => {
       const { data, error } = await supabase
         .from('event_prices')
         .select('*')
-        .eq('event_name', 'despertar-360')
+        .in('event_name', ['despertar-360-general', 'despertar-360-vip', 'despertar-360-platinum'])
         .eq('is_active', true)
-        .maybeSingle();
+        .order('price_amount');
 
       if (error) {
-        console.error('Error loading price:', error);
+        console.error('Error loading prices:', error);
         toast({
           variant: "destructive",
           title: "Error",
-          description: "No se pudo cargar el precio del evento. Por favor, intenta más tarde.",
+          description: "No se pudieron cargar los precios del evento. Por favor, intenta más tarde.",
         });
         return;
       }
 
       if (data) {
-        setPrice(data);
+        setPrices(data);
+        // Seleccionar el ticket general por defecto
+        const generalTicket = data.find(price => price.event_name === 'despertar-360-general');
+        if (generalTicket) {
+          setSelectedPrice(generalTicket);
+        }
       }
     };
 
-    Promise.all([checkAuth(), loadPrice()]).then(() => setIsLoading(false));
+    Promise.all([checkAuth(), loadPrices()]).then(() => setIsLoading(false));
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsAuthenticated(!!session);
@@ -66,6 +74,15 @@ const Despertar360 = () => {
   }, [toast]);
 
   const handlePayment = async () => {
+    if (!selectedPrice) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Por favor, selecciona un tipo de entrada.",
+      });
+      return;
+    }
+
     setIsProcessing(true);
     try {
       const response = await fetch(
@@ -75,6 +92,10 @@ const Despertar360 = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({
+            priceId: selectedPrice.id,
+            eventName: selectedPrice.event_name,
+          }),
         }
       );
 
@@ -276,15 +297,50 @@ const Despertar360 = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mt-16"
+          className="mt-16"
         >
-          <Button 
-            onClick={handlePayment}
-            disabled={isProcessing || !price}
-            className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors"
-          >
-            {isProcessing ? "Procesando..." : price ? `Reserva Tu Lugar Ahora - $${(price.price_amount / 100).toFixed(2)} ${price.currency}` : "Cargando..."}
-          </Button>
+          <h2 className="text-3xl font-bold text-white text-center mb-8">Elige tu Entrada</h2>
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            {prices.map((price) => (
+              <motion.div
+                key={price.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className={`glass-card p-6 rounded-xl cursor-pointer transition-all ${
+                  selectedPrice?.id === price.id ? 'ring-2 ring-accent' : ''
+                }`}
+                onClick={() => setSelectedPrice(price)}
+              >
+                <div className="flex flex-col items-center text-center">
+                  {price.event_name.includes('platinum') ? (
+                    <Crown className="w-12 h-12 text-accent mb-4" />
+                  ) : price.event_name.includes('vip') ? (
+                    <Star className="w-12 h-12 text-accent mb-4" />
+                  ) : (
+                    <Users className="w-12 h-12 text-accent mb-4" />
+                  )}
+                  <h3 className="text-xl font-semibold text-white mb-2">{price.ticket_description}</h3>
+                  <p className="text-2xl font-bold text-accent mb-2">
+                    ${(price.price_amount / 100).toFixed(2)} {price.currency}
+                  </p>
+                  <p className="text-sm text-gray-300">
+                    Válido hasta el {new Date(price.valid_until).toLocaleDateString()}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Button 
+              onClick={handlePayment}
+              disabled={isProcessing || !selectedPrice}
+              className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors"
+            >
+              {isProcessing ? "Procesando..." : selectedPrice ? `Reserva Tu Lugar Ahora - $${(selectedPrice.price_amount / 100).toFixed(2)} ${selectedPrice.currency}` : "Selecciona una entrada"}
+            </Button>
+          </div>
         </motion.div>
       </div>
     </div>
