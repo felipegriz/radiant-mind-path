@@ -83,14 +83,19 @@ const Despertar360 = () => {
 
     setIsProcessing(true);
     try {
+      console.log('Iniciando proceso de pago para:', selectedPrice.event_name);
+      
       const { data: checkoutResponse, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
           event_name: selectedPrice.event_name,
         }
       });
 
-      if (checkoutError) {
-        throw new Error('Error al procesar el pago');
+      console.log('Respuesta de create-checkout:', { checkoutResponse, checkoutError });
+
+      if (checkoutError || !checkoutResponse?.sessionId) {
+        console.error('Error al crear la sesión de checkout:', checkoutError);
+        throw new Error(checkoutError?.message || 'Error al crear la sesión de pago');
       }
 
       const stripe = await stripePromise;
@@ -99,19 +104,22 @@ const Despertar360 = () => {
         throw new Error('Error al cargar Stripe');
       }
 
-      const { error } = await stripe.redirectToCheckout({ 
+      console.log('Redirigiendo a Stripe con sessionId:', checkoutResponse.sessionId);
+      
+      const { error: stripeError } = await stripe.redirectToCheckout({ 
         sessionId: checkoutResponse.sessionId 
       });
       
-      if (error) {
-        throw error;
+      if (stripeError) {
+        console.error('Error de Stripe:', stripeError);
+        throw stripeError;
       }
     } catch (error) {
-      console.error('Payment error:', error);
+      console.error('Error detallado del pago:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "No se pudo procesar el pago. Por favor, intenta de nuevo.",
+        description: error.message || "No se pudo procesar el pago. Por favor, intenta de nuevo.",
       });
     } finally {
       setIsProcessing(false);
