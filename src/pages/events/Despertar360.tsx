@@ -135,6 +135,15 @@ const Despertar360 = () => {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto text-center"
           >
+            {isAuthenticated && (
+              <Button 
+                variant="secondary"
+                className="mb-8"
+                onClick={() => navigate("/student-area")}
+              >
+                Acceder al Área de Graduados
+              </Button>
+            )}
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               DESCUBRE EL SECRETO QUE EL 95% DE LAS PERSONAS IGNORAN PARA ALCANZAR SU MÁXIMO POTENCIAL
             </h1>
