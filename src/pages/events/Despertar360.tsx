@@ -123,7 +123,7 @@ const Despertar360 = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Navbar />
       
       {!isLoading && (
@@ -132,14 +132,14 @@ const Despertar360 = () => {
             {isAuthenticated ? (
               <Button 
                 onClick={() => document.getElementById('studentPortal')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-accent hover:bg-accent/80 text-background px-6 py-2 rounded-full text-sm font-bold transition-colors"
+                className="bg-primary hover:bg-primary/80 text-white px-6 py-2 rounded-full text-sm font-bold transition-colors"
               >
                 Portal de Graduados Despertar
               </Button>
             ) : (
               <Button 
                 onClick={() => navigate('/auth/login')}
-                className="bg-accent hover:bg-accent/80 text-background px-6 py-2 rounded-full text-sm font-bold transition-colors"
+                className="bg-primary hover:bg-primary/80 text-white px-6 py-2 rounded-full text-sm font-bold transition-colors"
               >
                 Acceder al Portal de Graduados Despertar
               </Button>
@@ -148,7 +148,7 @@ const Despertar360 = () => {
         </div>
       )}
 
-      <div className="hero-gradient">
+      <div className="bg-gray-100">
         <div className="container mx-auto px-4 py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -156,8 +156,8 @@ const Despertar360 = () => {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">DESPERTAR 360</h1>
-            <p className="text-xl text-gray-300 mb-8">
+            <h1 className="text-5xl md:text-6xl font-bold text-primary mb-6">DESPERTAR 360</h1>
+            <p className="text-xl text-gray-600 mb-8">
               Una experiencia transformadora que te llevará a descubrir tu verdadero potencial y despertar tu consciencia superior
             </p>
           </motion.div>

@@ -29,10 +29,10 @@ export const StudentResources = () => {
       transition={{ duration: 0.6 }}
       className="mt-16"
     >
-      <div className="glass-card p-8 rounded-2xl">
+      <div className="bg-gray-50 p-8 rounded-2xl shadow-lg">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Portal del Estudiante</h2>
-          <p className="text-gray-300">
+          <h2 className="text-3xl font-bold text-primary mb-4">Portal del Estudiante</h2>
+          <p className="text-gray-600">
             Accede a todos los recursos exclusivos del evento Despertar 360
           </p>
         </div>
@@ -44,12 +44,12 @@ export const StudentResources = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="glass-card p-6 rounded-xl hover-lift cursor-pointer"
+              className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all cursor-pointer"
             >
               <div className="flex flex-col items-center text-center">
-                <resource.icon className="w-12 h-12 text-accent mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">{resource.title}</h3>
-                <p className="text-gray-300">{resource.description}</p>
+                <resource.icon className="w-12 h-12 text-primary mb-4" />
+                <h3 className="text-xl font-semibold text-primary mb-2">{resource.title}</h3>
+                <p className="text-gray-600">{resource.description}</p>
               </div>
             </motion.div>
           ))}
