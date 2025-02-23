@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -26,7 +27,6 @@ const Despertar360 = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [prices, setPrices] = useState<EventPrice[]>([]);
-  const [selectedPrice, setSelectedPrice] = useState<EventPrice | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -55,10 +55,6 @@ const Despertar360 = () => {
 
       if (data) {
         setPrices(data);
-        const generalTicket = data.find(price => price.event_name === 'despertar-360-general');
-        if (generalTicket) {
-          setSelectedPrice(generalTicket);
-        }
       }
       setIsLoading(false);
     };
@@ -72,16 +68,7 @@ const Despertar360 = () => {
     return () => subscription.unsubscribe();
   }, [toast]);
 
-  const handlePayment = async () => {
-    if (!selectedPrice) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Por favor, selecciona un tipo de entrada.",
-      });
-      return;
-    }
-
+  const handlePayment = async (selectedPrice: EventPrice) => {
     setIsProcessing(true);
     try {
       console.log('Iniciando proceso de pago para:', selectedPrice.event_name);
@@ -169,9 +156,7 @@ const Despertar360 = () => {
         <div className="container mx-auto px-4">
           <PricingSection
             prices={prices}
-            selectedPrice={selectedPrice}
-            setSelectedPrice={setSelectedPrice}
-            onPayment={handlePayment}
+            onPayment={() => handlePayment(prices[0])}
             isProcessing={isProcessing}
           />
         </div>
