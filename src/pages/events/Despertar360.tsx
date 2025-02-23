@@ -24,7 +24,7 @@ const Despertar360 = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [price, setPrice] = useState<number | null>(null);
+  const [price, setPrice] = useState<EventPrice | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -34,20 +34,25 @@ const Despertar360 = () => {
     };
 
     const loadPrice = async () => {
-      const { data: prices, error } = await supabase
+      const { data, error } = await supabase
         .from('event_prices')
         .select('*')
         .eq('event_name', 'despertar-360')
         .eq('is_active', true)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error loading price:', error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No se pudo cargar el precio del evento. Por favor, intenta más tarde.",
+        });
         return;
       }
 
-      if (prices) {
-        setPrice(prices.price_amount);
+      if (data) {
+        setPrice(data);
       }
     };
 
@@ -58,7 +63,7 @@ const Despertar360 = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [toast]);
 
   const handlePayment = async () => {
     setIsProcessing(true);
@@ -91,9 +96,9 @@ const Despertar360 = () => {
       }
     } catch (error) {
       toast({
+        variant: "destructive",
         title: "Error",
         description: "No se pudo procesar el pago. Por favor, intenta de nuevo.",
-        variant: "destructive",
       });
     } finally {
       setIsProcessing(false);
@@ -278,7 +283,7 @@ const Despertar360 = () => {
             disabled={isProcessing || !price}
             className="bg-accent hover:bg-accent/80 text-background px-8 py-4 rounded-full text-lg font-bold transition-colors"
           >
-            {isProcessing ? "Procesando..." : price ? `Reserva Tu Lugar Ahora - $${(price / 100).toFixed(2)} USD` : "Cargando..."}
+            {isProcessing ? "Procesando..." : price ? `Reserva Tu Lugar Ahora - $${(price.price_amount / 100).toFixed(2)} ${price.currency}` : "Cargando..."}
           </Button>
         </motion.div>
       </div>
