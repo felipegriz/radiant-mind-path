@@ -15,6 +15,7 @@ import Contacto from "./pages/Contacto";
 import SuperHumano from "./pages/coaching-consultoria/SuperHumano";
 import SilverPartnership from "./pages/coaching-consultoria/SilverPartnership";
 import GreyPlatinum from "./pages/coaching-consultoria/GreyPlatinum";
+import Dashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/coaching-consultoria/super-humano" element={<SuperHumano />} />
           <Route path="/coaching-consultoria/silver-partnership" element={<SilverPartnership />} />
           <Route path="/coaching-consultoria/grey-platinum" element={<GreyPlatinum />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
