@@ -85,41 +85,41 @@ const Despertar360 = () => {
     try {
       console.log('Iniciando proceso de pago para:', selectedPrice.event_name);
       
-      const { data: checkoutResponse, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
           event_name: selectedPrice.event_name,
         }
       });
 
-      console.log('Respuesta de create-checkout:', { checkoutResponse, checkoutError });
+      console.log('Respuesta de create-checkout:', { data, error });
 
-      if (checkoutError || !checkoutResponse?.sessionId) {
-        console.error('Error al crear la sesión de checkout:', checkoutError);
-        throw new Error(checkoutError?.message || 'Error al crear la sesión de pago');
+      if (error) {
+        throw new Error(error.message || 'Error al crear la sesión de pago');
+      }
+
+      if (!data?.sessionId) {
+        throw new Error('No se recibió el ID de la sesión de pago');
       }
 
       const stripe = await stripePromise;
-      
       if (!stripe) {
-        throw new Error('Error al cargar Stripe');
+        throw new Error('No se pudo inicializar Stripe');
       }
 
-      console.log('Redirigiendo a Stripe con sessionId:', checkoutResponse.sessionId);
-      
       const { error: stripeError } = await stripe.redirectToCheckout({ 
-        sessionId: checkoutResponse.sessionId 
+        sessionId: data.sessionId 
       });
-      
+
       if (stripeError) {
-        console.error('Error de Stripe:', stripeError);
         throw stripeError;
       }
+
     } catch (error) {
       console.error('Error detallado del pago:', error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: error.message || "No se pudo procesar el pago. Por favor, intenta de nuevo.",
+        title: "Error en el proceso de pago",
+        description: error.message || "Hubo un problema al procesar el pago. Por favor, intenta de nuevo.",
       });
     } finally {
       setIsProcessing(false);
