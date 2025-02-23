@@ -41,11 +41,11 @@ const Despertar360 = () => {
         {
           id: "platinum",
           event_name: "despertar-360-platinum",
-          price_amount: 30000, // $300.00
+          price_amount: 30000, // $300.00 (cambio de precio aquí)
           currency: "USD",
           is_active: true,
           ticket_description: "VIP PLATINO",
-          valid_until: new Date(2024, 11, 31).toISOString() // Válido hasta fin de año
+          valid_until: new Date(2024, 11, 31).toISOString()
         },
         {
           id: "vip",
