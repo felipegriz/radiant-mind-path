@@ -8,20 +8,26 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  console.log('Iniciando función create-checkout');
+
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { 
+      headers: corsHeaders,
+      status: 200
+    });
   }
 
   try {
     const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    console.log('¿Existe STRIPE_SECRET_KEY?:', !!stripeSecretKey);
+
     if (!stripeSecretKey) {
-      console.error('STRIPE_SECRET_KEY no está configurada');
-      throw new Error('Error de configuración del servidor');
+      throw new Error('La clave secreta de Stripe no está configurada');
     }
 
     const { event_name } = await req.json();
-    console.log('Creating checkout session for event:', event_name);
+    console.log('Nombre del evento recibido:', event_name);
 
     const stripe = new Stripe(stripeSecretKey, {
       apiVersion: '2023-10-16',
@@ -29,19 +35,23 @@ serve(async (req) => {
     });
 
     // Mapeo de eventos a IDs de precios de Stripe
-    const STRIPE_PRICE_IDS: { [key: string]: string } = {
+    const STRIPE_PRICE_IDS = {
       'despertar-360-general': 'price_1QpbniLMf9X10TxuPxNFb3dE',
       'despertar-360-vip': 'price_1QvVnrLMf9X10TxuvN6PVKA5',
       'despertar-360-platinum': 'price_1QvVqBLMf9X10TxuctBAazPc'
     };
 
     const stripePrice = STRIPE_PRICE_IDS[event_name];
+    console.log('ID del precio de Stripe:', stripePrice);
+
     if (!stripePrice) {
-      console.error('Precio no encontrado para el evento:', event_name);
-      throw new Error('Tipo de entrada no válida');
+      throw new Error(`Precio no encontrado para el evento: ${event_name}`);
     }
 
-    console.log('Creating Stripe session with price:', stripePrice);
+    console.log('Creando sesión de Stripe...');
+    
+    const origin = req.headers.get('origin') || 'http://localhost:3000';
+    console.log('URL de origen:', origin);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -52,28 +62,41 @@ serve(async (req) => {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.get('origin')}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get('origin')}/events/despertar-360`,
+      success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/events/despertar-360`,
       client_reference_id: event_name,
     });
 
-    console.log('Session created successfully:', { sessionId: session.id });
+    console.log('Sesión creada exitosamente:', session.id);
 
-    return new Response(JSON.stringify({ 
-      sessionId: session.id 
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({ 
+        sessionId: session.id,
+        status: 'success'
+      }), {
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json'
+        },
+        status: 200,
+      }
+    );
 
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error('Error en create-checkout:', error);
     
-    return new Response(JSON.stringify({ 
-      error: error.message || 'Error al procesar el pago'
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 400,
-    });
+    return new Response(
+      JSON.stringify({
+        status: 'error',
+        message: error.message || 'Error al procesar el pago',
+        details: error.toString()
+      }), {
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json'
+        },
+        status: 200, // Cambiado a 200 para evitar el error de CORS
+      }
+    );
   }
 });
