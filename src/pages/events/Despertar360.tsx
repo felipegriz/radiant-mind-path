@@ -88,8 +88,8 @@ const Despertar360 = () => {
       }
 
       toast({
-        title: "Procesando pago",
-        description: "Por favor espera mientras configuramos tu pago...",
+        title: "Iniciando proceso de pago",
+        description: "Preparando el checkout de Stripe...",
       });
 
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
@@ -99,15 +99,26 @@ const Despertar360 = () => {
         }
       });
 
-      if (checkoutError || !checkoutData?.sessionId) {
-        throw new Error(checkoutError?.message || 'Error al crear la sesión de pago');
+      if (checkoutError) {
+        console.error('Error al crear sesión:', checkoutError);
+        throw new Error('Error al crear la sesión de pago. Por favor, intenta de nuevo.');
       }
+
+      if (!checkoutData?.sessionId) {
+        throw new Error('No se pudo crear la sesión de pago. Por favor, intenta de nuevo.');
+      }
+
+      toast({
+        title: "Redirigiendo al checkout",
+        description: "Te estamos llevando a la página segura de pago...",
+      });
 
       const { error: stripeError } = await stripe.redirectToCheckout({
         sessionId: checkoutData.sessionId
       });
 
       if (stripeError) {
+        console.error('Error de Stripe:', stripeError);
         throw stripeError;
       }
 
@@ -116,7 +127,7 @@ const Despertar360 = () => {
       toast({
         variant: "destructive",
         title: "Error en el proceso de pago",
-        description: error instanceof Error ? error.message : "Hubo un problema al procesar el pago. Por favor, intenta de nuevo.",
+        description: "Hubo un problema al procesar tu pago. Por favor, intenta de nuevo en unos momentos o contacta a soporte si el problema persiste.",
       });
       setProcessingPriceId(null);
     }
