@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { EventPrice } from "@/types/event";
+import { useToast } from "@/hooks/use-toast";
 
 interface PricingSectionProps {
   prices: EventPrice[];
@@ -10,16 +11,19 @@ interface PricingSectionProps {
   processingPriceId: string | null;
 }
 
-const STRIPE_LINKS = {
-  general: "https://buy.stripe.com/test_28o5m321L0Yc1r2cMM",
-  vip: "https://buy.stripe.com/test_28o5m321L0Yc1r2cNN",
-  platinum: "https://buy.stripe.com/test_28o5m321L0Yc1r2cOO"
+// IDs de precio de Stripe
+const STRIPE_PRICE_IDS = {
+  general: "price_1QpbniLMf9X10TxuPxNFb3dE",
+  vip: "price_1QvVnrLMf9X10TxuvN6PVKA5",
+  platinum: "price_1QvVqBLMf9X10TxuctBAazPc"
 };
 
 export const PricingSection = ({
   prices,
   processingPriceId
 }: PricingSectionProps) => {
+  const { toast } = useToast();
+
   // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
   const orderedPrices = [...prices].sort((a, b) => {
     const order = { general: 1, vip: 2, platinum: 3 };
@@ -28,10 +32,38 @@ export const PricingSection = ({
     return aOrder - bOrder;
   });
 
-  const handlePayment = (priceId: string) => {
-    const paymentLink = STRIPE_LINKS[priceId as keyof typeof STRIPE_LINKS];
-    if (paymentLink) {
-      window.location.href = paymentLink;
+  const handlePayment = async (price: EventPrice) => {
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS],
+          successUrl: `${window.location.origin}/success`,
+          cancelUrl: `${window.location.origin}/events/despertar-360`,
+        }),
+      });
+
+      const session = await response.json();
+
+      if (session.url) {
+        window.location.href = session.url;
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No se pudo iniciar el proceso de pago. Por favor, intenta de nuevo.",
+        });
+      }
+    } catch (error) {
+      console.error('Error al crear la sesión de pago:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Hubo un problema al procesar tu solicitud. Por favor, intenta de nuevo.",
+      });
     }
   };
 
@@ -70,7 +102,7 @@ export const PricingSection = ({
             </div>
             <div className="mt-auto">
               <Button 
-                onClick={() => handlePayment(price.id)}
+                onClick={() => handlePayment(price)}
                 disabled={processingPriceId === price.id}
                 className="w-full bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-full text-lg font-bold transition-colors"
               >
