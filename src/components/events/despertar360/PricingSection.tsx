@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import type { EventPrice } from "@/types/event";
 
 interface PricingSectionProps {
@@ -23,7 +22,7 @@ export const PricingSection = ({
   onPayment,
   processingPriceId: initialProcessingPriceId
 }: PricingSectionProps) => {
-  const [processingPriceId, setProcessingPriceId] = useState<string | null>(initialProcessingPriceId);
+  const [processingPriceId] = useState<string | null>(initialProcessingPriceId);
 
   // Ordenar los precios en el orden correcto: GENERAL, VIP, VIP PLATINO
   const orderedPrices = [...prices].sort((a, b) => {
@@ -32,16 +31,6 @@ export const PricingSection = ({
     const bOrder = order[b.id as keyof typeof order] || 0;
     return aOrder - bOrder;
   });
-
-  const handlePayment = (price: EventPrice) => {
-    setProcessingPriceId(price.id);
-    onPayment(price);
-    
-    const paymentLink = STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS];
-    if (paymentLink) {
-      window.open(paymentLink, '_self');
-    }
-  };
 
   return (
     <motion.div
@@ -77,14 +66,14 @@ export const PricingSection = ({
               </p>
             </div>
             <div className="mt-auto">
-              <Button 
-                onClick={() => handlePayment(price)}
-                disabled={processingPriceId === price.id}
-                variant="default"
-                className="w-full px-4 py-2 rounded-full text-lg font-bold"
+              <a 
+                href={STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS]}
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full px-4 py-2 rounded-full text-lg font-bold"
+                target="_self"
+                rel="noopener noreferrer"
               >
                 {processingPriceId === price.id ? 'Procesando...' : 'Comprar Ahora'}
-              </Button>
+              </a>
             </div>
           </motion.div>
         ))}
