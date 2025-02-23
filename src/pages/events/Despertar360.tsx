@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -58,9 +59,10 @@ const Despertar360 = () => {
           setSelectedPrice(generalTicket);
         }
       }
+      setIsLoading(false);
     };
 
-    Promise.all([checkAuth(), loadPrices()]).then(() => setIsLoading(false));
+    Promise.all([checkAuth(), loadPrices()]);
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setIsAuthenticated(!!session);
@@ -122,7 +124,14 @@ const Despertar360 = () => {
   };
 
   if (isLoading) {
-    return null;
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -153,7 +162,7 @@ const Despertar360 = () => {
         </div>
       </div>
 
-      {!isLoading && isAuthenticated && (
+      {isAuthenticated && (
         <div className="container mx-auto px-4 py-16">
           <StudentResources />
         </div>
