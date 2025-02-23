@@ -1,5 +1,5 @@
 
-import Stripe from 'stripe';
+import { Stripe } from 'https://esm.sh/stripe@13.10.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
