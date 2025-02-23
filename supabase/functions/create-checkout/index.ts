@@ -18,7 +18,6 @@ const handler = async (req: Request) => {
     console.log('¿Existe STRIPE_SECRET_KEY?:', !!stripeKey);
 
     if (!stripeKey) {
-      console.error('Error: Missing Stripe secret key');
       throw new Error('Missing Stripe secret key');
     }
 
@@ -32,13 +31,13 @@ const handler = async (req: Request) => {
 
     const { priceId, successUrl, cancelUrl } = requestData;
     
-    // Validación de datos
     if (!priceId || !successUrl || !cancelUrl) {
-      console.error('Faltan parámetros requeridos:', { priceId, successUrl, cancelUrl });
       throw new Error('Missing required parameters');
     }
 
-    console.log('Creando sesión de checkout con:', { priceId, successUrl, cancelUrl });
+    // Verificar que el precio existe en Stripe
+    const price = await stripe.prices.retrieve(priceId);
+    console.log('Precio encontrado en Stripe:', JSON.stringify(price, null, 2));
 
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -56,9 +55,6 @@ const handler = async (req: Request) => {
       customer_creation: 'always',
     });
 
-    console.log('Sesión creada con ID:', session.id);
-    console.log('URL de la sesión:', session.url);
-
     return new Response(
       JSON.stringify({ url: session.url }),
       {
@@ -70,7 +66,7 @@ const handler = async (req: Request) => {
     );
 
   } catch (error) {
-    console.error('Error detallado al crear la sesión:', error);
+    console.error('Error detallado:', error);
     
     return new Response(
       JSON.stringify({ 

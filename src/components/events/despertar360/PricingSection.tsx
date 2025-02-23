@@ -36,40 +36,47 @@ export const PricingSection = ({
   const handlePayment = async (price: EventPrice) => {
     try {
       console.log('Iniciando proceso de pago para:', price.ticket_description);
-      console.log('ID de precio Stripe:', STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS]);
+      
+      const priceId = STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS];
+      console.log('ID de precio Stripe:', priceId);
 
-      const { data, error } = await supabase.functions.invoke('create-checkout', {
-        body: {
-          priceId: STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS],
-          successUrl: `${window.location.origin}/success`,
-          cancelUrl: `${window.location.origin}/events/despertar-360`,
-        },
-      });
-
-      console.log('Respuesta de create-checkout:', { data, error });
-
-      if (error) {
-        console.error('Error al crear la sesión:', error);
-        throw error;
+      if (!priceId) {
+        throw new Error('ID de precio no válido');
       }
 
-      if (data?.url) {
-        console.log('Redirigiendo a:', data.url);
-        window.location.href = data.url;
+      const response = await fetch(`https://awbrvqrtqxwomnevipdt.supabase.co/functions/v1/create-checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          priceId,
+          successUrl: `${window.location.origin}/success`,
+          cancelUrl: `${window.location.origin}/events/despertar-360`,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error en la respuesta:', errorData);
+        throw new Error(errorData.error || 'Error al crear la sesión de pago');
+      }
+
+      const { url } = await response.json();
+
+      if (url) {
+        console.log('Redirigiendo a:', url);
+        window.location.href = url;
       } else {
-        console.error('No se recibió URL de sesión');
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "No se pudo iniciar el proceso de pago. Por favor, intenta de nuevo.",
-        });
+        throw new Error('No se recibió URL de sesión');
       }
     } catch (error) {
       console.error('Error al crear la sesión de pago:', error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Hubo un problema al procesar tu solicitud. Por favor, intenta de nuevo.",
+        title: "Error en el proceso de pago",
+        description: error instanceof Error ? error.message : "Hubo un problema al procesar tu solicitud. Por favor, intenta de nuevo.",
       });
     }
   };
