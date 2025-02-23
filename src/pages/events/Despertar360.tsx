@@ -16,7 +16,7 @@ import { FinalCTASection } from "@/components/events/despertar360/FinalCTASectio
 import { GraduatesButton } from "@/components/events/despertar360/GraduatesButton";
 import type { EventPrice } from "@/types/event";
 
-const stripePromise = loadStripe("pk_test_51Op7kfLsUYD3w5DwwooYfzIZaKnZ4XKr5aKuCVU9NeM2WJaD2Vhq94mzwEwqn4H1fxD5bDVmaf6Yh19NoSkhiWYe00wvDQG3ZH");
+const stripePromise = loadStripe("pk_live_51Op7kfLsUYD3w5DwMzYhZj6XHnQnPHYD4pD4M0JqaPY6qPnLHwgaTzAPKwRgxGNV2eK8UjZo3FWPQ0rhSWH6OZ8U00pPHXMtmG");
 
 const Despertar360 = () => {
   const navigate = useNavigate();
