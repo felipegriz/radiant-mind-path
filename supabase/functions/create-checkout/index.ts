@@ -25,51 +25,35 @@ const handler = async (req: Request) => {
       httpClient: Stripe.createFetchHttpClient(),
     });
 
-    const { event_name, price_amount } = await req.json();
-    console.log('Datos recibidos:', { event_name, price_amount });
-
-    // Validar los datos recibidos
-    if (!event_name || !price_amount) {
-      throw new Error('Faltan datos requeridos para crear la sesión');
+    const { priceId, successUrl, cancelUrl } = await req.json();
+    
+    // Validación de datos
+    if (!priceId || !successUrl || !cancelUrl) {
+      throw new Error('Missing required parameters');
     }
 
-    const origin = req.headers.get('origin') || 'https://2b4b6960-3aca-4278-9261-37a1a21f9176.lovableproject.com';
-    console.log('Origin URL:', origin);
+    console.log('Creando sesión de checkout con:', { priceId, successUrl, cancelUrl });
 
-    // Configurar la sesión con un tiempo de expiración más corto
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: `Entrada ${event_name}`,
-              description: 'Despertar 360',
-            },
-            unit_amount: price_amount,
-          },
+          price: priceId,
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/events/despertar-360`,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
       locale: 'es',
       allow_promotion_codes: true,
       billing_address_collection: 'required',
       customer_creation: 'always',
-      expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutos de expiración
     });
 
-    console.log('Sesión creada exitosamente:', session.id);
-    console.log('Tiempo de expiración:', new Date(session.expires_at! * 1000).toISOString());
+    console.log('Sesión creada:', session.id);
 
     return new Response(
-      JSON.stringify({ 
-        sessionId: session.id,
-        expiresAt: session.expires_at
-      }),
+      JSON.stringify({ url: session.url }),
       {
         headers: {
           ...corsHeaders,
@@ -79,12 +63,10 @@ const handler = async (req: Request) => {
     );
 
   } catch (error) {
-    console.error('Error detallado:', error);
+    console.error('Error al crear la sesión:', error);
+    
     return new Response(
-      JSON.stringify({
-        error: error instanceof Error ? error.message : 'Unknown error occurred',
-        details: error instanceof Error ? error.stack : undefined,
-      }),
+      JSON.stringify({ error: error.message }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,

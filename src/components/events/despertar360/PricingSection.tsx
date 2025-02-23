@@ -4,6 +4,7 @@ import { Users, Crown, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { EventPrice } from "@/types/event";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PricingSectionProps {
   prices: EventPrice[];
@@ -34,22 +35,20 @@ export const PricingSection = ({
 
   const handlePayment = async (price: EventPrice) => {
     try {
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: {
           priceId: STRIPE_PRICE_IDS[price.id as keyof typeof STRIPE_PRICE_IDS],
           successUrl: `${window.location.origin}/success`,
           cancelUrl: `${window.location.origin}/events/despertar-360`,
-        }),
+        },
       });
 
-      const session = await response.json();
+      if (error) {
+        throw error;
+      }
 
-      if (session.url) {
-        window.location.href = session.url;
+      if (data?.url) {
+        window.location.href = data.url;
       } else {
         toast({
           variant: "destructive",
