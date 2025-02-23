@@ -19,10 +19,10 @@ serve(async (req) => {
   }
 
   try {
-    const { priceId, eventName } = await req.json();
-    console.log('Received request:', { priceId, eventName }); // Debug log
+    const { priceId, eventName, priceAmount } = await req.json();
+    console.log('Received request:', { priceId, eventName, priceAmount }); // Debug log
 
-    if (!priceId || !eventName) {
+    if (!priceId || !eventName || !priceAmount) {
       throw new Error('Missing required parameters');
     }
 
@@ -35,7 +35,7 @@ serve(async (req) => {
             product_data: {
               name: eventName,
             },
-            unit_amount: 9900, // $99.00
+            unit_amount: priceAmount, // Usar el precio real del evento
           },
           quantity: 1,
         },

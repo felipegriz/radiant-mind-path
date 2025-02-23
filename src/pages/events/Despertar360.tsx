@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -85,7 +84,8 @@ const Despertar360 = () => {
       const { data: checkoutResponse, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
           priceId: selectedPrice.id,
-          eventName: selectedPrice.event_name,
+          eventName: selectedPrice.ticket_description,
+          priceAmount: selectedPrice.price_amount,
         }
       });
 
