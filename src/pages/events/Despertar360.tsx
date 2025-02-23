@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -109,6 +108,7 @@ const Despertar360 = () => {
       toast({
         title: "Iniciando proceso de pago",
         description: "Preparando el checkout de Stripe...",
+        duration: 3000,
       });
 
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
@@ -118,18 +118,14 @@ const Despertar360 = () => {
         }
       });
 
-      if (checkoutError) {
-        console.error('Error al crear sesión:', checkoutError);
+      if (checkoutError || !checkoutData?.sessionId) {
         throw new Error('Error al crear la sesión de pago. Por favor, intenta de nuevo.');
-      }
-
-      if (!checkoutData?.sessionId) {
-        throw new Error('No se pudo crear la sesión de pago. Por favor, intenta de nuevo.');
       }
 
       toast({
         title: "Redirigiendo al checkout",
-        description: "Te estamos llevando a la página segura de pago...",
+        description: "Te estamos llevando a la página segura de pago. Tienes 30 minutos para completar tu compra.",
+        duration: 5000,
       });
 
       const { error: stripeError } = await stripe.redirectToCheckout({

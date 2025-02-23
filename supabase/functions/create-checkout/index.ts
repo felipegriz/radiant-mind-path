@@ -28,9 +28,15 @@ const handler = async (req: Request) => {
     const { event_name, price_amount } = await req.json();
     console.log('Datos recibidos:', { event_name, price_amount });
 
+    // Validar los datos recibidos
+    if (!event_name || !price_amount) {
+      throw new Error('Faltan datos requeridos para crear la sesión');
+    }
+
     const origin = req.headers.get('origin') || 'https://2b4b6960-3aca-4278-9261-37a1a21f9176.lovableproject.com';
     console.log('Origin URL:', origin);
 
+    // Configurar la sesión con un tiempo de expiración más corto
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -53,12 +59,17 @@ const handler = async (req: Request) => {
       allow_promotion_codes: true,
       billing_address_collection: 'required',
       customer_creation: 'always',
+      expires_at: Math.floor(Date.now() / 1000) + (30 * 60), // 30 minutos de expiración
     });
 
     console.log('Sesión creada exitosamente:', session.id);
+    console.log('Tiempo de expiración:', new Date(session.expires_at! * 1000).toISOString());
 
     return new Response(
-      JSON.stringify({ sessionId: session.id }),
+      JSON.stringify({ 
+        sessionId: session.id,
+        expiresAt: session.expires_at
+      }),
       {
         headers: {
           ...corsHeaders,
