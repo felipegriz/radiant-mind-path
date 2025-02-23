@@ -34,24 +34,24 @@ export const PricingSection = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className={`bg-white p-6 rounded-xl cursor-pointer transition-all shadow-lg hover:shadow-xl ${
-              selectedPrice?.id === price.id ? 'ring-2 ring-primary' : ''
+            className={`bg-[#1A1F2C] p-6 rounded-xl cursor-pointer transition-all shadow-lg hover:shadow-xl ${
+              selectedPrice?.id === price.id ? 'ring-2 ring-accent-muted' : ''
             }`}
             onClick={() => setSelectedPrice(price)}
           >
             <div className="flex flex-col items-center text-center">
               {price.event_name.includes('platinum') ? (
-                <Crown className="w-12 h-12 text-primary mb-4" />
+                <Crown className="w-12 h-12 text-accent mb-4" />
               ) : price.event_name.includes('vip') ? (
-                <Star className="w-12 h-12 text-primary mb-4" />
+                <Star className="w-12 h-12 text-accent mb-4" />
               ) : (
-                <Users className="w-12 h-12 text-primary mb-4" />
+                <Users className="w-12 h-12 text-accent mb-4" />
               )}
-              <h3 className="text-xl font-semibold text-primary mb-2">{price.ticket_description}</h3>
-              <p className="text-2xl font-bold text-primary mb-2">
+              <h3 className="text-xl font-semibold text-white mb-2">{price.ticket_description}</h3>
+              <p className="text-2xl font-bold text-accent mb-2">
                 ${(price.price_amount / 100).toFixed(2)} {price.currency}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-300">
                 Válido hasta el {new Date(price.valid_until).toLocaleDateString()}
               </p>
             </div>
