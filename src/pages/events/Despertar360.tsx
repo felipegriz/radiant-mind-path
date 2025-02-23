@@ -40,7 +40,7 @@ const Despertar360 = () => {
         {
           id: "general",
           event_name: "despertar-360-general",
-          price_amount: 5000, // $50.00
+          price_amount: 5000,
           currency: "USD",
           is_active: true,
           ticket_description: "GENERAL",
@@ -49,7 +49,7 @@ const Despertar360 = () => {
         {
           id: "vip",
           event_name: "despertar-360-vip",
-          price_amount: 15000, // $150.00
+          price_amount: 15000,
           currency: "USD",
           is_active: true,
           ticket_description: "VIP",
@@ -58,7 +58,7 @@ const Despertar360 = () => {
         {
           id: "platinum",
           event_name: "despertar-360-platinum",
-          price_amount: 30000, // $300.00
+          price_amount: 30000,
           currency: "USD",
           is_active: true,
           ticket_description: "VIP PLATINO",
@@ -82,12 +82,15 @@ const Despertar360 = () => {
   const handlePayment = async (selectedPrice: EventPrice) => {
     setProcessingPriceId(selectedPrice.id);
     try {
-      console.log('Iniciando proceso de pago para:', selectedPrice.event_name);
-      
       const stripe = await stripePromise;
       if (!stripe) {
         throw new Error('Error al inicializar Stripe');
       }
+
+      toast({
+        title: "Procesando pago",
+        description: "Por favor espera mientras configuramos tu pago...",
+      });
 
       const { data: checkoutData, error: checkoutError } = await supabase.functions.invoke('create-checkout', {
         body: {
@@ -96,20 +99,12 @@ const Despertar360 = () => {
         }
       });
 
-      console.log('Respuesta del servidor:', { checkoutData, checkoutError });
-
-      if (checkoutError || !checkoutData) {
+      if (checkoutError || !checkoutData?.sessionId) {
         throw new Error(checkoutError?.message || 'Error al crear la sesión de pago');
       }
 
-      if (!checkoutData.sessionId) {
-        throw new Error('No se recibió el ID de la sesión de pago');
-      }
-
-      console.log('Redirigiendo a Stripe con sessionId:', checkoutData.sessionId);
-      
-      const { error: stripeError } = await stripe.redirectToCheckout({ 
-        sessionId: checkoutData.sessionId 
+      const { error: stripeError } = await stripe.redirectToCheckout({
+        sessionId: checkoutData.sessionId
       });
 
       if (stripeError) {
@@ -121,7 +116,7 @@ const Despertar360 = () => {
       toast({
         variant: "destructive",
         title: "Error en el proceso de pago",
-        description: error.message || "Hubo un problema al procesar el pago. Por favor, intenta de nuevo.",
+        description: error instanceof Error ? error.message : "Hubo un problema al procesar el pago. Por favor, intenta de nuevo.",
       });
       setProcessingPriceId(null);
     }
