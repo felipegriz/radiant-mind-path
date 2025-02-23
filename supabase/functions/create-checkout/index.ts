@@ -7,24 +7,6 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Asegurarse de que la clave secreta de Stripe esté disponible
-const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
-if (!stripeSecretKey) {
-  console.error('STRIPE_SECRET_KEY no está configurada');
-}
-
-const stripe = new Stripe(stripeSecretKey || '', {
-  apiVersion: '2023-10-16',
-  httpClient: Stripe.createFetchHttpClient(),
-});
-
-// Mapeo de eventos a IDs de precios de Stripe
-const STRIPE_PRICE_IDS = {
-  'despertar-360-general': 'price_1QpbniLMf9X10TxuPxNFb3dE',
-  'despertar-360-vip': 'price_1QvVnrLMf9X10TxuvN6PVKA5',
-  'despertar-360-platinum': 'price_1QvVqBLMf9X10TxuctBAazPc'
-};
-
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -32,17 +14,34 @@ serve(async (req) => {
   }
 
   try {
+    const stripeSecretKey = Deno.env.get('STRIPE_SECRET_KEY');
+    if (!stripeSecretKey) {
+      console.error('STRIPE_SECRET_KEY no está configurada');
+      throw new Error('Error de configuración del servidor');
+    }
+
     const { event_name } = await req.json();
     console.log('Creating checkout session for event:', event_name);
 
-    if (!stripeSecretKey) {
-      throw new Error('Stripe secret key no está configurada');
-    }
+    const stripe = new Stripe(stripeSecretKey, {
+      apiVersion: '2023-10-16',
+      httpClient: Stripe.createFetchHttpClient(),
+    });
+
+    // Mapeo de eventos a IDs de precios de Stripe
+    const STRIPE_PRICE_IDS: { [key: string]: string } = {
+      'despertar-360-general': 'price_1QpbniLMf9X10TxuPxNFb3dE',
+      'despertar-360-vip': 'price_1QvVnrLMf9X10TxuvN6PVKA5',
+      'despertar-360-platinum': 'price_1QvVqBLMf9X10TxuctBAazPc'
+    };
 
     const stripePrice = STRIPE_PRICE_IDS[event_name];
     if (!stripePrice) {
-      throw new Error('Precio no encontrado para este evento');
+      console.error('Precio no encontrado para el evento:', event_name);
+      throw new Error('Tipo de entrada no válida');
     }
+
+    console.log('Creating Stripe session with price:', stripePrice);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
