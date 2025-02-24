@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import DashboardStats from "@/components/admin/DashboardStats";
 import { useNavigate } from "react-router-dom";
 import { Users, CalendarDays, BookOpen, Plus, Loader2 } from "lucide-react";
+import * as SelectPrimitive from "@radix-ui/react-select";
 import {
   Select,
   SelectContent,
@@ -140,10 +141,10 @@ const Dashboard = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Select
-            disabled={isFetchingCohorts}
+          <SelectPrimitive.Root
             value={selectedCohort}
             onValueChange={setSelectedCohort}
+            disabled={isFetchingCohorts}
           >
             <SelectTrigger>
               <SelectValue placeholder="Seleccionar cohorte" />
@@ -155,8 +156,8 @@ const Dashboard = () => {
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select>
-          <Select
+          </SelectPrimitive.Root>
+          <SelectPrimitive.Root
             value={status}
             onValueChange={setStatus}
           >
@@ -168,7 +169,7 @@ const Dashboard = () => {
               <SelectItem value="attended">Asistió</SelectItem>
               <SelectItem value="graduated">Graduado</SelectItem>
             </SelectContent>
-          </Select>
+          </SelectPrimitive.Root>
           <Button 
             onClick={handleRegisterAttendee}
             disabled={isLoading || !email || !selectedCohort}
