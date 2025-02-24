@@ -27,7 +27,7 @@ const Dashboard = () => {
       try {
         const { data, error } = await supabase
           .from("event_cohorts")
-          .select("id, cohort_name")
+          .select("*")
           .eq("event_type", "despertar_360")
           .order("start_date", { ascending: false });
 
@@ -62,20 +62,20 @@ const Dashboard = () => {
     setIsLoading(true);
 
     try {
-      const { data: existingUser, error: userError } = await supabase
+      const { data: existingProfile, error: userError } = await supabase
         .from("profiles")
-        .select("id")
+        .select()
         .eq("email", email)
         .maybeSingle();
 
       if (userError) throw userError;
 
-      if (existingUser?.id) {
+      if (existingProfile?.id) {
         const { error: accessError } = await supabase
           .from("user_event_access")
           .insert([
             {
-              user_id: existingUser.id,
+              user_id: existingProfile.id,
               cohort_id: selectedCohort,
               status: status,
               attendance_date: status === "attended" || status === "graduated" ? new Date().toISOString() : null,
