@@ -12,6 +12,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -60,6 +61,33 @@ const Login = () => {
     }
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Correo enviado",
+        description: "Se ha enviado un enlace a tu correo para restablecer tu contraseña.",
+      });
+      setIsResettingPassword(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo enviar el correo de restablecimiento",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <motion.div
@@ -69,10 +97,10 @@ const Login = () => {
         className="glass-card w-full max-w-md p-8 rounded-2xl"
       >
         <h1 className="text-3xl font-bold text-white text-center mb-8">
-          Iniciar sesión
+          {isResettingPassword ? "Restablecer contraseña" : "Iniciar sesión"}
         </h1>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={isResettingPassword ? handlePasswordReset : handleLogin} className="space-y-4">
           <div>
             <Input
               type="email"
@@ -83,16 +111,18 @@ const Login = () => {
             />
           </div>
 
-          <div>
-            <Input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              minLength={6}
-            />
-          </div>
+          {!isResettingPassword && (
+            <div>
+              <Input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+              />
+            </div>
+          )}
 
           <Button
             type="submit"
@@ -102,7 +132,19 @@ const Login = () => {
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
             ) : null}
-            Iniciar Sesión
+            {isResettingPassword ? "Enviar correo de restablecimiento" : "Iniciar Sesión"}
+          </Button>
+
+          <Button
+            type="button"
+            variant="link"
+            className="w-full text-sm text-white/70 hover:text-white"
+            onClick={() => {
+              setIsResettingPassword(!isResettingPassword);
+              setPassword("");
+            }}
+          >
+            {isResettingPassword ? "Volver al inicio de sesión" : "¿Olvidaste tu contraseña?"}
           </Button>
         </form>
       </motion.div>
