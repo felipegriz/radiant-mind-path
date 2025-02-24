@@ -62,20 +62,20 @@ const Dashboard = () => {
     setIsLoading(true);
 
     try {
-      const { data: existingProfile, error: userError } = await supabase
+      const { data, error: userError } = await supabase
         .from("profiles")
-        .select()
+        .select("id, email")
         .eq("email", email)
         .maybeSingle();
 
       if (userError) throw userError;
 
-      if (existingProfile?.id) {
+      if (data?.id) {
         const { error: accessError } = await supabase
           .from("user_event_access")
           .insert([
             {
-              user_id: existingProfile.id,
+              user_id: data.id,
               cohort_id: selectedCohort,
               status: status,
               attendance_date: status === "attended" || status === "graduated" ? new Date().toISOString() : null,
