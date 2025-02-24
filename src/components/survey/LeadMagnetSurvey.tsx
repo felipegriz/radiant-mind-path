@@ -48,6 +48,19 @@ const questions: Question[] = [
   },
   {
     id: 2,
+    text: "¿Cuál es tu edad?",
+    type: "radio",
+    options: [
+      "18-24 años",
+      "25-34 años",
+      "35-44 años",
+      "45-54 años",
+      "55-64 años",
+      "65 años o más"
+    ]
+  },
+  {
+    id: 3,
     text: "¿Cuáles son tus ingresos mensuales actuales?",
     type: "radio",
     options: [
