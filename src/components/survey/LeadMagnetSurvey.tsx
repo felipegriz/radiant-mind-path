@@ -95,18 +95,20 @@ const LeadMagnetSurvey = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <div className="space-y-4">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">¡Quiero darte el mejor regalo!</DialogTitle>
-            <DialogDescription className="text-base mt-4">
-              Para poder transformarte de manera más rápida necesito conocerte un poco mejor para poder personalizar la información al nivel en el que estás actualmente y a lo que necesitas aprender para llegar al siguiente nivel, para lo cual he diseñado una pequeña encuesta y a cambio de que la llenes te quiero regalar mi mejor Curso online!
-              <br /><br />
-              Me tomó 15 años de carrera en el crecimiento personal y cientos de miles de dólares invertidos darme cuenta que existe una octava área de la vida y que además es la más poderosa porque influye todas las demás, pero nadie la utiliza de manera correcta!
-              <br /><br />
-              Este curso se llama LA OCTAVA ÁREA y apenas completes esta pequeña encuesta tendrás acceso inmediato al curso. ¿Tenemos un trato?
-              <br /><br />
-              Acá está la encuesta :)
-            </DialogDescription>
-          </DialogHeader>
+          {step === 0 && (
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold">¡Quiero darte el mejor regalo!</DialogTitle>
+              <DialogDescription className="text-base mt-4">
+                Para poder transformarte de manera más rápida necesito conocerte un poco mejor para poder personalizar la información al nivel en el que estás actualmente y a lo que necesitas aprender para llegar al siguiente nivel, para lo cual he diseñado una pequeña encuesta y a cambio de que la llenes te quiero regalar mi mejor Curso online!
+                <br /><br />
+                Me tomó 15 años de carrera en el crecimiento personal y cientos de miles de dólares invertidos darme cuenta que existe una octava área de la vida y que además es la más poderosa porque influye todas las demás, pero nadie la utiliza de manera correcta!
+                <br /><br />
+                Este curso se llama LA OCTAVA ÁREA y apenas completes esta pequeña encuesta tendrás acceso inmediato al curso. ¿Tenemos un trato?
+                <br /><br />
+                Acá está la encuesta :)
+              </DialogDescription>
+            </DialogHeader>
+          )}
           <div className="space-y-4 mt-4">
             {step === 0 ? (
               <InitialForm 
