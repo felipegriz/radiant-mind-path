@@ -19,8 +19,7 @@ const LeadMagnetSurvey = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    goal: "",
-    challenge: "",
+    whatsapp: "",
   });
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -40,17 +39,15 @@ const LeadMagnetSurvey = () => {
       console.log("Form submitted:", formData);
       
       toast({
-        title: "¡Gracias por compartir tu información!",
-        description: "Te enviaremos recursos valiosos a tu correo electrónico.",
+        title: "¡Gracias por tu interés!",
+        description: "Te enviaremos el acceso al curso gratuitamente.",
       });
       
       setOpen(false);
-      setStep(1);
       setFormData({
         name: "",
         email: "",
-        goal: "",
-        challenge: "",
+        whatsapp: "",
       });
     } catch (error) {
       toast({
@@ -63,94 +60,6 @@ const LeadMagnetSurvey = () => {
     }
   };
 
-  const renderStep = () => {
-    switch (step) {
-      case 1:
-        return (
-          <div className="space-y-4">
-            <DialogHeader>
-              <DialogTitle>¡Descubre Tu Potencial!</DialogTitle>
-              <DialogDescription>
-                Comienza tu viaje hacia el éxito respondiendo estas preguntas
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <Input
-                placeholder="Tu nombre"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-              />
-              <Input
-                type="email"
-                placeholder="Tu correo electrónico"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-              />
-              <Button 
-                className="w-full"
-                onClick={() => setStep(2)}
-                disabled={!formData.name || !formData.email}
-              >
-                Siguiente
-              </Button>
-            </div>
-          </div>
-        );
-      case 2:
-        return (
-          <div className="space-y-4">
-            <DialogHeader>
-              <DialogTitle>¡Estamos casi listos!</DialogTitle>
-              <DialogDescription>
-                Cuéntanos un poco más sobre tus objetivos
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <Input
-                placeholder="¿Cuál es tu principal objetivo profesional?"
-                name="goal"
-                value={formData.goal}
-                onChange={handleInputChange}
-              />
-              <Input
-                placeholder="¿Cuál es tu mayor desafío actual?"
-                name="challenge"
-                value={formData.challenge}
-                onChange={handleInputChange}
-              />
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline"
-                  onClick={() => setStep(1)}
-                  className="w-full"
-                >
-                  Anterior
-                </Button>
-                <Button 
-                  onClick={handleSubmit}
-                  disabled={isLoading || !formData.goal || !formData.challenge}
-                  className="w-full"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Enviando...
-                    </>
-                  ) : (
-                    "Enviar"
-                  )}
-                </Button>
-              </div>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -159,7 +68,53 @@ const LeadMagnetSurvey = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        {renderStep()}
+        <div className="space-y-4">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">¡Quiero darte el mejor regalo!</DialogTitle>
+            <DialogDescription className="text-base mt-4">
+              Me tomó 15 años de carrera en el crecimiento personal para darme cuenta que existe una octava área de la vida y que además es la más poderosa porque influye todas las demás.
+              <br /><br />
+              Me tomó 15 años y cientos de miles de dólares en información descubrirla y te la quiero regalar para que impacte tu vida tanto como impactó la mía.
+              <br /><br />
+              Déjame tu correo y WhatsApp para hacerte llegar el acceso a este curso de manera gratuita.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <Input
+              placeholder="Tu nombre"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
+            <Input
+              type="email"
+              placeholder="Tu correo electrónico"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+            <Input
+              placeholder="Tu WhatsApp (incluye código de país)"
+              name="whatsapp"
+              value={formData.whatsapp}
+              onChange={handleInputChange}
+            />
+            <Button 
+              onClick={handleSubmit}
+              disabled={isLoading || !formData.name || !formData.email || !formData.whatsapp}
+              className="w-full"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Enviando...
+                </>
+              ) : (
+                "¡Quiero mi regalo!"
+              )}
+            </Button>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
