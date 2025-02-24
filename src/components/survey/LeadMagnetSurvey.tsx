@@ -72,6 +72,8 @@ const LeadMagnetSurvey = () => {
           <DialogHeader>
             <DialogTitle className="text-xl font-bold">¡Quiero darte el mejor regalo!</DialogTitle>
             <DialogDescription className="text-base mt-4">
+              Para poder transformarte de la manera más rápida posible necesito conocerte un poco mejor para poder personalizar la información al nivel que estás actualmente y lo que necesitas para llegar al siguiente nivel para lo cual he diseñado una pequeña encuesta y a cambio de que la llenes te quiero regalar mi mejor curso online.
+              <br /><br />
               Me tomó 15 años de carrera en el crecimiento personal para darme cuenta que existe una octava área de la vida y que además es la más poderosa porque influye todas las demás.
               <br /><br />
               Me tomó 15 años y cientos de miles de dólares en información descubrirla y te la quiero regalar para que impacte tu vida tanto como impactó la mía.
