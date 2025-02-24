@@ -27,21 +27,25 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchCohorts = async () => {
-      const { data: cohortsData, error } = await supabase
-        .from('event_cohorts')
-        .select('id, cohort_name')
-        .eq('event_type', 'despertar_360')
-        .order('start_date', { ascending: false });
+      try {
+        const { data: cohortsData, error } = await supabase
+          .from('event_cohorts')
+          .select('id, cohort_name')
+          .eq('event_type', 'despertar_360')
+          .order('start_date', { ascending: false });
 
-      if (error) {
+        if (error) throw error;
+
+        if (cohortsData) {
+          setCohorts(cohortsData);
+          setIsFetchingCohorts(false);
+        }
+      } catch (error) {
         toast({
           title: "Error",
           description: "No se pudieron cargar las cohortes",
           variant: "destructive",
         });
-      } else if (cohortsData) {
-        setCohorts(cohortsData);
-        setIsFetchingCohorts(false);
       }
     };
 
@@ -61,8 +65,6 @@ const Dashboard = () => {
     setIsLoading(true);
 
     try {
-      // Primero verificamos si el usuario ya existe
-      let userId;
       const { data: existingUser } = await supabase
         .from('profiles')
         .select('id')
@@ -70,29 +72,33 @@ const Dashboard = () => {
         .single();
 
       if (existingUser) {
-        userId = existingUser.id;
+        const { error: accessError } = await supabase
+          .from('user_event_access')
+          .insert([
+            {
+              user_id: existingUser.id,
+              cohort_id: selectedCohort,
+              status: status,
+              attendance_date: status === 'attended' || status === 'graduated' ? new Date().toISOString() : null,
+            },
+          ]);
+
+        if (accessError) throw accessError;
+
+        toast({
+          title: "¡Éxito!",
+          description: "El asistente ha sido registrado correctamente",
+        });
+
+        setEmail("");
+        setSelectedCohort("");
+      } else {
+        toast({
+          title: "Error",
+          description: "No se encontró un usuario con ese correo",
+          variant: "destructive",
+        });
       }
-
-      // Si no existe, creamos el registro de acceso
-      const { error: accessError } = await supabase
-        .from('user_event_access')
-        .insert([
-          {
-            user_id: userId,
-            cohort_id: selectedCohort,
-            status: status,
-            attendance_date: status === 'attended' || status === 'graduated' ? new Date().toISOString() : null,
-          },
-        ]);
-
-      if (accessError) throw accessError;
-
-      toast({
-        title: "¡Éxito!",
-        description: "El asistente ha sido registrado correctamente",
-      });
-
-      setEmail("");
     } catch (error) {
       toast({
         title: "Error",

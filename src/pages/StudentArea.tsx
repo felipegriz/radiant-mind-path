@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -171,27 +170,24 @@ const StudentArea = () => {
               )}
 
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {availableModules.map((module, index) => {
-                  const IconComponent = module.icon;
-                  return (
-                    <motion.a
-                      key={module.id}
-                      href={module.link}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      className="glass-card p-8 rounded-2xl hover-lift cursor-pointer"
-                    >
-                      <div className="flex flex-col items-center text-center">
-                        <IconComponent className="w-12 h-12 text-white mb-4" />
-                        <h3 className="text-xl font-semibold text-white mb-2">{module.title}</h3>
-                        {module.description && (
-                          <p className="text-gray-300">{module.description}</p>
-                        )}
-                      </div>
-                    </motion.a>
-                  );
-                })}
+                {availableModules.map((module, index) => (
+                  <motion.a
+                    key={module.id}
+                    href={module.link}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="glass-card p-8 rounded-2xl hover-lift cursor-pointer"
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-12 h-12 text-white mb-4">{module.icon}</div>
+                      <h3 className="text-xl font-semibold text-white mb-2">{module.title}</h3>
+                      {module.description && (
+                        <p className="text-gray-300">{module.description}</p>
+                      )}
+                    </div>
+                  </motion.a>
+                ))}
               </div>
             </motion.div>
           );
