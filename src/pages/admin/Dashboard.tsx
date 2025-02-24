@@ -15,7 +15,13 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-type AttendanceStatus = "registered" | "attended" | "graduated";
+const STATUS_OPTIONS = {
+  registered: "Registrado",
+  attended: "Asistió",
+  graduated: "Graduado",
+} as const;
+
+type AttendanceStatus = keyof typeof STATUS_OPTIONS;
 type CohortData = { id: string; cohort_name: string };
 
 const Dashboard = () => {
@@ -55,10 +61,8 @@ const Dashboard = () => {
     fetchCohorts();
   }, [toast]);
 
-  const handleStatusChange = (newStatus: string) => {
-    if (newStatus === "registered" || newStatus === "attended" || newStatus === "graduated") {
-      setStatus(newStatus);
-    }
+  const handleStatusChange = (newStatus: AttendanceStatus) => {
+    setStatus(newStatus);
   };
 
   const handleRegisterAttendee = async () => {
@@ -165,15 +169,17 @@ const Dashboard = () => {
           </Select>
           <Select
             value={status}
-            onValueChange={handleStatusChange}
+            onValueChange={(value: string) => handleStatusChange(value as AttendanceStatus)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="registered">Registrado</SelectItem>
-              <SelectItem value="attended">Asistió</SelectItem>
-              <SelectItem value="graduated">Graduado</SelectItem>
+              {Object.entries(STATUS_OPTIONS).map(([value, label]) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Button 
