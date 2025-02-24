@@ -1,4 +1,3 @@
-
 import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -7,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
+import LeadMagnetSurvey from "../survey/LeadMagnetSurvey";
 
 const programas = [
   "ACCIONADORES",
@@ -118,9 +118,7 @@ const Navbar = () => {
               Contacto
             </Link>
           </div>
-          <button className="bg-accent hover:bg-accent/80 transition-colors text-white px-6 py-2 rounded-full text-sm font-medium">
-            Comienza Ahora
-          </button>
+          <LeadMagnetSurvey />
         </div>
       </div>
     </nav>
