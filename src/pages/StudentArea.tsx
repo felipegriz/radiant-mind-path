@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -5,7 +6,8 @@ import {
   GraduationCap, 
   Mail, 
   Phone,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { AIChat } from "@/components/chat/AIChat";
@@ -34,60 +36,68 @@ const StudentArea = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      // Obtener la sesión actual
       const { data: { session } } = await supabase.auth.getSession();
       
+      // Si no hay sesión, redirigir al login
       if (!session) {
         navigate('/auth/login');
         return;
       }
 
-      // Obtener el perfil del usuario
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('full_name, nickname')
-        .eq('id', session.user.id)
-        .single();
+      try {
+        // Obtener el perfil del usuario
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, nickname')
+          .eq('id', session.user.id)
+          .single();
 
-      if (profile) {
-        setFullName(profile.full_name);
-        setNickname(profile.nickname);
+        if (profile) {
+          setFullName(profile.full_name);
+          setNickname(profile.nickname);
+        }
+
+        // Obtener accesos a eventos del usuario
+        const { data: access } = await supabase
+          .from('user_event_access')
+          .select('*')
+          .eq('user_id', session.user.id);
+
+        if (access) {
+          setUserEventAccess(access);
+        }
+
+        // Obtener cohortes activas
+        const { data: activeCohortes } = await supabase
+          .from('event_cohorts')
+          .select('*')
+          .eq('is_active', true);
+
+        if (activeCohortes) {
+          setCohorts(activeCohortes);
+        }
+
+        // Obtener módulos de contenido
+        const { data: modules } = await supabase
+          .from('event_content_modules')
+          .select('*')
+          .order('sequence_order');
+
+        if (modules) {
+          setEventModules(modules);
+        }
+      } catch (error) {
+        console.error('Error loading student data:', error);
+        navigate('/auth/login');
+      } finally {
+        setIsLoading(false);
       }
-
-      // Obtener accesos a eventos del usuario
-      const { data: access } = await supabase
-        .from('user_event_access')
-        .select('*')
-        .eq('user_id', session.user.id);
-
-      if (access) {
-        setUserEventAccess(access);
-      }
-
-      // Obtener cohortes activas
-      const { data: activeCohortes } = await supabase
-        .from('event_cohorts')
-        .select('*')
-        .eq('is_active', true);
-
-      if (activeCohortes) {
-        setCohorts(activeCohortes);
-      }
-
-      // Obtener módulos de contenido
-      const { data: modules } = await supabase
-        .from('event_content_modules')
-        .select('*')
-        .order('sequence_order');
-
-      if (modules) {
-        setEventModules(modules);
-      }
-      
-      setIsLoading(false);
     };
 
     checkAuth();
 
+    // Suscribirse a cambios en el estado de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         navigate('/auth/login');
@@ -96,6 +106,15 @@ const StudentArea = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  // Mostrar pantalla de carga mientras se verifica la autenticación
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-white" />
+      </div>
+    );
+  }
 
   const getUserEventStatus = (cohortId: string) => {
     const access = userEventAccess.find(a => a.cohort_id === cohortId);
@@ -109,10 +128,6 @@ const StudentArea = () => {
       module.required_status.includes(status)
     );
   };
-
-  if (isLoading) {
-    return <div className="min-h-screen bg-background" />;
-  }
 
   return (
     <div className="min-h-screen bg-background">
