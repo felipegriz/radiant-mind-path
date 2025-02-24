@@ -1,4 +1,3 @@
-
 export type UserLevel = "Bronce" | "Plata" | "Oro" | "Diamante" | "Platino" | "Grey Platinum";
 
 export interface Question {
@@ -95,13 +94,23 @@ export const questions: Question[] = [
     text: "¿Cuál es tu principal objetivo de crecimiento personal en este momento?",
     type: "radio",
     options: [
-      "Crecimiento financiero y abundancia",
-      "Relaciones y conexiones más profundas",
-      "Propósito y realización personal",
+      "Cambiar mi vida",
+      "Ganar más dinero",
+      "Lograr maestría emocional",
+      "Crear una vida extraordinaria",
+      "Tengo dinero pero quiero plenitud",
+      "Quiero mejorar mi relación de pareja",
+      "Quiero trabajar mis finanzas personales",
+      "Quiero descubrir mi propósito de vida",
       "Equilibrio vida-trabajo",
       "Salud y bienestar integral",
       "Liderazgo y desarrollo profesional",
-      "Espiritualidad y conexión interior"
+      "Aprender un sistema de manejo del tiempo",
+      "Espiritualidad y conexión interior",
+      "Emprender",
+      "Conocerme mejor",
+      "Descubrir mi potencial",
+      "Construir la mejor mentalidad posible"
     ]
   },
   {
