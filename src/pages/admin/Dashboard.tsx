@@ -7,15 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { Users, CalendarDays, BookOpen, Plus, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
-interface CohortData {
-  id: string;
-  cohort_name: string;
-}
-
-interface Profile {
-  id: string;
-}
+type EventCohort = Database['public']['Tables']['event_cohorts']['Row'];
+type Profile = Database['public']['Tables']['profiles']['Row'];
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -23,7 +18,7 @@ const Dashboard = () => {
   const [email, setEmail] = useState("");
   const [selectedCohort, setSelectedCohort] = useState("");
   const [status, setStatus] = useState("attended");
-  const [cohorts, setCohorts] = useState<CohortData[]>([]);
+  const [cohorts, setCohorts] = useState<EventCohort[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingCohorts, setIsFetchingCohorts] = useState(true);
 
@@ -34,8 +29,7 @@ const Dashboard = () => {
           .from("event_cohorts")
           .select("id, cohort_name")
           .eq("event_type", "despertar_360")
-          .order("start_date", { ascending: false })
-          .returns<CohortData[]>();
+          .order("start_date", { ascending: false });
 
         if (error) throw error;
 
@@ -72,12 +66,11 @@ const Dashboard = () => {
         .from("profiles")
         .select("id")
         .eq("email", email)
-        .returns<Profile>()
         .maybeSingle();
 
       if (userError) throw userError;
 
-      if (existingUser) {
+      if (existingUser?.id) {
         const { error: accessError } = await supabase
           .from("user_event_access")
           .insert([
