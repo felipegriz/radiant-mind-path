@@ -62,20 +62,21 @@ const Dashboard = () => {
     setIsLoading(true);
 
     try {
-      const { data, error: userError } = await supabase
-        .from("profiles")
-        .select("id, email")
+      // Primero buscamos el usuario en la tabla students
+      const { data: studentData, error: studentError } = await supabase
+        .from("students")
+        .select("id")
         .eq("email", email)
         .maybeSingle();
 
-      if (userError) throw userError;
+      if (studentError) throw studentError;
 
-      if (data?.id) {
+      if (studentData?.id) {
         const { error: accessError } = await supabase
           .from("user_event_access")
           .insert([
             {
-              user_id: data.id,
+              user_id: studentData.id,
               cohort_id: selectedCohort,
               status: status,
               attendance_date: status === "attended" || status === "graduated" ? new Date().toISOString() : null,
