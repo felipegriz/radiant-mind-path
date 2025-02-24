@@ -90,6 +90,72 @@ export type Database = {
           },
         ]
       }
+      event_cohorts: {
+        Row: {
+          cohort_name: string
+          created_at: string | null
+          end_date: string
+          event_type: Database["public"]["Enums"]["event_type"]
+          id: string
+          is_active: boolean | null
+          start_date: string
+        }
+        Insert: {
+          cohort_name: string
+          created_at?: string | null
+          end_date: string
+          event_type: Database["public"]["Enums"]["event_type"]
+          id?: string
+          is_active?: boolean | null
+          start_date: string
+        }
+        Update: {
+          cohort_name?: string
+          created_at?: string | null
+          end_date?: string
+          event_type?: Database["public"]["Enums"]["event_type"]
+          id?: string
+          is_active?: boolean | null
+          start_date?: string
+        }
+        Relationships: []
+      }
+      event_content_modules: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          event_type: Database["public"]["Enums"]["event_type"]
+          icon: string
+          id: string
+          link: string
+          required_status: string[] | null
+          sequence_order: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          event_type: Database["public"]["Enums"]["event_type"]
+          icon: string
+          id?: string
+          link: string
+          required_status?: string[] | null
+          sequence_order?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          event_type?: Database["public"]["Enums"]["event_type"]
+          icon?: string
+          id?: string
+          link?: string
+          required_status?: string[] | null
+          sequence_order?: number | null
+          title?: string
+        }
+        Relationships: []
+      }
       event_prices: {
         Row: {
           created_at: string
@@ -122,6 +188,44 @@ export type Database = {
           valid_until?: string | null
         }
         Relationships: []
+      }
+      event_purchases: {
+        Row: {
+          cohort_id: string | null
+          created_at: string | null
+          id: string
+          purchase_date: string | null
+          status: string | null
+          stripe_session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          cohort_id?: string | null
+          created_at?: string | null
+          id?: string
+          purchase_date?: string | null
+          status?: string | null
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          cohort_id?: string | null
+          created_at?: string | null
+          id?: string
+          purchase_date?: string | null
+          status?: string | null
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_purchases_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "event_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -394,6 +498,44 @@ export type Database = {
         }
         Relationships: []
       }
+      user_event_access: {
+        Row: {
+          access_granted_at: string | null
+          attendance_date: string | null
+          cohort_id: string | null
+          created_at: string | null
+          id: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_granted_at?: string | null
+          attendance_date?: string | null
+          cohort_id?: string | null
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_granted_at?: string | null
+          attendance_date?: string | null
+          cohort_id?: string | null
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_event_access_cohort_id_fkey"
+            columns: ["cohort_id"]
+            isOneToOne: false
+            referencedRelation: "event_cohorts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -420,10 +562,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_event_access: {
+        Args: {
+          user_uuid: string
+          required_status: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       enrollment_status: "active" | "completed" | "cancelled" | "pending"
+      event_type: "despertar_360" | "cita_con_lo_imposible" | "mission_mastery"
       program_pillar: "inmersion" | "recondicionamiento" | "personalizacion"
       program_status: "active" | "inactive" | "coming_soon"
     }

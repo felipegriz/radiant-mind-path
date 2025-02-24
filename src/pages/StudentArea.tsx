@@ -2,7 +2,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BookOpen, GraduationCap, Calendar, MessageCircle, FileText, PlayCircle, Mail, Phone } from "lucide-react";
+import { 
+  GraduationCap, 
+  Mail, 
+  Phone,
+  AlertCircle
+} from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { AIChat } from "@/components/chat/AIChat";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,39 +18,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-
-const resources = [
-  {
-    icon: PlayCircle,
-    title: "Videos y Cursos",
-    description: "Accede a todo el contenido multimedia y cursos disponibles",
-    link: "#cursos"
-  },
-  {
-    icon: Calendar,
-    title: "Calendario de Eventos",
-    description: "Mantente al día con los próximos eventos y sesiones",
-    link: "#calendario"
-  },
-  {
-    icon: FileText,
-    title: "Materiales de Estudio",
-    description: "Descarga documentos, guías y recursos complementarios",
-    link: "#materiales"
-  },
-  {
-    icon: MessageCircle,
-    title: "Comunidad",
-    description: "Conecta con otros estudiantes y comparte experiencias",
-    link: "#comunidad"
-  }
-];
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import type { EventCohort, UserEventAccess, EventContentModule } from "@/types/event";
 
 const StudentArea = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [fullName, setFullName] = useState("");
   const [nickname, setNickname] = useState("");
+  const [userEventAccess, setUserEventAccess] = useState<UserEventAccess[]>([]);
+  const [eventModules, setEventModules] = useState<EventContentModule[]>([]);
+  const [cohorts, setCohorts] = useState<EventCohort[]>([]);
   const whatsappNumber = "17869925648";
   const whatsappUrl = `https://wa.me/${whatsappNumber}`;
   const emailAddress = "contacto@felipegriz.com";
@@ -60,7 +43,7 @@ const StudentArea = () => {
       }
 
       // Obtener el perfil del usuario
-      const { data: profile, error } = await supabase
+      const { data: profile } = await supabase
         .from('profiles')
         .select('full_name, nickname')
         .eq('id', session.user.id)
@@ -69,6 +52,36 @@ const StudentArea = () => {
       if (profile) {
         setFullName(profile.full_name);
         setNickname(profile.nickname);
+      }
+
+      // Obtener accesos a eventos del usuario
+      const { data: access } = await supabase
+        .from('user_event_access')
+        .select('*')
+        .eq('user_id', session.user.id);
+
+      if (access) {
+        setUserEventAccess(access);
+      }
+
+      // Obtener cohortes activas
+      const { data: activeCohortes } = await supabase
+        .from('event_cohorts')
+        .select('*')
+        .eq('is_active', true);
+
+      if (activeCohortes) {
+        setCohorts(activeCohortes);
+      }
+
+      // Obtener módulos de contenido
+      const { data: modules } = await supabase
+        .from('event_content_modules')
+        .select('*')
+        .order('sequence_order');
+
+      if (modules) {
+        setEventModules(modules);
       }
       
       setIsLoading(false);
@@ -84,6 +97,19 @@ const StudentArea = () => {
 
     return () => subscription.unsubscribe();
   }, [navigate]);
+
+  const getUserEventStatus = (cohortId: string) => {
+    const access = userEventAccess.find(a => a.cohort_id === cohortId);
+    return access?.status || null;
+  };
+
+  const getAvailableModules = (eventType: string, status: string | null) => {
+    if (!status) return [];
+    return eventModules.filter(module => 
+      module.event_type === eventType && 
+      module.required_status.includes(status)
+    );
+  };
 
   if (isLoading) {
     return <div className="min-h-screen bg-background" />;
@@ -115,31 +141,65 @@ const StudentArea = () => {
       </div>
 
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 gap-8">
-          {resources.map((resource, index) => (
-            <motion.a
-              key={index}
-              href={resource.link}
+        {cohorts.map((cohort) => {
+          const status = getUserEventStatus(cohort.id);
+          const availableModules = getAvailableModules(cohort.event_type, status);
+          const cohortDate = new Date(cohort.start_date);
+          const today = new Date();
+
+          if (!status) return null;
+
+          return (
+            <motion.div
+              key={cohort.id}
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="glass-card p-8 rounded-2xl hover-lift cursor-pointer"
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-16"
             >
-              <div className="flex items-start space-x-4">
-                <resource.icon className="w-8 h-8 text-white shrink-0" />
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{resource.title}</h3>
-                  <p className="text-gray-300">{resource.description}</p>
-                </div>
+              <h2 className="text-3xl font-bold text-white mb-6">{cohort.cohort_name}</h2>
+              
+              {status === 'registered' && cohortDate > today && (
+                <Alert variant="default" className="mb-8">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Evento Próximo</AlertTitle>
+                  <AlertDescription>
+                    Tu evento comienza el {new Date(cohort.start_date).toLocaleDateString()}. 
+                    Podrás acceder al contenido completo después de asistir al evento.
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {availableModules.map((module, index) => {
+                  const IconComponent = module.icon;
+                  return (
+                    <motion.a
+                      key={module.id}
+                      href={module.link}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      className="glass-card p-8 rounded-2xl hover-lift cursor-pointer"
+                    >
+                      <div className="flex flex-col items-center text-center">
+                        <IconComponent className="w-12 h-12 text-white mb-4" />
+                        <h3 className="text-xl font-semibold text-white mb-2">{module.title}</h3>
+                        {module.description && (
+                          <p className="text-gray-300">{module.description}</p>
+                        )}
+                      </div>
+                    </motion.a>
+                  );
+                })}
               </div>
-            </motion.a>
-          ))}
-        </div>
+            </motion.div>
+          );
+        })}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="mt-16"
@@ -149,13 +209,12 @@ const StudentArea = () => {
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="mt-16 text-center"
         >
           <div className="glass-card p-8 rounded-2xl max-w-2xl mx-auto">
-            <BookOpen className="w-12 h-12 text-white mx-auto mb-6" />
             <h2 className="text-2xl font-bold text-white mb-4">¿Necesitas ayuda?</h2>
             <p className="text-gray-300 mb-6">
               Nuestro equipo está aquí para apoyarte en tu proceso de aprendizaje
