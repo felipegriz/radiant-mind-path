@@ -61,6 +61,23 @@ const questions: Question[] = [
   },
   {
     id: 3,
+    text: "¿Hace cuánto tiempo conoces a Felipe y lo que hacemos?",
+    type: "radio",
+    options: [
+      "Más de cinco años",
+      "Más de cuatro años",
+      "Más de tres años",
+      "Más de dos años",
+      "Más de un año",
+      "De siete a 12 meses",
+      "De tres a seis meses",
+      "De uno a dos meses",
+      "De una a tres semanas",
+      "Menos de una semana"
+    ]
+  },
+  {
+    id: 4,
     text: "¿Cuáles son tus ingresos mensuales actuales?",
     type: "radio",
     options: [
