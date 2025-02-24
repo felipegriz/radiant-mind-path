@@ -27,19 +27,6 @@ interface Question {
 const questions: Question[] = [
   {
     id: 1,
-    text: "¿Cuáles son tus ingresos mensuales actuales?",
-    type: "radio",
-    options: [
-      "Menos de $1,000",
-      "$1,000 - $3,000",
-      "$3,000 - $5,000",
-      "$5,000 - $10,000",
-      "$10,000 - $15,000",
-      "Más de $15,000"
-    ]
-  },
-  {
-    id: 2,
     text: "¿A qué te dedicas?",
     type: "radio",
     options: [
@@ -57,6 +44,19 @@ const questions: Question[] = [
       "Desemplead@",
       "Fuera del mercado/retirad@",
       "Otros"
+    ]
+  },
+  {
+    id: 2,
+    text: "¿Cuáles son tus ingresos mensuales actuales?",
+    type: "radio",
+    options: [
+      "Menos de $1,000",
+      "$1,000 - $3,000",
+      "$3,000 - $5,000",
+      "$5,000 - $10,000",
+      "$10,000 - $15,000",
+      "Más de $15,000"
     ]
   }
 ];
