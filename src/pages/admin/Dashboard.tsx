@@ -55,8 +55,8 @@ const Dashboard = () => {
     fetchCohorts();
   }, [toast]);
 
-  const handleStatusChange = (value: string) => {
-    setStatus(value as AttendanceStatus);
+  const handleStatusChange = (value: AttendanceStatus) => {
+    setStatus(value);
   };
 
   const handleRegisterAttendee = async () => {
@@ -161,7 +161,7 @@ const Dashboard = () => {
               ))}
             </SelectContent>
           </Select>
-          <Select 
+          <Select<AttendanceStatus> 
             value={status}
             onValueChange={handleStatusChange}
           >
