@@ -1,9 +1,12 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
+import { VideoUploader } from "@/components/video/VideoUploader";
 
 const OctavaArea = () => {
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -28,13 +31,19 @@ const OctavaArea = () => {
           transition={{ delay: 0.2 }}
           className="aspect-video w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
         >
-          <iframe 
-            className="w-full h-full"
-            src="https://us02web.zoom.us/rec/share/dMiLFSh5sXdOAM7AnSnmhxTdXD9J_Q0wJ0LDcuArsB5qYjEcCjbJuyQnAjtMu1m2.Y3ggY4hg5heU2eLm"
-            frameBorder="0" 
-            allow="autoplay; fullscreen" 
-            allowFullScreen
-          ></iframe>
+          {videoUrl ? (
+            <video 
+              className="w-full h-full"
+              controls
+              src={videoUrl}
+            >
+              Tu navegador no soporta la reproducción de videos.
+            </video>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+              <VideoUploader onUploadComplete={setVideoUrl} />
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
