@@ -88,6 +88,46 @@ const questions: Question[] = [
       "$10,000 - $15,000",
       "Más de $15,000"
     ]
+  },
+  {
+    id: 5,
+    text: "¿Has invertido en programas de desarrollo personal en el último año?",
+    type: "radio",
+    options: [
+      "Sí, más de $5,000",
+      "Sí, entre $1,000 y $5,000",
+      "Sí, menos de $1,000",
+      "No, pero me interesa",
+      "No, y no me interesa por ahora"
+    ]
+  },
+  {
+    id: 6,
+    text: "¿Cuál es tu principal objetivo de desarrollo personal en este momento?",
+    type: "radio",
+    options: [
+      "Crecimiento financiero y abundancia",
+      "Relaciones y conexiones más profundas",
+      "Propósito y realización personal",
+      "Equilibrio vida-trabajo",
+      "Salud y bienestar integral",
+      "Liderazgo y desarrollo profesional",
+      "Espiritualidad y conexión interior"
+    ]
+  },
+  {
+    id: 7,
+    text: "¿Cuál es tu mayor desafío actual?",
+    type: "radio",
+    options: [
+      "Falta de claridad en mi propósito",
+      "Limitaciones financieras",
+      "Gestión del tiempo",
+      "Relaciones personales",
+      "Motivación y disciplina",
+      "Estrés y ansiedad",
+      "Otro"
+    ]
   }
 ];
 
