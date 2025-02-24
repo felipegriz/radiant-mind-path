@@ -366,6 +366,39 @@ export type Database = {
         }
         Relationships: []
       }
+      prospects: {
+        Row: {
+          conversion_date: string | null
+          created_at: string
+          email: string
+          id: string
+          notes: string | null
+          source: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          conversion_date?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          notes?: string | null
+          source?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          conversion_date?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          notes?: string | null
+          source?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       session_attendance: {
         Row: {
           attendance_date: string | null

@@ -67,12 +67,35 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // First check if email exists in students table
+      const { data: studentData } = await supabase
+        .from('students')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+      // Sign up the user
+      const { data: authData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (signUpError) throw signUpError;
+
+      if (!studentData) {
+        // If email is not in students table, create a prospect
+        const { error: prospectError } = await supabase
+          .from('prospects')
+          .insert([
+            {
+              email,
+              user_id: authData.user?.id,
+              source: 'web_signup'
+            }
+          ]);
+
+        if (prospectError) throw prospectError;
+      }
 
       toast({
         title: "Registro exitoso",
