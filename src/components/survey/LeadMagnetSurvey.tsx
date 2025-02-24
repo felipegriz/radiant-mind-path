@@ -128,6 +128,22 @@ const questions: Question[] = [
       "Estrés y ansiedad",
       "Otro"
     ]
+  },
+  {
+    id: 8,
+    text: "Si tuvieras una varita mágica y pudieras hacer realidad cualquier cosa, ¿cuál sería tu sueño o gran meta?",
+    type: "radio",
+    options: [
+      "Impactar positivamente a millones de personas",
+      "Libertad financiera total",
+      "Construir un legado duradero",
+      "Realización personal plena",
+      "Viajar por el mundo sin limitaciones",
+      "Crear una empresa exitosa",
+      "Tener una familia feliz y armoniosa",
+      "Alcanzar la paz y plenitud interior",
+      "Otro"
+    ]
   }
 ];
 
