@@ -5,14 +5,6 @@ import { Input } from "@/components/ui/input";
 import DashboardStats from "@/components/admin/DashboardStats";
 import { useNavigate } from "react-router-dom";
 import { Users, CalendarDays, BookOpen, Plus, Loader2 } from "lucide-react";
-import * as SelectPrimitive from "@radix-ui/react-select";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -141,35 +133,28 @@ const Dashboard = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <SelectPrimitive.Root
+          <select
+            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             value={selectedCohort}
-            onValueChange={setSelectedCohort}
+            onChange={(e) => setSelectedCohort(e.target.value)}
             disabled={isFetchingCohorts}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Seleccionar cohorte" />
-            </SelectTrigger>
-            <SelectContent>
-              {cohorts.map((cohort) => (
-                <SelectItem key={cohort.id} value={cohort.id}>
-                  {cohort.cohort_name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </SelectPrimitive.Root>
-          <SelectPrimitive.Root
+            <option value="">Seleccionar cohorte</option>
+            {cohorts.map((cohort) => (
+              <option key={cohort.id} value={cohort.id}>
+                {cohort.cohort_name}
+              </option>
+            ))}
+          </select>
+          <select
+            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             value={status}
-            onValueChange={setStatus}
+            onChange={(e) => setStatus(e.target.value)}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Estado" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="registered">Registrado</SelectItem>
-              <SelectItem value="attended">Asistió</SelectItem>
-              <SelectItem value="graduated">Graduado</SelectItem>
-            </SelectContent>
-          </SelectPrimitive.Root>
+            <option value="registered">Registrado</option>
+            <option value="attended">Asistió</option>
+            <option value="graduated">Graduado</option>
+          </select>
           <Button 
             onClick={handleRegisterAttendee}
             disabled={isLoading || !email || !selectedCohort}
