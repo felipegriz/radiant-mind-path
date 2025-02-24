@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,33 +16,37 @@ import SilverPartnership from "./pages/coaching-consultoria/SilverPartnership";
 import GreyPlatinum from "./pages/coaching-consultoria/GreyPlatinum";
 import Dashboard from "./pages/admin/Dashboard";
 import OctavaArea from "./pages/courses/OctavaArea";
+import ResetPassword from "@/pages/auth/ResetPassword";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/events/despertar-360" element={<Despertar360 />} />
-          <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
-          <Route path="/events/mission-mastery" element={<MissionMastery />} />
-          <Route path="/student-area" element={<StudentArea />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/contacto" element={<Contacto />} />
-          <Route path="/coaching-consultoria/super-humano" element={<SuperHumano />} />
-          <Route path="/coaching-consultoria/silver-partnership" element={<SilverPartnership />} />
-          <Route path="/coaching-consultoria/grey-platinum" element={<GreyPlatinum />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/courses/octava-area" element={<OctavaArea />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/events/despertar-360" element={<Despertar360 />} />
+            <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
+            <Route path="/events/mission-mastery" element={<MissionMastery />} />
+            <Route path="/student-area" element={<StudentArea />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/reset-password" element={<ResetPassword />} />
+            <Route path="/contacto" element={<Contacto />} />
+            <Route path="/coaching-consultoria/super-humano" element={<SuperHumano />} />
+            <Route path="/coaching-consultoria/silver-partnership" element={<SilverPartnership />} />
+            <Route path="/coaching-consultoria/grey-platinum" element={<GreyPlatinum />} />
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/courses/octava-area" element={<OctavaArea />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
