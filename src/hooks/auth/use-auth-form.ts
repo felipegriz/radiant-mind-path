@@ -113,10 +113,11 @@ export const useAuthForm = () => {
         throw new Error("Por favor ingresa tu correo electrónico");
       }
 
+      const currentDomain = window.location.origin;
       const { error } = await supabase.auth.resetPasswordForEmail(
         email.trim(),
         {
-          redirectTo: `${window.location.origin}/auth/reset-password`,
+          redirectTo: `${currentDomain}/auth/reset-password`,
         }
       );
 
