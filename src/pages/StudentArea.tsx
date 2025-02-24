@@ -27,6 +27,7 @@ const StudentArea = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [fullName, setFullName] = useState("");
   const [nickname, setNickname] = useState("");
   const [userEventAccess, setUserEventAccess] = useState<UserEventAccess[]>([]);
@@ -37,26 +38,37 @@ const StudentArea = () => {
   const emailAddress = "contacto@felipegriz.com";
 
   useEffect(() => {
-    const loadData = async () => {
+    const checkAuthAndLoadData = async () => {
       try {
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        const { data: { session } } = await supabase.auth.getSession();
         
-        if (sessionError || !session) {
+        if (!session) {
           toast({
             variant: "destructive",
-            title: "Error de autenticación",
-            description: "Por favor inicia sesión para acceder"
+            title: "Acceso Restringido",
+            description: "Por favor inicia sesión para acceder al área de estudiantes"
           });
           navigate('/auth/login', { replace: true });
           return;
         }
 
+        setIsAuthenticated(true);
+
         // Cargar perfil del usuario
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('full_name, nickname')
           .eq('id', session.user.id)
           .single();
+
+        if (profileError) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "No se pudo cargar tu perfil"
+          });
+          return;
+        }
 
         if (profile) {
           setFullName(profile.full_name || '');
@@ -69,9 +81,7 @@ const StudentArea = () => {
           .select('*')
           .eq('user_id', session.user.id);
 
-        if (access) {
-          setUserEventAccess(access);
-        }
+        setUserEventAccess(access || []);
 
         // Cargar cohortes activos
         const { data: activeCohortes } = await supabase
@@ -79,9 +89,7 @@ const StudentArea = () => {
           .select('*')
           .eq('is_active', true);
 
-        if (activeCohortes) {
-          setCohorts(activeCohortes);
-        }
+        setCohorts(activeCohortes || []);
 
         // Cargar módulos
         const { data: modules } = await supabase
@@ -89,9 +97,7 @@ const StudentArea = () => {
           .select('*')
           .order('sequence_order');
 
-        if (modules) {
-          setEventModules(modules);
-        }
+        setEventModules(modules || []);
 
       } catch (error) {
         toast({
@@ -104,10 +110,11 @@ const StudentArea = () => {
       }
     };
 
-    loadData();
+    checkAuthAndLoadData();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
+        setIsAuthenticated(false);
         navigate('/auth/login', { replace: true });
       }
     });
@@ -128,10 +135,41 @@ const StudentArea = () => {
     );
   };
 
-  if (isLoading) {
+  if (isLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-white" />
+      </div>
+    );
+  }
+
+  if (cohorts.length === 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Sin acceso a eventos</AlertTitle>
+            <AlertDescription>
+              No tienes acceso a ningún evento en este momento. Por favor contacta con soporte si crees que esto es un error.
+            </AlertDescription>
+          </Alert>
+          <div className="flex justify-center space-x-4">
+            <Button variant="outline" asChild>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                <Phone className="w-4 h-4 mr-2" />
+                Contactar por WhatsApp
+              </a>
+            </Button>
+            <Button variant="outline" asChild>
+              <a href={`mailto:${emailAddress}`}>
+                <Mail className="w-4 h-4 mr-2" />
+                Contactar por Email
+              </a>
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
@@ -164,6 +202,17 @@ const StudentArea = () => {
               </Button>
             </div>
           </div>
+
+          {userEventAccess.length === 0 && (
+            <Alert>
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Sin acceso activo</AlertTitle>
+              <AlertDescription>
+                Aún no tienes acceso a ningún evento. Si acabas de realizar tu compra, 
+                el acceso se activará en breve. Si tienes dudas, por favor contáctanos.
+              </AlertDescription>
+            </Alert>
+          )}
 
           {cohorts.map((cohort) => {
             const status = getUserEventStatus(cohort.id);
@@ -213,9 +262,14 @@ const StudentArea = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-muted-foreground">
-                    No hay módulos disponibles para este evento en este momento.
-                  </p>
+                  <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Sin acceso a este evento</AlertTitle>
+                    <AlertDescription>
+                      No tienes acceso a este evento en este momento. Si crees que esto es un error,
+                      por favor contacta con soporte.
+                    </AlertDescription>
+                  </Alert>
                 )}
               </motion.div>
             );
