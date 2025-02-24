@@ -55,16 +55,17 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
               </p>
             </div>
             <div className="mt-auto">
-              <a 
-                href={STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS]} 
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS];
+              <button 
+                onClick={() => {
+                  const link = STRIPE_PAYMENT_LINKS[price.id as keyof typeof STRIPE_PAYMENT_LINKS];
+                  if (link) {
+                    window.open(link, '_blank');
+                  }
                 }}
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full px-4 py-2 rounded-full text-lg font-bold"
               >
                 Comprar Ahora
-              </a>
+              </button>
             </div>
           </motion.div>
         ))}
