@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -27,7 +26,6 @@ const StudentArea = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [fullName, setFullName] = useState("");
   const [nickname, setNickname] = useState("");
   const [userEventAccess, setUserEventAccess] = useState<UserEventAccess[]>([]);
@@ -38,21 +36,43 @@ const StudentArea = () => {
   const emailAddress = "contacto@felipegriz.com";
 
   useEffect(() => {
-    const checkAuthAndLoadData = async () => {
+    const immediateAuthCheck = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          variant: "destructive",
+          title: "Acceso Restringido",
+          description: "Por favor inicia sesión para acceder al área de estudiantes"
+        });
+        navigate('/auth/login', { replace: true });
+      }
+    };
+    immediateAuthCheck();
+  }, []);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        toast({
+          variant: "destructive",
+          title: "Sesión finalizada",
+          description: "Por favor inicia sesión para continuar"
+        });
+        navigate('/auth/login', { replace: true });
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate, toast]);
+
+  useEffect(() => {
+    const loadData = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        
         if (!session) {
-          toast({
-            variant: "destructive",
-            title: "Acceso Restringido",
-            description: "Por favor inicia sesión para acceder al área de estudiantes"
-          });
           navigate('/auth/login', { replace: true });
           return;
         }
-
-        setIsAuthenticated(true);
 
         // Cargar perfil del usuario
         const { data: profile, error: profileError } = await supabase
@@ -110,17 +130,16 @@ const StudentArea = () => {
       }
     };
 
-    checkAuthAndLoadData();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        setIsAuthenticated(false);
-        navigate('/auth/login', { replace: true });
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    loadData();
   }, [navigate, toast]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-white" />
+      </div>
+    );
+  }
 
   const getUserEventStatus = (cohortId: string) => {
     const access = userEventAccess.find(a => a.cohort_id === cohortId);
@@ -134,14 +153,6 @@ const StudentArea = () => {
       module.required_status.includes(status)
     );
   };
-
-  if (isLoading || !isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-white" />
-      </div>
-    );
-  }
 
   if (cohorts.length === 0) {
     return (
