@@ -24,45 +24,7 @@ import { Loader2 } from "lucide-react";
 
 const queryClient = new QueryClient();
 
-// AuthProvider para manejar el estado global de autenticación
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // Verificar la sesión inicial
-    const checkSession = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setIsAuthenticated(!!session);
-        
-        // Si no hay sesión y estamos en una ruta protegida, redirigir al login
-        if (!session && window.location.pathname.includes('/student-area')) {
-          navigate('/auth/login', { replace: true });
-        }
-      } catch (error) {
-        console.error('Error checking session:', error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkSession();
-
-    // Suscribirse a cambios en la autenticación
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session);
-      if (!session) {
-        navigate('/auth/login', { replace: true });
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
-
-  return children;
-};
-
-// Componente de protección para rutas que requieren autenticación
+// ProtectedRoute con redirección inmediata
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const [isChecking, setIsChecking] = useState(true);
@@ -88,6 +50,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     };
 
     checkAuth();
+
+    // Suscribirse a cambios en la autenticación
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        navigate('/auth/login', { replace: true });
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [navigate]);
 
   if (isChecking) {
@@ -98,7 +69,12 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
-  return isAuthenticated ? <>{children}</> : null;
+  // Si no está autenticado, redirigir inmediatamente
+  if (!isAuthenticated) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 const App = () => {
@@ -108,38 +84,36 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/events/despertar-360" element={<Despertar360 />} />
-              <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
-              <Route path="/events/mission-mastery" element={<MissionMastery />} />
-              <Route 
-                path="/student-area" 
-                element={
-                  <ProtectedRoute>
-                    <StudentArea />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/reset-password" element={<ResetPassword />} />
-              <Route path="/contacto" element={<Contacto />} />
-              <Route path="/coaching-consultoria/super-humano" element={<SuperHumano />} />
-              <Route path="/coaching-consultoria/silver-partnership" element={<SilverPartnership />} />
-              <Route path="/coaching-consultoria/grey-platinum" element={<GreyPlatinum />} />
-              <Route 
-                path="/admin/dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="/courses/octava-area" element={<OctavaArea />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/events/despertar-360" element={<Despertar360 />} />
+            <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
+            <Route path="/events/mission-mastery" element={<MissionMastery />} />
+            <Route 
+              path="/student-area" 
+              element={
+                <ProtectedRoute>
+                  <StudentArea />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/reset-password" element={<ResetPassword />} />
+            <Route path="/contacto" element={<Contacto />} />
+            <Route path="/coaching-consultoria/super-humano" element={<SuperHumano />} />
+            <Route path="/coaching-consultoria/silver-partnership" element={<SilverPartnership />} />
+            <Route path="/coaching-consultoria/grey-platinum" element={<GreyPlatinum />} />
+            <Route 
+              path="/admin/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/courses/octava-area" element={<OctavaArea />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

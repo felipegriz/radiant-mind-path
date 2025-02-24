@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -35,18 +34,15 @@ const StudentArea = () => {
   const emailAddress = "contacto@felipegriz.com";
 
   useEffect(() => {
-    const checkAuth = async () => {
-      // Obtener la sesión actual
+    const init = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       
-      // Si no hay sesión, redirigir al login
       if (!session) {
-        navigate('/auth/login');
+        navigate('/auth/login', { replace: true });
         return;
       }
 
       try {
-        // Obtener el perfil del usuario
         const { data: profile } = await supabase
           .from('profiles')
           .select('full_name, nickname')
@@ -58,7 +54,6 @@ const StudentArea = () => {
           setNickname(profile.nickname);
         }
 
-        // Obtener accesos a eventos del usuario
         const { data: access } = await supabase
           .from('user_event_access')
           .select('*')
@@ -68,7 +63,6 @@ const StudentArea = () => {
           setUserEventAccess(access);
         }
 
-        // Obtener cohortes activas
         const { data: activeCohortes } = await supabase
           .from('event_cohorts')
           .select('*')
@@ -78,7 +72,6 @@ const StudentArea = () => {
           setCohorts(activeCohortes);
         }
 
-        // Obtener módulos de contenido
         const { data: modules } = await supabase
           .from('event_content_modules')
           .select('*')
@@ -89,25 +82,23 @@ const StudentArea = () => {
         }
       } catch (error) {
         console.error('Error loading student data:', error);
-        navigate('/auth/login');
+        navigate('/auth/login', { replace: true });
       } finally {
         setIsLoading(false);
       }
     };
 
-    checkAuth();
+    init();
 
-    // Suscribirse a cambios en el estado de autenticación
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
-        navigate('/auth/login');
+        navigate('/auth/login', { replace: true });
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  // Mostrar pantalla de carga mientras se verifica la autenticación
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
