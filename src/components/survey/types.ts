@@ -118,13 +118,18 @@ export const questions: Question[] = [
     text: "¿Cuál es tu mayor desafío actual?",
     type: "radio",
     options: [
+      "Mucho mes al final del dinero",
       "Falta de claridad en mi propósito",
-      "Limitaciones financieras",
       "Gestión del tiempo",
-      "Relaciones personales",
+      "Problemas con mi pareja",
+      "Problemas con mis hijos",
+      "No me gusta mi empleo",
+      "Tengo dinero pero siento que hace falta algo",
       "Motivación y disciplina",
       "Estrés y ansiedad",
-      "Otro"
+      "Rabia y mal genio",
+      "Claridad en mis metas y en el mapa de ruta",
+      "Falta de enfoque"
     ]
   },
   {
