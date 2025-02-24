@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,25 @@ const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Verificar el estado de autenticación al cargar la página
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      // Si no hay sesión activa, redirigir al login
+      if (!session?.access_token) {
+        navigate('/auth/login');
+        toast({
+          title: "Sesión no válida",
+          description: "Por favor inicia sesión primero",
+          variant: "destructive",
+        });
+      }
+    };
+
+    checkSession();
+  }, [navigate, toast]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,9 +55,12 @@ const ResetPassword = () => {
 
       if (error) throw error;
 
+      // Cerrar la sesión después de actualizar la contraseña
+      await supabase.auth.signOut();
+
       toast({
         title: "¡Éxito!",
-        description: "Tu contraseña ha sido actualizada correctamente.",
+        description: "Tu contraseña ha sido actualizada correctamente. Por favor inicia sesión nuevamente.",
       });
 
       navigate("/auth/login");
