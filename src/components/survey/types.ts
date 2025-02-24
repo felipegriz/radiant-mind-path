@@ -92,7 +92,7 @@ export const questions: Question[] = [
   },
   {
     id: 6,
-    text: "¿Cuál es tu principal objetivo de desarrollo personal en este momento?",
+    text: "¿Cuál es tu principal objetivo de crecimiento personal en este momento?",
     type: "radio",
     options: [
       "Crecimiento financiero y abundancia",
