@@ -75,12 +75,17 @@ export const questions: Question[] = [
   },
   {
     id: 5,
-    text: "¿Has invertido en programas de desarrollo personal en el último año?",
+    text: "¿Has invertido en programas de crecimiento personal en el último año?",
     type: "radio",
     options: [
-      "Sí, más de $5,000",
-      "Sí, entre $1,000 y $5,000",
-      "Sí, menos de $1,000",
+      "Más de $100,000",
+      "Más de $50,000",
+      "Más de $30,000",
+      "Más de $20,000",
+      "Más de $10,000",
+      "Más de $5,000",
+      "Entre $1,000 y $5,000",
+      "Menos de $1,000",
       "No, pero me interesa",
       "No, y no me interesa por ahora"
     ]
