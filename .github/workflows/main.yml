@@ -1,3 +1,4 @@
+
 name: Deploy React App
 
 on:
@@ -24,7 +25,13 @@ jobs:
     - name: Build
       run: npm run build
       
+    - name: Copy htaccess
+      run: cp public/.htaccess dist/.htaccess
+      
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: dist
+        clean: true
+        single-commit: true
+
