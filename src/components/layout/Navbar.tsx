@@ -38,6 +38,10 @@ const Navbar = () => {
               Inicio
             </Link>
 
+            <Link to="/sobre-mi" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Sobre Mí
+            </Link>
+
             <Link to="/cursos-gratis" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Cursos Gratis
             </Link>
@@ -109,10 +113,6 @@ const Navbar = () => {
             >
               GREY TRAINING ACADEMY
             </a>
-
-            <Link to="/sobre-mi" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
-              Sobre Mí
-            </Link>
 
             <Link to="/contacto" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Contacto
