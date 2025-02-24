@@ -1,9 +1,7 @@
 
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Question } from "./types";
 
 interface QuestionFormProps {
@@ -15,54 +13,38 @@ interface QuestionFormProps {
   isLoading: boolean;
 }
 
-export const QuestionForm = ({ 
-  question, 
-  value, 
-  onAnswerSelect, 
-  onNext, 
+export const QuestionForm = ({
+  question,
+  value,
+  onAnswerSelect,
+  onNext,
   isLastQuestion,
-  isLoading 
+  isLoading,
 }: QuestionFormProps) => {
-  const renderQuestion = () => {
-    switch (question.type) {
-      case "radio":
-        return (
-          <RadioGroup 
-            value={value} 
-            onValueChange={onAnswerSelect}
-            className="space-y-2"
-          >
-            {question.options?.map((option) => (
-              <div key={option} className="flex items-center space-x-2">
-                <RadioGroupItem value={option} id={option} />
-                <Label htmlFor={option}>{option}</Label>
-              </div>
-            ))}
-          </RadioGroup>
-        );
-      default:
-        return <Input onChange={(e) => onAnswerSelect(e.target.value)} />;
-    }
-  };
-
   return (
     <div className="space-y-4">
-      <h3 className="font-medium text-lg">
-        {question.text}
-      </h3>
-      {renderQuestion()}
-      <Button 
+      <h3 className="text-lg font-medium mb-4">{question.text}</h3>
+      <RadioGroup
+        value={value}
+        onValueChange={onAnswerSelect}
+        className="space-y-3"
+      >
+        {question.options?.map((option) => (
+          <div key={option} className="flex items-center space-x-2">
+            <RadioGroupItem value={option} id={option} />
+            <Label htmlFor={option}>{option}</Label>
+          </div>
+        ))}
+      </RadioGroup>
+      <Button
         onClick={onNext}
-        disabled={isLoading || !value}
-        className="w-full"
+        disabled={!value || isLoading}
+        className="w-full mt-4"
       >
         {isLoading ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Enviando...
-          </>
+          "Enviando..."
         ) : isLastQuestion ? (
-          "¡Quiero mi regalo!"
+          "¡FELICIDADES! Terminaste la encuesta! Dale click a este enlace para accesar al curso Online de LA OCTAVA AREA"
         ) : (
           "Siguiente"
         )}
