@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import DashboardStats from "@/components/admin/DashboardStats";
@@ -25,7 +25,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingCohorts, setIsFetchingCohorts] = useState(true);
 
-  useState(() => {
+  useEffect(() => {
     const fetchCohorts = async () => {
       const { data: cohortsData, error } = await supabase
         .from('event_cohorts')
@@ -46,7 +46,7 @@ const Dashboard = () => {
     };
 
     fetchCohorts();
-  }, []);
+  }, [toast]);
 
   const handleRegisterAttendee = async () => {
     if (!email || !selectedCohort) {

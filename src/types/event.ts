@@ -1,3 +1,4 @@
+
 export interface EventPrice {
   id: string;
   event_name: string;
@@ -20,8 +21,11 @@ export interface EventCohort {
 export interface UserEventAccess {
   id: string;
   cohort_id: string;
-  status: 'registered' | 'attended' | 'graduated';
+  user_id: string;
+  status: string;
   attendance_date: string | null;
+  access_granted_at?: string;
+  created_at?: string;
 }
 
 export interface EventContentModule {
