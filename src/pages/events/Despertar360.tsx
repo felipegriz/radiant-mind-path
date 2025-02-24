@@ -19,7 +19,6 @@ const Despertar360 = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [processingPriceId, setProcessingPriceId] = useState<string | null>(null);
   const [prices, setPrices] = useState<EventPrice[]>([]);
 
   useEffect(() => {
@@ -72,11 +71,6 @@ const Despertar360 = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handlePayment = (selectedPrice: EventPrice) => {
-    setProcessingPriceId(selectedPrice.id);
-    // La lógica del pago ahora está en el PricingSection
-  };
-
   const scrollToPricing = () => {
     const pricingSection = document.getElementById('pricing-section');
     if (pricingSection) {
@@ -113,11 +107,7 @@ const Despertar360 = () => {
 
       <div id="pricing-section" className="bg-[#1A1F2C] py-16">
         <div className="container mx-auto px-4">
-          <PricingSection
-            prices={prices}
-            onPayment={handlePayment}
-            processingPriceId={processingPriceId}
-          />
+          <PricingSection prices={prices} />
         </div>
       </div>
 
