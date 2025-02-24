@@ -15,12 +15,14 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+type AttendanceStatus = "registered" | "attended" | "graduated";
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [selectedCohort, setSelectedCohort] = useState("");
-  const [status, setStatus] = useState<"registered" | "attended" | "graduated">("attended");
+  const [status, setStatus] = useState<AttendanceStatus>("attended");
   const [cohorts, setCohorts] = useState<Array<{id: string, cohort_name: string}>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchingCohorts, setIsFetchingCohorts] = useState(true);
@@ -110,6 +112,10 @@ const Dashboard = () => {
     }
   };
 
+  const handleStatusChange = (value: AttendanceStatus) => {
+    setStatus(value);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -154,7 +160,10 @@ const Dashboard = () => {
               ))}
             </SelectContent>
           </Select>
-          <Select value={status} onValueChange={(val: "registered" | "attended" | "graduated") => setStatus(val)}>
+          <Select 
+            value={status} 
+            onValueChange={handleStatusChange}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Estado" />
             </SelectTrigger>
