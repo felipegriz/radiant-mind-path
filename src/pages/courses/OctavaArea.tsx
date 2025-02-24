@@ -1,3 +1,4 @@
+
 import React from "react";
 import { motion } from "framer-motion";
 
@@ -25,9 +26,14 @@ const OctavaArea = () => {
           transition={{ delay: 0.2 }}
           className="aspect-video w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
         >
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <p className="text-gray-600">Video del Curso</p>
-          </div>
+          {/* Aquí necesitamos reemplazar [URL_DE_LA_GRABACION] con la URL real de la grabación de Zoom */}
+          <iframe 
+            className="w-full h-full"
+            src="[URL_DE_LA_GRABACION]"
+            frameBorder="0" 
+            allow="autoplay; fullscreen" 
+            allowFullScreen
+          ></iframe>
         </motion.div>
       </div>
     </div>
