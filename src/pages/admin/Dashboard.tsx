@@ -8,7 +8,14 @@ import { Users, CalendarDays, BookOpen, Plus, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-type CohortData = { id: string; cohort_name: string };
+interface CohortData {
+  id: string;
+  cohort_name: string;
+}
+
+interface Profile {
+  id: string;
+}
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -23,16 +30,17 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCohorts = async () => {
       try {
-        const { data: cohortsData, error } = await supabase
-          .from('event_cohorts')
-          .select('id, cohort_name')
-          .eq('event_type', 'despertar_360')
-          .order('start_date', { ascending: false });
+        const { data, error } = await supabase
+          .from("event_cohorts")
+          .select("id, cohort_name")
+          .eq("event_type", "despertar_360")
+          .order("start_date", { ascending: false })
+          .returns<CohortData[]>();
 
         if (error) throw error;
 
-        if (cohortsData) {
-          setCohorts(cohortsData);
+        if (data) {
+          setCohorts(data);
           setIsFetchingCohorts(false);
         }
       } catch (error) {
@@ -60,21 +68,24 @@ const Dashboard = () => {
     setIsLoading(true);
 
     try {
-      const { data: existingUser } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', email)
-        .single();
+      const { data: existingUser, error: userError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("email", email)
+        .returns<Profile>()
+        .maybeSingle();
+
+      if (userError) throw userError;
 
       if (existingUser) {
         const { error: accessError } = await supabase
-          .from('user_event_access')
+          .from("user_event_access")
           .insert([
             {
               user_id: existingUser.id,
               cohort_id: selectedCohort,
               status: status,
-              attendance_date: status === 'attended' || status === 'graduated' ? new Date().toISOString() : null,
+              attendance_date: status === "attended" || status === "graduated" ? new Date().toISOString() : null,
             },
           ]);
 
