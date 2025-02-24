@@ -15,8 +15,11 @@ const OctavaArea = () => {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             LA OCTAVA AREA
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Descubre el poder transformador de la octava área de tu vida y cómo puede potenciar todas las demás áreas para alcanzar una vida extraordinaria.
+          </p>
+          <p className="text-lg text-accent font-medium mb-12">
+            Código de acceso: Octava1@
           </p>
         </motion.div>
 
@@ -26,10 +29,9 @@ const OctavaArea = () => {
           transition={{ delay: 0.2 }}
           className="aspect-video w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
         >
-          {/* Aquí necesitamos reemplazar [URL_DE_LA_GRABACION] con la URL real de la grabación de Zoom */}
           <iframe 
             className="w-full h-full"
-            src="[URL_DE_LA_GRABACION]"
+            src="https://us02web.zoom.us/rec/share/dMiLFSh5sXdOAM7AnSnmhxTdXD9J_Q0wJ0LDcuArsB5qYjEcCjbJuyQnAjtMu1m2.Y3ggY4hg5heU2eLm?startTime=1739145699000"
             frameBorder="0" 
             allow="autoplay; fullscreen" 
             allowFullScreen
