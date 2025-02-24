@@ -12,15 +12,53 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+
+type UserLevel = "Bronce" | "Plata" | "Oro" | "Diamante" | "Platino" | "Grey Platinum";
+
+interface Question {
+  id: number;
+  text: string;
+  type: "income" | "text" | "radio";
+  options?: string[];
+}
+
+const questions: Question[] = [
+  {
+    id: 1,
+    text: "¿Cuáles son tus ingresos mensuales actuales?",
+    type: "radio",
+    options: [
+      "Menos de $1,000",
+      "$1,000 - $3,000",
+      "$3,000 - $5,000",
+      "$5,000 - $10,000",
+      "$10,000 - $15,000",
+      "Más de $15,000"
+    ]
+  },
+  // Aquí puedes agregar más preguntas según necesites
+];
+
+const calculateUserLevel = (income: string): UserLevel => {
+  if (income === "Menos de $1,000") return "Bronce";
+  if (income === "$1,000 - $3,000") return "Plata";
+  if (income === "$3,000 - $5,000") return "Oro";
+  if (income === "$5,000 - $10,000") return "Diamante";
+  if (income === "$10,000 - $15,000") return "Platino";
+  return "Grey Platinum";
+};
 
 const LeadMagnetSurvey = () => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0); // 0 for initial form, 1+ for questions
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     whatsapp: "",
   });
+  const [surveyAnswers, setSurveyAnswers] = useState<Record<number, string>>({});
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -32,11 +70,32 @@ const LeadMagnetSurvey = () => {
     }));
   };
 
+  const handleAnswerSelect = (value: string) => {
+    setSurveyAnswers(prev => ({
+      ...prev,
+      [step]: value
+    }));
+  };
+
+  const handleNext = () => {
+    if (step < questions.length) {
+      setStep(prev => prev + 1);
+    } else {
+      handleSubmit();
+    }
+  };
+
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      // Aquí puedes agregar la lógica para enviar los datos a tu CRM o base de datos
-      console.log("Form submitted:", formData);
+      const userLevel = calculateUserLevel(surveyAnswers[1] || "");
+      const submissionData = {
+        ...formData,
+        answers: surveyAnswers,
+        level: userLevel,
+      };
+      
+      console.log("Form submitted:", submissionData);
       
       toast({
         title: "¡Gracias por tu interés!",
@@ -49,6 +108,8 @@ const LeadMagnetSurvey = () => {
         email: "",
         whatsapp: "",
       });
+      setSurveyAnswers({});
+      setStep(0);
     } catch (error) {
       toast({
         title: "Error",
@@ -57,6 +118,28 @@ const LeadMagnetSurvey = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const renderQuestion = (question: Question) => {
+    switch (question.type) {
+      case "radio":
+        return (
+          <RadioGroup 
+            value={surveyAnswers[question.id]} 
+            onValueChange={(value) => handleAnswerSelect(value)}
+            className="space-y-2"
+          >
+            {question.options?.map((option) => (
+              <div key={option} className="flex items-center space-x-2">
+                <RadioGroupItem value={option} id={option} />
+                <Label htmlFor={option}>{option}</Label>
+              </div>
+            ))}
+          </RadioGroup>
+        );
+      default:
+        return <Input onChange={(e) => handleAnswerSelect(e.target.value)} />;
     }
   };
 
@@ -82,39 +165,61 @@ const LeadMagnetSurvey = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 mt-4">
-            <Input
-              placeholder="Tu nombre"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-            <Input
-              type="email"
-              placeholder="Tu correo electrónico"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-            <Input
-              placeholder="Tu WhatsApp (incluye código de país)"
-              name="whatsapp"
-              value={formData.whatsapp}
-              onChange={handleInputChange}
-            />
-            <Button 
-              onClick={handleSubmit}
-              disabled={isLoading || !formData.name || !formData.email || !formData.whatsapp}
-              className="w-full"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Enviando...
-                </>
-              ) : (
-                "¡Quiero mi regalo!"
-              )}
-            </Button>
+            {step === 0 ? (
+              <>
+                <Input
+                  placeholder="Tu nombre"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  type="email"
+                  placeholder="Tu correo electrónico"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
+                <Input
+                  placeholder="Tu WhatsApp (incluye código de país)"
+                  name="whatsapp"
+                  value={formData.whatsapp}
+                  onChange={handleInputChange}
+                />
+                <Button 
+                  onClick={() => setStep(1)}
+                  disabled={!formData.name || !formData.email || !formData.whatsapp}
+                  className="w-full"
+                >
+                  Continuar
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="space-y-4">
+                  <h3 className="font-medium text-lg">
+                    {questions[step - 1]?.text}
+                  </h3>
+                  {questions[step - 1] && renderQuestion(questions[step - 1])}
+                </div>
+                <Button 
+                  onClick={handleNext}
+                  disabled={isLoading || !surveyAnswers[step]}
+                  className="w-full"
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Enviando...
+                    </>
+                  ) : step === questions.length ? (
+                    "¡Quiero mi regalo!"
+                  ) : (
+                    "Siguiente"
+                  )}
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </DialogContent>
