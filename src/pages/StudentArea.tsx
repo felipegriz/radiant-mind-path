@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -9,14 +10,7 @@ import {
   Loader2
 } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import { AIChat } from "@/components/chat/AIChat";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useToast } from "@/components/ui/use-toast";
@@ -36,7 +30,7 @@ const StudentArea = () => {
   const emailAddress = "contacto@felipegriz.com";
 
   useEffect(() => {
-    const immediateAuthCheck = async () => {
+    const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         toast({
@@ -45,35 +39,10 @@ const StudentArea = () => {
           description: "Por favor inicia sesión para acceder al área de estudiantes"
         });
         navigate('/auth/login', { replace: true });
+        return;
       }
-    };
-    immediateAuthCheck();
-  }, []);
 
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        toast({
-          variant: "destructive",
-          title: "Sesión finalizada",
-          description: "Por favor inicia sesión para continuar"
-        });
-        navigate('/auth/login', { replace: true });
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate, toast]);
-
-  useEffect(() => {
-    const loadData = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          navigate('/auth/login', { replace: true });
-          return;
-        }
-
         // Cargar perfil del usuario
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
@@ -118,7 +87,6 @@ const StudentArea = () => {
           .order('sequence_order');
 
         setEventModules(modules || []);
-
       } catch (error) {
         toast({
           variant: "destructive",
@@ -130,7 +98,20 @@ const StudentArea = () => {
       }
     };
 
-    loadData();
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        toast({
+          variant: "destructive",
+          title: "Sesión finalizada",
+          description: "Por favor inicia sesión para continuar"
+        });
+        navigate('/auth/login', { replace: true });
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [navigate, toast]);
 
   if (isLoading) {
