@@ -18,9 +18,6 @@ const OctavaArea = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Descubre el poder transformador de la octava área de tu vida y cómo puede potenciar todas las demás áreas para alcanzar una vida extraordinaria.
           </p>
-          <p className="text-lg text-accent font-medium mb-12">
-            Código de acceso: Octava1@
-          </p>
         </motion.div>
 
         <motion.div
@@ -31,7 +28,7 @@ const OctavaArea = () => {
         >
           <iframe 
             className="w-full h-full"
-            src="https://us02web.zoom.us/rec/share/dMiLFSh5sXdOAM7AnSnmhxTdXD9J_Q0wJ0LDcuArsB5qYjEcCjbJuyQnAjtMu1m2.Y3ggY4hg5heU2eLm?startTime=1739145699000"
+            src="https://us02web.zoom.us/rec/share/dMiLFSh5sXdOAM7AnSnmhxTdXD9J_Q0wJ0LDcuArsB5qYjEcCjbJuyQnAjtMu1m2.Y3ggY4hg5heU2eLm?startTime=1739145699000&pwd=Octava1%40"
             frameBorder="0" 
             allow="autoplay; fullscreen" 
             allowFullScreen
