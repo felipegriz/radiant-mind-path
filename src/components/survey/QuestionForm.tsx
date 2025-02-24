@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Question } from "./types";
+import { useNavigate } from "react-router-dom";
 
 interface QuestionFormProps {
   question: Question;
@@ -21,6 +22,17 @@ export const QuestionForm = ({
   isLastQuestion,
   isLoading,
 }: QuestionFormProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (isLastQuestion) {
+      onNext(); // This will submit the form
+      navigate('/courses/octava-area');
+    } else {
+      onNext();
+    }
+  };
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium mb-4">{question.text}</h3>
@@ -37,7 +49,7 @@ export const QuestionForm = ({
         ))}
       </RadioGroup>
       <Button
-        onClick={onNext}
+        onClick={handleClick}
         disabled={!value || isLoading}
         className="w-full mt-4"
       >
