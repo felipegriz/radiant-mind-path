@@ -9,155 +9,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-
-type UserLevel = "Bronce" | "Plata" | "Oro" | "Diamante" | "Platino" | "Grey Platinum";
-
-interface Question {
-  id: number;
-  text: string;
-  type: "income" | "text" | "radio";
-  options?: string[];
-}
-
-const questions: Question[] = [
-  {
-    id: 1,
-    text: "¿A qué te dedicas?",
-    type: "radio",
-    options: [
-      "Empresari@ consciente",
-      "Empresari@",
-      "Emprendedor tradicional",
-      "Emprendedor digital",
-      "Experto/Info-emprendedor",
-      "Conferencista",
-      "Coach",
-      "Vendedor",
-      "Networker",
-      "Marketing de afiliados",
-      "Emplead@",
-      "Desemplead@",
-      "Fuera del mercado/retirad@",
-      "Otros"
-    ]
-  },
-  {
-    id: 2,
-    text: "¿Cuál es tu edad?",
-    type: "radio",
-    options: [
-      "18-24 años",
-      "25-34 años",
-      "35-44 años",
-      "45-54 años",
-      "55-64 años",
-      "65 años o más"
-    ]
-  },
-  {
-    id: 3,
-    text: "¿Hace cuánto tiempo conoces a Felipe y lo que hacemos?",
-    type: "radio",
-    options: [
-      "Más de cinco años",
-      "Más de cuatro años",
-      "Más de tres años",
-      "Más de dos años",
-      "Más de un año",
-      "De siete a 12 meses",
-      "De tres a seis meses",
-      "De uno a dos meses",
-      "De una a tres semanas",
-      "Menos de una semana"
-    ]
-  },
-  {
-    id: 4,
-    text: "¿Cuáles son tus ingresos mensuales actuales?",
-    type: "radio",
-    options: [
-      "Menos de $1,000",
-      "$1,000 - $3,000",
-      "$3,000 - $5,000",
-      "$5,000 - $10,000",
-      "$10,000 - $15,000",
-      "Más de $15,000"
-    ]
-  },
-  {
-    id: 5,
-    text: "¿Has invertido en programas de desarrollo personal en el último año?",
-    type: "radio",
-    options: [
-      "Sí, más de $5,000",
-      "Sí, entre $1,000 y $5,000",
-      "Sí, menos de $1,000",
-      "No, pero me interesa",
-      "No, y no me interesa por ahora"
-    ]
-  },
-  {
-    id: 6,
-    text: "¿Cuál es tu principal objetivo de desarrollo personal en este momento?",
-    type: "radio",
-    options: [
-      "Crecimiento financiero y abundancia",
-      "Relaciones y conexiones más profundas",
-      "Propósito y realización personal",
-      "Equilibrio vida-trabajo",
-      "Salud y bienestar integral",
-      "Liderazgo y desarrollo profesional",
-      "Espiritualidad y conexión interior"
-    ]
-  },
-  {
-    id: 7,
-    text: "¿Cuál es tu mayor desafío actual?",
-    type: "radio",
-    options: [
-      "Falta de claridad en mi propósito",
-      "Limitaciones financieras",
-      "Gestión del tiempo",
-      "Relaciones personales",
-      "Motivación y disciplina",
-      "Estrés y ansiedad",
-      "Otro"
-    ]
-  },
-  {
-    id: 8,
-    text: "Si tuvieras una varita mágica y pudieras hacer realidad cualquier cosa, ¿cuál sería tu sueño o gran meta?",
-    type: "radio",
-    options: [
-      "Impactar positivamente a millones de personas",
-      "Libertad financiera total",
-      "Construir un legado duradero",
-      "Realización personal plena",
-      "Viajar por el mundo sin limitaciones",
-      "Crear una empresa exitosa",
-      "Tener una familia feliz y armoniosa",
-      "Alcanzar la paz y plenitud interior",
-      "Otro"
-    ]
-  }
-];
-
-const calculateUserLevel = (income: string): UserLevel => {
-  if (income === "Menos de $1,000") return "Bronce";
-  if (income === "$1,000 - $3,000") return "Plata";
-  if (income === "$3,000 - $5,000") return "Oro";
-  if (income === "$5,000 - $10,000") return "Diamante";
-  if (income === "$10,000 - $15,000") return "Platino";
-  return "Grey Platinum";
-};
+import { questions } from "./types";
+import { calculateUserLevel } from "./utils";
+import { InitialForm } from "./InitialForm";
+import { QuestionForm } from "./QuestionForm";
 
 const LeadMagnetSurvey = () => {
-  const [step, setStep] = useState(0); // 0 for initial form, 1+ for questions
+  const [step, setStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -168,7 +27,7 @@ const LeadMagnetSurvey = () => {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -227,28 +86,6 @@ const LeadMagnetSurvey = () => {
     }
   };
 
-  const renderQuestion = (question: Question) => {
-    switch (question.type) {
-      case "radio":
-        return (
-          <RadioGroup 
-            value={surveyAnswers[question.id]} 
-            onValueChange={(value) => handleAnswerSelect(value)}
-            className="space-y-2"
-          >
-            {question.options?.map((option) => (
-              <div key={option} className="flex items-center space-x-2">
-                <RadioGroupItem value={option} id={option} />
-                <Label htmlFor={option}>{option}</Label>
-              </div>
-            ))}
-          </RadioGroup>
-        );
-      default:
-        return <Input onChange={(e) => handleAnswerSelect(e.target.value)} />;
-    }
-  };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -272,59 +109,20 @@ const LeadMagnetSurvey = () => {
           </DialogHeader>
           <div className="space-y-4 mt-4">
             {step === 0 ? (
-              <>
-                <Input
-                  placeholder="Tu nombre"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                />
-                <Input
-                  type="email"
-                  placeholder="Tu correo electrónico"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-                <Input
-                  placeholder="Tu WhatsApp (incluye código de país)"
-                  name="whatsapp"
-                  value={formData.whatsapp}
-                  onChange={handleInputChange}
-                />
-                <Button 
-                  onClick={() => setStep(1)}
-                  disabled={!formData.name || !formData.email || !formData.whatsapp}
-                  className="w-full"
-                >
-                  Continuar
-                </Button>
-              </>
+              <InitialForm 
+                formData={formData}
+                onInputChange={handleInputChange}
+                onContinue={() => setStep(1)}
+              />
             ) : (
-              <>
-                <div className="space-y-4">
-                  <h3 className="font-medium text-lg">
-                    {questions[step - 1]?.text}
-                  </h3>
-                  {questions[step - 1] && renderQuestion(questions[step - 1])}
-                </div>
-                <Button 
-                  onClick={handleNext}
-                  disabled={isLoading || !surveyAnswers[step]}
-                  className="w-full"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Enviando...
-                    </>
-                  ) : step === questions.length ? (
-                    "¡Quiero mi regalo!"
-                  ) : (
-                    "Siguiente"
-                  )}
-                </Button>
-              </>
+              <QuestionForm 
+                question={questions[step - 1]}
+                value={surveyAnswers[step] || ""}
+                onAnswerSelect={handleAnswerSelect}
+                onNext={handleNext}
+                isLastQuestion={step === questions.length}
+                isLoading={isLoading}
+              />
             )}
           </div>
         </div>
