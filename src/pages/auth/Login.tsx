@@ -10,11 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [nickname, setNickname] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -23,58 +20,39 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
+      if (authError) throw authError;
 
-      toast({
-        title: "¡Bienvenido!",
-        description: "Has iniciado sesión correctamente.",
-      });
+      // Check if user is admin
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', authData.user.id)
+        .single();
 
-      navigate("/student-area");
+      if (roleError) throw roleError;
+
+      if (roleData?.role === 'admin') {
+        toast({
+          title: "¡Bienvenido Administrador!",
+          description: "Has iniciado sesión como administrador.",
+        });
+        navigate("/admin/dashboard");
+      } else {
+        toast({
+          title: "¡Bienvenido!",
+          description: "Has iniciado sesión correctamente.",
+        });
+        navigate("/student-area");
+      }
     } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "No se pudo iniciar sesión",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            nickname: nickname,
-          },
-        },
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "¡Registro exitoso!",
-        description: "Por favor, verifica tu correo electrónico.",
-      });
-      
-      setIsRegister(false);
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "No se pudo completar el registro",
         variant: "destructive",
       });
     } finally {
@@ -91,33 +69,10 @@ const Login = () => {
         className="glass-card w-full max-w-md p-8 rounded-2xl"
       >
         <h1 className="text-3xl font-bold text-white text-center mb-8">
-          {isRegister ? "Crear cuenta" : "Iniciar sesión"}
+          Iniciar sesión
         </h1>
 
-        <form onSubmit={isRegister ? handleSignUp : handleLogin} className="space-y-4">
-          {isRegister && (
-            <>
-              <div>
-                <Input
-                  type="text"
-                  placeholder="¿Cómo te gusta que te digan?"
-                  value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Input
-                  type="text"
-                  placeholder="Nombre completo"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                />
-              </div>
-            </>
-          )}
-
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <Input
               type="email"
@@ -139,34 +94,16 @@ const Login = () => {
             />
           </div>
 
-          <div className="space-y-2">
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin mr-2" />
-              ) : null}
-              {isRegister ? "Registrarse" : "Iniciar Sesión"}
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => {
-                setIsRegister(!isRegister);
-                setEmail("");
-                setPassword("");
-                setFullName("");
-                setNickname("");
-              }}
-              disabled={isLoading}
-            >
-              {isRegister ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate"}
-            </Button>
-          </div>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            ) : null}
+            Iniciar Sesión
+          </Button>
         </form>
       </motion.div>
     </div>

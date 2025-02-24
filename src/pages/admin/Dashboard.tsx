@@ -1,176 +1,77 @@
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import DashboardStats from "@/components/admin/DashboardStats";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Users, CalendarDays, BookOpen, Plus, Loader2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import type { Database } from "@/integrations/supabase/types";
-
-type EventCohort = Database['public']['Tables']['event_cohorts']['Row'];
-type Profile = Database['public']['Tables']['profiles']['Row'];
+import DashboardStats from "@/components/admin/DashboardStats";
+import Navbar from "@/components/layout/Navbar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [selectedCohort, setSelectedCohort] = useState("");
-  const [status, setStatus] = useState("attended");
-  const [cohorts, setCohorts] = useState<EventCohort[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetchingCohorts, setIsFetchingCohorts] = useState(true);
 
   useEffect(() => {
-    const fetchCohorts = async () => {
-      try {
-        const { data, error } = await supabase
-          .from("event_cohorts")
-          .select("*")
-          .eq("event_type", "despertar_360")
-          .order("start_date", { ascending: false });
+    checkAdminAccess();
+  }, []);
 
-        if (error) throw error;
-
-        if (data) {
-          setCohorts(data);
-          setIsFetchingCohorts(false);
-        }
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "No se pudieron cargar las cohortes",
-          variant: "destructive",
-        });
-      }
-    };
-
-    fetchCohorts();
-  }, [toast]);
-
-  const handleRegisterAttendee = async () => {
-    if (!email || !selectedCohort) {
-      toast({
-        title: "Error",
-        description: "Por favor ingresa un correo y selecciona una cohorte",
-        variant: "destructive",
-      });
+  const checkAdminAccess = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      navigate('/auth/login');
       return;
     }
 
-    setIsLoading(true);
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', session.user.id)
+      .single();
 
-    try {
-      // Primero buscamos el usuario en la tabla students
-      const { data: studentData, error: studentError } = await supabase
-        .from("students")
-        .select("id")
-        .eq("email", email)
-        .maybeSingle();
-
-      if (studentError) throw studentError;
-
-      if (studentData?.id) {
-        const { error: accessError } = await supabase
-          .from("user_event_access")
-          .insert([
-            {
-              user_id: studentData.id,
-              cohort_id: selectedCohort,
-              status: status,
-              attendance_date: status === "attended" || status === "graduated" ? new Date().toISOString() : null,
-            },
-          ]);
-
-        if (accessError) throw accessError;
-
-        toast({
-          title: "¡Éxito!",
-          description: "El asistente ha sido registrado correctamente",
-        });
-
-        setEmail("");
-        setSelectedCohort("");
-      } else {
-        toast({
-          title: "Error",
-          description: "No se encontró un usuario con ese correo",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo registrar al asistente",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+    if (roleData?.role !== 'admin') {
+      navigate('/student-area');
     }
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <div className="flex gap-4">
-          <Button onClick={() => navigate("/admin/students")}>
-            <Users className="mr-2" /> Estudiantes
-          </Button>
-          <Button onClick={() => navigate("/admin/calendar")}>
-            <CalendarDays className="mr-2" /> Calendario
-          </Button>
-          <Button onClick={() => navigate("/admin/programs")}>
-            <BookOpen className="mr-2" /> Programas
-          </Button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold mb-8">Panel de Administración</h1>
+        
+        <DashboardStats />
 
-      <DashboardStats />
-
-      <div className="mt-8 p-6 bg-card rounded-lg shadow-lg">
-        <h2 className="text-xl font-semibold mb-6">Registrar Asistente Previo</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Input
-            placeholder="Correo electrónico"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <select
-            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            value={selectedCohort}
-            onChange={(e) => setSelectedCohort(e.target.value)}
-            disabled={isFetchingCohorts}
-          >
-            <option value="">Seleccionar cohorte</option>
-            {cohorts.map((cohort) => (
-              <option key={cohort.id} value={cohort.id}>
-                {cohort.cohort_name}
-              </option>
-            ))}
-          </select>
-          <select
-            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="registered">Registrado</option>
-            <option value="attended">Asistió</option>
-            <option value="graduated">Graduado</option>
-          </select>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           <Button 
-            onClick={handleRegisterAttendee}
-            disabled={isLoading || !email || !selectedCohort}
-            className="md:col-span-3"
+            variant="outline"
+            className="p-6 h-auto flex flex-col items-center text-center"
+            onClick={() => navigate('/courses/octava-area')}
           >
-            {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Plus className="mr-2 h-4 w-4" />
-            )}
-            Registrar Asistente
+            <h3 className="text-lg font-semibold mb-2">Gestionar La Octava Area</h3>
+            <p className="text-sm text-muted-foreground">
+              Actualizar videos y contenido del curso
+            </p>
+          </Button>
+
+          <Button 
+            variant="outline"
+            className="p-6 h-auto flex flex-col items-center text-center"
+            onClick={() => navigate('/admin/students')}
+          >
+            <h3 className="text-lg font-semibold mb-2">Gestionar Estudiantes</h3>
+            <p className="text-sm text-muted-foreground">
+              Ver y administrar estudiantes registrados
+            </p>
+          </Button>
+
+          <Button 
+            variant="outline"
+            className="p-6 h-auto flex flex-col items-center text-center"
+            onClick={() => navigate('/admin/content')}
+          >
+            <h3 className="text-lg font-semibold mb-2">Gestionar Contenido</h3>
+            <p className="text-sm text-muted-foreground">
+              Administrar contenido y recursos
+            </p>
           </Button>
         </div>
       </div>

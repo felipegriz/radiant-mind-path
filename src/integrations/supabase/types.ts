@@ -569,12 +569,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_admin: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       enrollment_status: "active" | "completed" | "cancelled" | "pending"
       event_type: "despertar_360" | "cita_con_lo_imposible" | "mission_mastery"
       program_pillar: "inmersion" | "recondicionamiento" | "personalizacion"
       program_status: "active" | "inactive" | "coming_soon"
+      user_role: "admin" | "student"
     }
     CompositeTypes: {
       [_ in never]: never
