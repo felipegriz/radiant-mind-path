@@ -34,8 +34,8 @@ export const QuestionForm = ({
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-medium mb-4">{question.text}</h3>
+    <div className="space-y-4 max-w-full">
+      <h3 className="text-lg font-medium mb-4 break-words">{question.text}</h3>
       <RadioGroup
         value={value}
         onValueChange={onAnswerSelect}
@@ -51,7 +51,7 @@ export const QuestionForm = ({
       <Button
         onClick={handleClick}
         disabled={!value || isLoading}
-        className="w-full mt-4"
+        className="w-full mt-4 whitespace-normal h-auto py-2 px-4 text-sm"
       >
         {isLoading ? (
           "Enviando..."

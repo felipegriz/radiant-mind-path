@@ -30,7 +30,7 @@ const OctavaArea = () => {
         >
           <iframe 
             className="w-full h-full"
-            src="https://us02web.zoom.us/rec/share/dMiLFSh5sXdOAM7AnSnmhxTdXD9J_Q0wJ0LDcuArsB5qYjEcCjbJuyQnAjtMu1m2.Y3ggY4hg5heU2eLm?startTime=1739145699000&pwd=Octava1%40"
+            src="https://us02web.zoom.us/rec/play/dMiLFSh5sXdOAM7AnSnmhxTdXD9J_Q0wJ0LDcuArsB5qYjEcCjbJuyQnAjtMu1m2.Y3ggY4hg5heU2eLm"
             frameBorder="0" 
             allow="autoplay; fullscreen" 
             allowFullScreen
