@@ -38,7 +38,27 @@ const questions: Question[] = [
       "Más de $15,000"
     ]
   },
-  // Aquí puedes agregar más preguntas según necesites
+  {
+    id: 2,
+    text: "¿A qué te dedicas?",
+    type: "radio",
+    options: [
+      "Empresari@ consciente",
+      "Empresari@",
+      "Emprendedor tradicional",
+      "Emprendedor digital",
+      "Experto/Info-emprendedor",
+      "Conferencista",
+      "Coach",
+      "Vendedor",
+      "Networker",
+      "Marketing de afiliados",
+      "Emplead@",
+      "Desemplead@",
+      "Fuera del mercado/retirad@",
+      "Otros"
+    ]
+  }
 ];
 
 const calculateUserLevel = (income: string): UserLevel => {
