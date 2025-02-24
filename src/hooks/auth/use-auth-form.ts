@@ -108,9 +108,17 @@ export const useAuthForm = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
-      });
+      // Validar que el email no esté vacío
+      if (!email.trim()) {
+        throw new Error("Por favor ingresa tu correo electrónico");
+      }
+
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        email.trim(),
+        {
+          redirectTo: `${window.location.origin}/auth/reset-password`,
+        }
+      );
 
       if (error) throw error;
 
@@ -118,8 +126,13 @@ export const useAuthForm = () => {
         title: "Correo enviado",
         description: "Se ha enviado un enlace a tu correo para restablecer tu contraseña.",
       });
+      
+      // Limpiamos los campos y volvemos al login
+      setEmail("");
+      setPassword("");
       setIsResettingPassword(false);
     } catch (error: any) {
+      console.error("Error en reseteo de contraseña:", error);
       toast({
         title: "Error",
         description: error.message || "No se pudo enviar el correo de restablecimiento",
