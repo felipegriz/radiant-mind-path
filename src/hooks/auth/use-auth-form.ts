@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -108,18 +107,15 @@ export const useAuthForm = () => {
     setIsLoading(true);
 
     try {
-      // Validar que el email no esté vacío
       if (!email.trim()) {
         throw new Error("Por favor ingresa tu correo electrónico");
       }
 
       const currentDomain = window.location.origin;
-      const { error } = await supabase.auth.resetPasswordForEmail(
-        email.trim(),
-        {
-          redirectTo: `${currentDomain}/auth/reset-password`,
-        }
-      );
+      
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${currentDomain}/auth/reset-password`,
+      });
 
       if (error) throw error;
 
@@ -128,7 +124,6 @@ export const useAuthForm = () => {
         description: "Se ha enviado un enlace a tu correo para restablecer tu contraseña.",
       });
       
-      // Limpiamos los campos y volvemos al login
       setEmail("");
       setPassword("");
       setIsResettingPassword(false);
