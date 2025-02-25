@@ -18,22 +18,12 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-        cache: 'npm'
         
     - name: Install Dependencies
-      run: |
-        npm install -g npm@latest
-        npm ci
+      run: npm install
       
     - name: Build
-      env:
-        CI: false
       run: npm run build
-      
-    - name: Copy htaccess
-      run: |
-        mkdir -p dist
-        cp public/.htaccess dist/.htaccess || true
       
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
@@ -41,4 +31,3 @@ jobs:
         folder: dist
         clean: true
         single-commit: true
-
