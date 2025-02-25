@@ -28,7 +28,7 @@ const FeaturesSection = () => {
   };
 
   return (
-    <section className="grid md:grid-cols-3 gap-8">
+    <section className="container mx-auto px-4 py-20 grid md:grid-cols-3 gap-8">
       {features.map((feature, index) => (
         <motion.div
           key={index}
