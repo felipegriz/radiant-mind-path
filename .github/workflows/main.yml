@@ -26,19 +26,17 @@ jobs:
     - name: Install Dependencies
       run: |
         npm install -g npm@latest
-        npm ci
+        rm -rf node_modules
+        npm install
       
     - name: Build
       env:
         CI: false
-      run: |
-        npm run build
-        cp public/.htaccess dist/.htaccess || true
+      run: npm run build
         
     - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        folder: dist
-        branch: gh-pages
-        clean: true
-        single-commit: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: dist
+        cname: ${{ secrets.CNAME }}
