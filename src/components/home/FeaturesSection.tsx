@@ -28,7 +28,7 @@ const FeaturesSection = () => {
   };
 
   return (
-    <section className="grid md:grid-cols-3 gap-8">
+    <section className="container mx-auto px-4 py-20 grid md:grid-cols-3 gap-8">
       {features.map((feature, index) => (
         <motion.div
           key={index}
@@ -36,7 +36,7 @@ const FeaturesSection = () => {
           whileInView="animate"
           variants={fadeInUp}
           viewport={{ once: true }}
-          className="glass-card rounded-2xl p-8 hover-lift"
+          className="glass-card p-8 hover-lift"
         >
           <feature.icon className="w-12 h-12 text-white mb-4" />
           <h3 className="text-2xl font-semibold mb-5 text-white">{feature.title}</h3>
