@@ -1,11 +1,11 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
-import { VideoUploader } from "@/components/video/VideoUploader";
 
 const OctavaArea = () => {
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  // URL del video de Zoom con los parámetros necesarios
+  const videoUrl = "TU_URL_DE_ZOOM?embed=true&hidewindow=true&showsharebutton=false&showdownloadbutton=false&hidejoinlabel=true&hidedescription=true";
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -31,18 +31,12 @@ const OctavaArea = () => {
           transition={{ delay: 0.2 }}
           className="aspect-video w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
         >
-          {videoUrl ? (
-            <iframe 
-              src={videoUrl}
-              className="w-full h-full"
-              allow="autoplay; fullscreen; picture-in-picture"
-              style={{ aspectRatio: '16/9' }}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-100">
-              <VideoUploader onUploadComplete={setVideoUrl} />
-            </div>
-          )}
+          <iframe 
+            src={videoUrl}
+            className="w-full h-full"
+            allow="autoplay; fullscreen; picture-in-picture"
+            style={{ aspectRatio: '16/9' }}
+          />
         </motion.div>
       </div>
     </div>
