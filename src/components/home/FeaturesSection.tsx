@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Brain, Target, Heart } from "lucide-react";
+import { Brain, Target, Map } from "lucide-react";
 
 const features = [
   {
@@ -14,7 +14,7 @@ const features = [
     description: "Aprende a reprogramar tu mente para cambiar tu vida para siempre",
   },
   {
-    icon: Heart,
+    icon: Map,
     title: "MENTORÍA & COACHING AVANZADO",
     description: "Trabaja de la mano de uno de los Top 10 Coaches de habla hispana para transformar tu vida y tu negocio",
   },
