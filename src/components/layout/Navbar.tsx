@@ -1,3 +1,4 @@
+
 import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -37,6 +38,8 @@ const Navbar = () => {
             <Link to="/" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Inicio
             </Link>
+
+            <LeadMagnetSurvey />
 
             <Link to="/sobre-mi" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Sobre Mí
@@ -118,7 +121,6 @@ const Navbar = () => {
               Contacto
             </Link>
           </div>
-          <LeadMagnetSurvey />
         </div>
       </div>
     </nav>
