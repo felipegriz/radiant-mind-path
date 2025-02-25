@@ -20,7 +20,6 @@ const ResetPassword = () => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       
-      // Si no hay sesión activa, redirigir al login
       if (!session?.access_token) {
         navigate('/auth/login');
         toast({
