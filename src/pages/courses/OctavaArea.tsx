@@ -32,13 +32,12 @@ const OctavaArea = () => {
           className="aspect-video w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
         >
           {videoUrl ? (
-            <video 
-              className="w-full h-full"
-              controls
+            <iframe 
               src={videoUrl}
-            >
-              Tu navegador no soporta la reproducción de videos.
-            </video>
+              className="w-full h-full"
+              allow="autoplay; fullscreen; picture-in-picture"
+              style={{ aspectRatio: '16/9' }}
+            />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gray-100">
               <VideoUploader onUploadComplete={setVideoUrl} />
