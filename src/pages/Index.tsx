@@ -1,24 +1,26 @@
 
-import Navbar from "@/components/layout/Navbar";
+import React from "react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import HeroSection from "@/components/home/HeroSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
-import StatisticsSection from "@/components/home/StatisticsSection";
 import QuoteSection from "@/components/home/QuoteSection";
+import StatisticsSection from "@/components/home/StatisticsSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen w-full bg-background">
-      <Navbar />
-      
-      <div className="hero-gradient pt-12 pb-32">
-        <HeroSection />
+    <div className="min-h-screen bg-background">
+      <HeroSection />
+      <div className="container mx-auto px-4 py-8 text-center">
+        <Link to="/courses/octava-area">
+          <Button variant="default" size="lg">
+            Subir Video - La Octava Area
+          </Button>
+        </Link>
       </div>
-
-      <div className="container mx-auto px-4 -mt-28">
-        <FeaturesSection />
-        <StatisticsSection />
-        <QuoteSection />
-      </div>
+      <FeaturesSection />
+      <QuoteSection />
+      <StatisticsSection />
     </div>
   );
 };
