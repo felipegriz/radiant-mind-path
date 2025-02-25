@@ -26,7 +26,7 @@
     --border: 220 13% 20%;
     --input: 220 13% 20%;
     --ring: 220 13% 30%;
-    --radius: 0rem;
+    --radius: 0.75rem;
   }
 
   * {
@@ -39,7 +39,7 @@
   }
 
   .glass-card {
-    @apply bg-white/5 backdrop-blur-sm border border-white/10;
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 shadow-lg;
   }
 
   .hover-lift {

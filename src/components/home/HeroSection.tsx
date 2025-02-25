@@ -10,7 +10,7 @@ const HeroSection = () => {
         transition={{ duration: 0.8 }}
         className="space-y-4"
       >
-        <span className="px-6 py-2 bg-gray-800 inline-block text-sm font-medium text-white">
+        <span className="px-6 py-2 bg-gray-800 inline-block rounded-full text-sm font-medium text-white">
           FELIPE GRIZ
         </span>
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gradient flex flex-col gap-1">
