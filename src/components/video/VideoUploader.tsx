@@ -65,7 +65,8 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       toast({
         title: "¡Éxito!",
         description: "El video se ha subido correctamente.",
-        duration: 5000, // El toast permanecerá visible por 5 segundos
+        duration: 5000,
+        className: "bg-green-50 text-green-900 border border-green-200", // Estilo para toast de éxito
       });
 
     } catch (err) {
@@ -76,7 +77,8 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
         title: "Error en la subida",
         description: errorMessage,
         variant: "destructive",
-        duration: 10000, // El mensaje de error permanecerá visible por 10 segundos
+        duration: 10000,
+        className: "bg-red-50 text-red-900 border border-red-200", // Estilo para toast de error
       });
     } finally {
       setUploading(false);
@@ -114,7 +116,7 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
         </Button>
       </label>
       {error && (
-        <Alert variant="destructive" className="mt-4">
+        <Alert variant="destructive" className="mt-4 bg-red-50 border-red-200 text-red-900">
           <AlertDescription>
             {error}
           </AlertDescription>
