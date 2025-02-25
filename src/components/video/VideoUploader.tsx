@@ -23,10 +23,10 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      // Aumentado el límite a 500MB
-      const maxSize = 500 * 1024 * 1024; // 500MB en bytes
+      // Aumentado el límite a 600MB
+      const maxSize = 600 * 1024 * 1024; // 600MB en bytes
       if (file.size > maxSize) {
-        throw new Error('El archivo es demasiado grande. El tamaño máximo es 500MB.');
+        throw new Error('El archivo es demasiado grande. El tamaño máximo es 600MB.');
       }
 
       const fileExt = file.name.split('.').pop();
