@@ -5,7 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 
 const OctavaArea = () => {
   // URL del video de Zoom con los parámetros necesarios
-  const videoUrl = "TU_URL_DE_ZOOM?embed=true&hidewindow=true&showsharebutton=false&showdownloadbutton=false&hidejoinlabel=true&hidedescription=true";
+  const videoUrl = "https://us02web.zoom.us/rec/share/FkkpYzLoxzF7cEMhHnKxXTRfbLUIVXygxnNm41IuIRkEhYpkNwuL7PAjSWqIhJvl.J75Pjz1LTc-d7mMk?startTime=1739145699000&embed=true&hidewindow=true&showsharebutton=false&showdownloadbutton=false&hidejoinlabel=true&hidedescription=true";
 
   return (
     <div className="min-h-screen bg-gray-50">
