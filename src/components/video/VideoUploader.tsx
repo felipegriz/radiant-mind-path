@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface VideoUploaderProps {
   onUploadComplete: (url: string) => void;
@@ -23,10 +24,10 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      // Aumentado el límite a 600MB
-      const maxSize = 600 * 1024 * 1024; // 600MB en bytes
+      // Aumentado el límite a 1GB
+      const maxSize = 1024 * 1024 * 1024; // 1GB en bytes
       if (file.size > maxSize) {
-        throw new Error('El archivo es demasiado grande. El tamaño máximo es 600MB.');
+        throw new Error('El video es demasiado grande. Por favor, asegúrate que sea menor a 1GB o contáctanos para ayudarte con la subida.');
       }
 
       const fileExt = file.name.split('.').pop();
@@ -43,7 +44,7 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
 
       if (uploadError) {
         console.error('Error de subida:', uploadError);
-        throw uploadError;
+        throw new Error('Hubo un problema al subir el video. Por favor intenta de nuevo o contáctanos si el problema persiste.');
       }
 
       console.log('Archivo subido exitosamente:', data);
@@ -63,9 +64,9 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
 
     } catch (err) {
       console.error('Error en el proceso de subida:', err);
-      setError('Error al subir el video. Por favor, intenta de nuevo.');
+      setError(err.message || 'Error al subir el video. Por favor, intenta de nuevo.');
       toast({
-        title: "Error",
+        title: "Error en la subida",
         description: err.message || 'Error al subir el video. Por favor, intenta de nuevo.',
         variant: "destructive",
       });
@@ -99,15 +100,17 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
                 Subiendo video... 
               </div>
             ) : (
-              'Subir video del curso'
+              'Subir video del curso (máximo 1GB)'
             )}
           </span>
         </Button>
       </label>
       {error && (
-        <p className="text-red-500 text-sm bg-red-100 p-2 rounded">
-          {error}
-        </p>
+        <Alert variant="destructive" className="mt-4">
+          <AlertDescription>
+            {error}
+          </AlertDescription>
+        </Alert>
       )}
     </div>
   );
