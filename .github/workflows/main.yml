@@ -7,6 +7,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,16 +21,24 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+        cache: 'npm'
         
     - name: Install Dependencies
-      run: npm install
+      run: |
+        npm install -g npm@latest
+        npm ci
       
     - name: Build
-      run: npm run build
-      
+      env:
+        CI: false
+      run: |
+        npm run build
+        cp public/.htaccess dist/.htaccess || true
+        
     - name: Deploy to GitHub Pages
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         folder: dist
+        branch: gh-pages
         clean: true
         single-commit: true
