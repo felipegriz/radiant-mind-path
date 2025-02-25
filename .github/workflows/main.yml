@@ -23,6 +23,9 @@ jobs:
           node-version: 18
           cache: npm
 
+      - name: Create CNAME
+        run: echo "felipegriz.com" > public/CNAME
+
       - name: Install dependencies
         run: npm install
 
@@ -37,3 +40,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           force_orphan: true
+          cname: felipegriz.com
