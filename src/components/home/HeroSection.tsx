@@ -10,16 +10,18 @@ const HeroSection = () => {
         transition={{ duration: 0.8 }}
         className="space-y-4"
       >
-        <span className="px-6 py-2 glass-effect inline-block rounded-full text-sm font-medium text-gray-900">
+        <span className="px-6 py-2 glass-effect inline-block rounded-full text-sm font-medium text-white">
           FELIPE GRIZ
         </span>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 flex flex-col gap-1">
-          <span>Creando</span>
-          <span>Super Humanos</span>
-          <span>A Través Del</span>
-          <span>Crecimiento Personal</span>
-        </h1>
-        <p className="text-xl text-gray-600 max-w-4xl mx-auto pt-2">
+        <div className="bg-white rounded-3xl py-8">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-gray-900 flex flex-col gap-1">
+            <span>Creando</span>
+            <span>Super Humanos</span>
+            <span>A Través Del</span>
+            <span>Crecimiento Personal</span>
+          </h1>
+        </div>
+        <p className="text-xl text-white max-w-4xl mx-auto pt-2">
           Aprende la mentalidad y las mejores estrategias de las mentes más brillantes del mundo
         </p>
       </motion.div>
