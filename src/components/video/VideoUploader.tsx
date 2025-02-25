@@ -17,39 +17,49 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
   const { toast } = useToast();
 
   const uploadWithProgress = async (file: File, fileName: string): Promise<{ data: any, error: any }> => {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      const { data: { session } } = supabase.auth.getSession();
-      
-      xhr.upload.addEventListener('progress', (event) => {
-        if (event.lengthComputable) {
-          const percentage = (event.loaded / event.total) * 100;
-          setProgress(percentage);
-          console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
+    return new Promise(async (resolve, reject) => {
+      try {
+        const xhr = new XMLHttpRequest();
+        const { data: sessionData } = await supabase.auth.getSession();
+        const session = sessionData.session;
+
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const percentage = (event.loaded / event.total) * 100;
+            setProgress(percentage);
+            console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
+          }
+        });
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve({ data: JSON.parse(xhr.response), error: null });
+          } else {
+            reject({ data: null, error: new Error(`Upload failed with status ${xhr.status}`) });
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject({ data: null, error: new Error('Upload failed') });
+        });
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Construir la URL usando el endpoint público de Supabase
+        const bucketName = 'course_videos';
+        const supabaseUrl = supabase.storageUrl || 'https://awbrvqrtqxwomnevipdt.supabase.co/storage/v1';
+        const url = `${supabaseUrl}/object/${bucketName}/${fileName}`;
+
+        xhr.open('POST', url);
+        xhr.setRequestHeader('apikey', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '');
+        if (session?.access_token) {
+          xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
         }
-      });
-
-      xhr.addEventListener('load', () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve({ data: JSON.parse(xhr.response), error: null });
-        } else {
-          reject({ data: null, error: new Error(`Upload failed with status ${xhr.status}`) });
-        }
-      });
-
-      xhr.addEventListener('error', () => {
-        reject({ data: null, error: new Error('Upload failed') });
-      });
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      xhr.open('POST', `${supabase.storage.url}/object/course_videos/${fileName}`);
-      xhr.setRequestHeader('apikey', supabase.supabaseKey);
-      if (session?.access_token) {
-        xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
+        xhr.send(formData);
+      } catch (error) {
+        reject({ data: null, error });
       }
-      xhr.send(formData);
     });
   };
 
