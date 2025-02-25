@@ -89,7 +89,7 @@ const LeadMagnetSurvey = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-accent hover:bg-accent/80 transition-colors text-white px-6 py-2 rounded-full text-sm font-medium">
+        <Button className="bg-accent hover:bg-accent/80 transition-colors text-black px-6 py-2 rounded-full text-sm font-medium">
           Comienza Ahora
         </Button>
       </DialogTrigger>
