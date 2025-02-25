@@ -15,22 +15,31 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Verificar el estado de autenticación al cargar la página
   useEffect(() => {
-    const checkSession = async () => {
+    const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
+      console.log("Current session:", session); // Debug log
       
-      if (!session?.access_token) {
+      if (!session) {
+        const hash = window.location.hash;
+        console.log("URL hash:", hash); // Debug log
+        
+        // Si no hay sesión pero hay un hash en la URL, intentamos procesarlo
+        if (hash && hash.includes('type=recovery')) {
+          // El usuario llegó a través del enlace de recuperación
+          return;
+        }
+        
         navigate('/auth/login');
         toast({
-          title: "Sesión no válida",
-          description: "Por favor inicia sesión primero",
+          title: "Acceso no autorizado",
+          description: "Por favor sigue el enlace enviado a tu correo",
           variant: "destructive",
         });
       }
     };
 
-    checkSession();
+    getSession();
   }, [navigate, toast]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -40,6 +49,15 @@ const ResetPassword = () => {
       toast({
         title: "Error",
         description: "Las contraseñas no coinciden",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Error",
+        description: "La contraseña debe tener al menos 6 caracteres",
         variant: "destructive",
       });
       return;
@@ -64,6 +82,7 @@ const ResetPassword = () => {
 
       navigate("/auth/login");
     } catch (error: any) {
+      console.error("Error al actualizar contraseña:", error); // Debug log
       toast({
         title: "Error",
         description: error.message || "No se pudo actualizar la contraseña",
