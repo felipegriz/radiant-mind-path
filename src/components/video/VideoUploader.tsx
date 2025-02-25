@@ -24,7 +24,12 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      // Aumentado el límite a 1GB
+      console.log('Archivo seleccionado:', {
+        nombre: file.name,
+        tamaño: file.size,
+        tipo: file.type
+      });
+
       const maxSize = 1024 * 1024 * 1024; // 1GB en bytes
       if (file.size > maxSize) {
         throw new Error('El video es demasiado grande. Por favor, asegúrate que sea menor a 1GB o contáctanos para ayudarte con la subida.');
@@ -43,8 +48,8 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
         });
 
       if (uploadError) {
-        console.error('Error de subida:', uploadError);
-        throw new Error('Hubo un problema al subir el video. Por favor intenta de nuevo o contáctanos si el problema persiste.');
+        console.error('Error detallado de Supabase:', uploadError);
+        throw new Error(`Error al subir el video: ${uploadError.message}`);
       }
 
       console.log('Archivo subido exitosamente:', data);
@@ -60,15 +65,18 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       toast({
         title: "¡Éxito!",
         description: "El video se ha subido correctamente.",
+        duration: 5000, // El toast permanecerá visible por 5 segundos
       });
 
     } catch (err) {
-      console.error('Error en el proceso de subida:', err);
-      setError(err.message || 'Error al subir el video. Por favor, intenta de nuevo.');
+      console.error('Error completo:', err);
+      const errorMessage = err.message || 'Error al subir el video. Por favor, intenta de nuevo.';
+      setError(errorMessage);
       toast({
         title: "Error en la subida",
-        description: err.message || 'Error al subir el video. Por favor, intenta de nuevo.',
+        description: errorMessage,
         variant: "destructive",
+        duration: 10000, // El mensaje de error permanecerá visible por 10 segundos
       });
     } finally {
       setUploading(false);
