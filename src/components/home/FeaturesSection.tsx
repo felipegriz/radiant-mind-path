@@ -38,9 +38,9 @@ const FeaturesSection = () => {
           viewport={{ once: true }}
           className="glass-card p-8 hover-lift"
         >
-          <feature.icon className="w-12 h-12 text-white mb-4" />
-          <h3 className="text-2xl font-semibold mb-5 text-white">{feature.title}</h3>
-          <p className="text-[#C8C8C9]">{feature.description}</p>
+          <feature.icon className="w-12 h-12 text-gray-900 mb-4" />
+          <h3 className="text-2xl font-semibold mb-5 text-gray-900">{feature.title}</h3>
+          <p className="text-gray-600">{feature.description}</p>
         </motion.div>
       ))}
     </section>
