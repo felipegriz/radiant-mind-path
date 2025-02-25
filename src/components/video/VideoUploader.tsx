@@ -16,6 +16,43 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
+  const uploadWithProgress = async (file: File, fileName: string): Promise<{ data: any, error: any }> => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      const { data: { session } } = supabase.auth.getSession();
+      
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable) {
+          const percentage = (event.loaded / event.total) * 100;
+          setProgress(percentage);
+          console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
+        }
+      });
+
+      xhr.addEventListener('load', () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve({ data: JSON.parse(xhr.response), error: null });
+        } else {
+          reject({ data: null, error: new Error(`Upload failed with status ${xhr.status}`) });
+        }
+      });
+
+      xhr.addEventListener('error', () => {
+        reject({ data: null, error: new Error('Upload failed') });
+      });
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      xhr.open('POST', `${supabase.storage.url}/object/course_videos/${fileName}`);
+      xhr.setRequestHeader('apikey', supabase.supabaseKey);
+      if (session?.access_token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
+      }
+      xhr.send(formData);
+    });
+  };
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setUploading(true);
@@ -41,17 +78,7 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
 
       console.log('Iniciando subida del archivo:', fileName);
       
-      const { data, error: uploadError } = await supabase.storage
-        .from('course_videos')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false,
-          onUploadProgress: (progress) => {
-            const percentage = (progress.loaded / progress.total) * 100;
-            setProgress(percentage);
-            console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
-          }
-        });
+      const { data, error: uploadError } = await uploadWithProgress(file, fileName);
 
       if (uploadError) {
         console.error('Error detallado de Supabase:', uploadError);
@@ -88,7 +115,6 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       });
     } finally {
       setUploading(false);
-      setProgress(0);
     }
   };
 
