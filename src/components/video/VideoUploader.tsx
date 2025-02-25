@@ -48,11 +48,14 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
 
         // Construir la URL usando el endpoint público de Supabase
         const bucketName = 'course_videos';
-        const supabaseUrl = supabase.storageUrl || 'https://awbrvqrtqxwomnevipdt.supabase.co/storage/v1';
+        const supabaseProjectId = 'awbrvqrtqxwomnevipdt';
+        const supabaseUrl = `https://${supabaseProjectId}.supabase.co/storage/v1`;
         const url = `${supabaseUrl}/object/${bucketName}/${fileName}`;
 
         xhr.open('POST', url);
-        xhr.setRequestHeader('apikey', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '');
+        // Usar la key desde el cliente de Supabase directamente
+        const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF3YnJ2cXJ0cXh3b21uZXZpcGR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyNDc2OTksImV4cCI6MjA1NTgyMzY5OX0.hSk2QO1cLGr99XAK34NZpBlJw2uQyxLkuIGlece1Mow';
+        xhr.setRequestHeader('apikey', anonKey);
         if (session?.access_token) {
           xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
         }
