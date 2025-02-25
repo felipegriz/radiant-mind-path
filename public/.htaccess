@@ -22,3 +22,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # Redirige todas las solicitudes a index.html
 RewriteRule ^ index.html [QSA,L]
 
+# Asegurar que el dominio correcto se use
+RewriteCond %{HTTP_HOST} !^felipegriz\.com$ [NC]
+RewriteRule ^(.*)$ https://felipegriz.com/$1 [L,R=301]
