@@ -16,56 +16,6 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const uploadWithProgress = async (file: File, fileName: string): Promise<{ data: any, error: any }> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const xhr = new XMLHttpRequest();
-        const { data: sessionData } = await supabase.auth.getSession();
-        const session = sessionData.session;
-
-        xhr.upload.addEventListener('progress', (event) => {
-          if (event.lengthComputable) {
-            const percentage = (event.loaded / event.total) * 100;
-            setProgress(percentage);
-            console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
-          }
-        });
-
-        xhr.addEventListener('load', () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            resolve({ data: JSON.parse(xhr.response), error: null });
-          } else {
-            reject({ data: null, error: new Error(`Upload failed with status ${xhr.status}`) });
-          }
-        });
-
-        xhr.addEventListener('error', () => {
-          reject({ data: null, error: new Error('Upload failed') });
-        });
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        // Construir la URL usando el endpoint público de Supabase
-        const bucketName = 'course_videos';
-        const supabaseProjectId = 'awbrvqrtqxwomnevipdt';
-        const supabaseUrl = `https://${supabaseProjectId}.supabase.co/storage/v1`;
-        const url = `${supabaseUrl}/object/${bucketName}/${fileName}`;
-
-        xhr.open('POST', url);
-        // Usar la key desde el cliente de Supabase directamente
-        const anonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF3YnJ2cXJ0cXh3b21uZXZpcGR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAyNDc2OTksImV4cCI6MjA1NTgyMzY5OX0.hSk2QO1cLGr99XAK34NZpBlJw2uQyxLkuIGlece1Mow';
-        xhr.setRequestHeader('apikey', anonKey);
-        if (session?.access_token) {
-          xhr.setRequestHeader('Authorization', `Bearer ${session.access_token}`);
-        }
-        xhr.send(formData);
-      } catch (error) {
-        reject({ data: null, error });
-      }
-    });
-  };
-
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setUploading(true);
@@ -91,14 +41,23 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
 
       console.log('Iniciando subida del archivo:', fileName);
       
-      const { data, error: uploadError } = await uploadWithProgress(file, fileName);
+      // Usar el método upload de Supabase con un controlador de progreso personalizado
+      const { error: uploadError } = await supabase.storage
+        .from('course_videos')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false,
+          onUploadProgress: (progress) => {
+            const percentage = (progress.loaded / progress.total) * 100;
+            setProgress(percentage);
+            console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
+          },
+        });
 
       if (uploadError) {
         console.error('Error detallado de Supabase:', uploadError);
         throw new Error(`Error al subir el video: ${uploadError.message}`);
       }
-
-      console.log('Archivo subido exitosamente:', data);
 
       const { data: { publicUrl } } = supabase.storage
         .from('course_videos')
