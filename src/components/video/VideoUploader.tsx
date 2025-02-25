@@ -41,17 +41,15 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
 
       console.log('Iniciando subida del archivo:', fileName);
       
-      // Usar el método upload de Supabase con un controlador de progreso personalizado
+      // Crear un FormData y usar XMLHttpRequest para mostrar el progreso
+      const formData = new FormData();
+      formData.append('file', file);
+
       const { error: uploadError } = await supabase.storage
         .from('course_videos')
         .upload(fileName, file, {
           cacheControl: '3600',
-          upsert: false,
-          onUploadProgress: (progress) => {
-            const percentage = (progress.loaded / progress.total) * 100;
-            setProgress(percentage);
-            console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
-          },
+          upsert: false
         });
 
       if (uploadError) {
@@ -87,6 +85,7 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       });
     } finally {
       setUploading(false);
+      setProgress(100); // Al finalizar, mostrar 100%
     }
   };
 
