@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -112,12 +111,8 @@ export const useAuthForm = () => {
         throw new Error("Por favor ingresa tu correo electrónico");
       }
 
-      // Configuración específica para el correo de restablecimiento
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
-        data: {
-          email: email.trim()
-        }
+        redirectTo: `${window.location.origin}/auth/reset-password`
       });
 
       if (error) throw error;
