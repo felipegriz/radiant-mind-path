@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
 
 interface VideoUploaderProps {
   onUploadComplete: (url: string) => void;
@@ -44,7 +45,12 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
         .from('course_videos')
         .upload(fileName, file, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
+          onUploadProgress: (progress) => {
+            const percentage = (progress.loaded / progress.total) * 100;
+            setProgress(percentage);
+            console.log(`Progreso de subida: ${percentage.toFixed(2)}%`);
+          }
         });
 
       if (uploadError) {
@@ -66,7 +72,7 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
         title: "¡Éxito!",
         description: "El video se ha subido correctamente.",
         duration: 5000,
-        className: "bg-green-50 text-green-900 border border-green-200", // Estilo para toast de éxito
+        className: "bg-green-50 text-green-900 border border-green-200",
       });
 
     } catch (err) {
@@ -78,7 +84,7 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
         description: errorMessage,
         variant: "destructive",
         duration: 10000,
-        className: "bg-red-50 text-red-900 border border-red-200", // Estilo para toast de error
+        className: "bg-red-50 text-red-900 border border-red-200",
       });
     } finally {
       setUploading(false);
@@ -107,7 +113,7 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
             {uploading ? (
               <div className="flex items-center gap-2">
                 <span className="animate-spin">⏳</span>
-                Subiendo video... 
+                Subiendo video... {Math.round(progress)}%
               </div>
             ) : (
               'Subir video del curso (máximo 1GB)'
@@ -115,6 +121,16 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
           </span>
         </Button>
       </label>
+      
+      {uploading && (
+        <div className="space-y-2">
+          <Progress value={progress} className="w-full" />
+          <p className="text-sm text-gray-500 text-center">
+            Subiendo video... {Math.round(progress)}%
+          </p>
+        </div>
+      )}
+
       {error && (
         <Alert variant="destructive" className="mt-4 bg-red-50 border-red-200 text-red-900">
           <AlertDescription>
