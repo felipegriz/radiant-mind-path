@@ -1,73 +1,71 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VideoUploaderProps {
   onUploadComplete: (url: string) => void;
 }
 
 export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
-  const [url, setUrl] = useState('');
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!url.trim()) {
-      setError('Por favor, ingresa el enlace de Zoom');
-      return;
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploading(true);
+      setError(null);
+      
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `octava-area-video-${Date.now()}.${fileExt}`;
+      
+      const { data, error: uploadError } = await supabase.storage
+        .from('course_videos')
+        .upload(fileName, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('course_videos')
+        .getPublicUrl(fileName);
+
+      onUploadComplete(publicUrl);
+    } catch (err) {
+      console.error('Error uploading video:', err);
+      setError('Error al subir el video. Por favor, intenta de nuevo.');
+    } finally {
+      setUploading(false);
     }
-
-    if (!url.includes('zoom.us')) {
-      setError('Por favor, ingresa un enlace válido de Zoom');
-      return;
-    }
-
-    // Agregar parámetros para ocultar elementos de la interfaz
-    const cleanUrl = url.split('?')[0]; // Obtener la URL base sin parámetros existentes
-    const enhancedUrl = `${cleanUrl}?embed=true&hidewindow=true&showsharebutton=false&showdownloadbutton=false&hidejoinlabel=true&hidedescription=true`;
-    
-    onUploadComplete(enhancedUrl);
-    
-    toast({
-      title: "¡Éxito!",
-      description: "El enlace de Zoom se ha guardado correctamente.",
-      duration: 5000,
-      className: "bg-green-50 text-green-900 border border-green-200",
-    });
-
-    setUrl('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Input
-        type="url"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        placeholder="Pega aquí el enlace de Zoom"
-        className="w-full"
+    <div className="space-y-4">
+      <input
+        type="file"
+        accept="video/*"
+        onChange={handleFileUpload}
+        disabled={uploading}
+        className="hidden"
+        id="video-upload"
       />
-      
-      <Button 
-        type="submit"
-        variant="outline"
-        className="w-full"
-      >
-        Guardar enlace de Zoom
-      </Button>
-
-      {error && (
-        <Alert variant="destructive" className="mt-4 bg-red-50 border-red-200 text-red-900">
-          <AlertDescription>
-            {error}
-          </AlertDescription>
-        </Alert>
-      )}
-    </form>
+      <label htmlFor="video-upload">
+        <Button 
+          variant="outline" 
+          disabled={uploading}
+          className="cursor-pointer"
+          asChild
+        >
+          <span>
+            {uploading ? 'Subiendo video...' : 'Subir video del curso'}
+          </span>
+        </Button>
+      </label>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+    </div>
   );
 };

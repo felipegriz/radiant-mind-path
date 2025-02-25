@@ -1,11 +1,11 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
+import { VideoUploader } from "@/components/video/VideoUploader";
 
 const OctavaArea = () => {
-  // URL del video de Zoom con los parámetros necesarios
-  const videoUrl = "https://us02web.zoom.us/rec/share/FkkpYzLoxzF7cEMhHnKxXTRfbLUIVXygxnNm41IuIRkEhYpkNwuL7PAjSWqIhJvl.J75Pjz1LTc-d7mMk?startTime=1739145699000&embed=true&hidewindow=true&showsharebutton=false&showdownloadbutton=false&hidejoinlabel=true&hidedescription=true";
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -31,12 +31,19 @@ const OctavaArea = () => {
           transition={{ delay: 0.2 }}
           className="aspect-video w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
         >
-          <iframe 
-            src={videoUrl}
-            className="w-full h-full"
-            allow="autoplay; fullscreen; picture-in-picture"
-            style={{ aspectRatio: '16/9' }}
-          />
+          {videoUrl ? (
+            <video 
+              className="w-full h-full"
+              controls
+              src={videoUrl}
+            >
+              Tu navegador no soporta la reproducción de videos.
+            </video>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+              <VideoUploader onUploadComplete={setVideoUrl} />
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
