@@ -9,9 +9,14 @@ import StatisticsSection from "@/components/home/StatisticsSection";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
-      <HeroSection />
-      <FeaturesSection />
+      <div className="relative">
+        <div className="absolute top-0 left-0 right-0 bg-white" style={{ height: "calc(100% + 300px)" }}></div>
+        <div className="relative">
+          <Navbar />
+          <HeroSection />
+          <FeaturesSection />
+        </div>
+      </div>
       <QuoteSection />
       <StatisticsSection />
     </div>
