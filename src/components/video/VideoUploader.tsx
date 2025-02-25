@@ -27,7 +27,11 @@ export const VideoUploader = ({ onUploadComplete }: VideoUploaderProps) => {
       return;
     }
 
-    onUploadComplete(url);
+    // Agregar parámetros para ocultar elementos de la interfaz
+    const cleanUrl = url.split('?')[0]; // Obtener la URL base sin parámetros existentes
+    const enhancedUrl = `${cleanUrl}?embed=true&hidewindow=true&showsharebutton=false&showdownloadbutton=false&hidejoinlabel=true&hidedescription=true`;
+    
+    onUploadComplete(enhancedUrl);
     
     toast({
       title: "¡Éxito!",
