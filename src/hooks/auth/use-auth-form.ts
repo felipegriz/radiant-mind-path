@@ -112,11 +112,8 @@ export const useAuthForm = () => {
         throw new Error("Por favor ingresa tu correo electrónico");
       }
 
-      // Usar la URL de producción para el reseteo de contraseña
-      const resetUrl = 'https://felipegriz.com/auth/reset-password';
-
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: resetUrl
+        redirectTo: 'https://www.felipegriz.com/auth/reset-password'
       });
 
       if (error) throw error;
