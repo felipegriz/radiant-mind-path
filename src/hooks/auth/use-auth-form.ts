@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -111,8 +112,11 @@ export const useAuthForm = () => {
         throw new Error("Por favor ingresa tu correo electrónico");
       }
 
+      // Usar la URL de producción para el reseteo de contraseña
+      const resetUrl = 'https://felipegriz.com/auth/reset-password';
+
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: `${window.location.origin}/auth/reset-password`
+        redirectTo: resetUrl
       });
 
       if (error) throw error;

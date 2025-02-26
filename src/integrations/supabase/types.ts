@@ -531,6 +531,75 @@ export type Database = {
         }
         Relationships: []
       }
+      survey_questions: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          options: Json | null
+          question: string
+          sequence_order: number | null
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          options?: Json | null
+          question: string
+          sequence_order?: number | null
+          type?: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          options?: Json | null
+          question?: string
+          sequence_order?: number | null
+          type?: string
+        }
+        Relationships: []
+      }
+      survey_responses: {
+        Row: {
+          created_at: string | null
+          id: string
+          prospect_id: string | null
+          question_id: string | null
+          response: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          prospect_id?: string | null
+          question_id?: string | null
+          response: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          prospect_id?: string | null
+          question_id?: string | null
+          response?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_responses_prospect_id_fkey"
+            columns: ["prospect_id"]
+            isOneToOne: false
+            referencedRelation: "prospects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_responses_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "survey_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_event_access: {
         Row: {
           access_granted_at: string | null
