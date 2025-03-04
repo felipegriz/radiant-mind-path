@@ -6,13 +6,14 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const HeroVideoUploader = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [videoSize, setVideoSize] = useState<number | null>(null);
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
-  // Aumentamos el tamaño máximo a 100MB
+  const [instagramUrl, setInstagramUrl] = useState('');
   const MAX_FILE_SIZE_MB = 100;
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,54 +84,99 @@ export const HeroVideoUploader = () => {
     }
   };
 
+  const handleInstagramUrl = () => {
+    if (!instagramUrl) {
+      toast.error('Por favor ingresa una URL de Instagram');
+      return;
+    }
+
+    // Set the URL directly as the path
+    setUploadedPath(instagramUrl);
+    // Copy to clipboard
+    navigator.clipboard.writeText(instagramUrl);
+    toast.success('URL copiada al portapapeles');
+  };
+
   return (
     <div className="space-y-4 p-6 bg-card/30 backdrop-blur-md rounded-xl border border-border">
       <h3 className="text-xl font-semibold">Subir Video de Explicación</h3>
-      <p className="text-sm text-muted-foreground">
-        Sube un video para la página de explicación de DESPERTAR 360°. Tamaño máximo: {MAX_FILE_SIZE_MB}MB.
-      </p>
       
-      <input
-        type="file"
-        accept="video/*"
-        onChange={handleFileUpload}
-        disabled={uploading}
-        className="hidden"
-        id="hero-video-upload"
-      />
-      
-      <label htmlFor="hero-video-upload">
-        <Button 
-          variant="outline" 
-          disabled={uploading}
-          className="cursor-pointer w-full"
-          asChild
-        >
-          <span>
-            {uploading ? `Subiendo video... ${progress}%` : 'Seleccionar video para subir'}
-          </span>
-        </Button>
-      </label>
-      
-      {uploading && (
-        <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
-          <div 
-            className="bg-primary h-full transition-all duration-300 ease-in-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      )}
-      
-      {videoSize && (
-        <div className="text-xs text-muted-foreground">
-          Tamaño del archivo: {videoSize.toFixed(2)} MB
-        </div>
-      )}
+      <Tabs defaultValue="upload" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="upload">Subir Archivo</TabsTrigger>
+          <TabsTrigger value="instagram">URL de Instagram</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="upload">
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Sube un video para la página de explicación de DESPERTAR 360°. Tamaño máximo: {MAX_FILE_SIZE_MB}MB.
+            </p>
+            
+            <input
+              type="file"
+              accept="video/*"
+              onChange={handleFileUpload}
+              disabled={uploading}
+              className="hidden"
+              id="hero-video-upload"
+            />
+            
+            <label htmlFor="hero-video-upload">
+              <Button 
+                variant="outline" 
+                disabled={uploading}
+                className="cursor-pointer w-full"
+                asChild
+              >
+                <span>
+                  {uploading ? `Subiendo video... ${progress}%` : 'Seleccionar video para subir'}
+                </span>
+              </Button>
+            </label>
+            
+            {uploading && (
+              <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
+                <div 
+                  className="bg-primary h-full transition-all duration-300 ease-in-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            )}
+            
+            {videoSize && (
+              <div className="text-xs text-muted-foreground">
+                Tamaño del archivo: {videoSize.toFixed(2)} MB
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        <TabsContent value="instagram" className="space-y-4">
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">
+              Ingresa la URL del video de Instagram que deseas usar
+            </p>
+            <Input
+              type="url"
+              placeholder="https://www.instagram.com/reel/..."
+              value={instagramUrl}
+              onChange={(e) => setInstagramUrl(e.target.value)}
+            />
+            <Button 
+              onClick={handleInstagramUrl}
+              className="w-full"
+            >
+              Usar URL de Instagram
+            </Button>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {uploadedPath && (
         <Alert className="bg-green-50 border-green-200">
           <AlertCircle className="h-4 w-4 text-green-600" />
-          <AlertTitle className="text-green-800">Video subido correctamente</AlertTitle>
+          <AlertTitle className="text-green-800">Video configurado correctamente</AlertTitle>
           <AlertDescription className="text-green-700">
             <p>Usa esta ruta en la variable <code className="bg-green-100 px-1 rounded">explanationVideoPath</code> en el archivo:</p>
             <p className="font-mono text-xs mt-1 bg-green-100 p-2 rounded break-all">{uploadedPath}</p>
@@ -148,19 +194,9 @@ export const HeroVideoUploader = () => {
           </AlertDescription>
         </Alert>
       )}
-      
-      <div className="text-xs text-muted-foreground mt-2">
-        <p>Después de subir el video, debes actualizar la variable <code className="bg-muted px-1 rounded">explanationVideoPath</code> en el archivo <code className="bg-muted px-1 rounded">src/pages/events/DespertarExplanation.tsx</code>.</p>
-      </div>
 
-      <div className="mt-4 p-3 bg-amber-100/10 border border-amber-200/20 rounded-lg">
-        <h4 className="text-sm font-medium text-amber-700">Consejos para optimizar videos:</h4>
-        <ul className="text-xs text-muted-foreground list-disc pl-4 mt-1 space-y-1">
-          <li>Usa un formato como MP4 con códec h.264 para mejor compatibilidad.</li>
-          <li>Reduce la resolución a 720p para reducir el tamaño del archivo.</li>
-          <li>Comprime el video antes de subirlo usando herramientas como <a href="https://handbrake.fr/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Handbrake</a> (gratis).</li>
-          <li>Mantén la duración del video lo más corta posible.</li>
-        </ul>
+      <div className="text-xs text-muted-foreground mt-2">
+        <p>Después de configurar el video, debes actualizar la variable <code className="bg-muted px-1 rounded">explanationVideoPath</code> en el archivo <code className="bg-muted px-1 rounded">src/pages/events/DespertarExplanation.tsx</code>.</p>
       </div>
     </div>
   );
