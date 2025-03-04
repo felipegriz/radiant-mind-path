@@ -61,15 +61,35 @@ const DespertarExplanation = () => {
     }
 
     if (isInstagramUrl) {
+      // Process Instagram URL to ensure correct embedding format
+      let embedUrl = explanationVideoPath;
+      
+      // Add /embed at the end if not already present
+      if (!embedUrl.endsWith('/embed') && !embedUrl.includes('/embed/')) {
+        embedUrl = embedUrl.endsWith('/') ? `${embedUrl}embed` : `${embedUrl}/embed`;
+      }
+      
+      // Handle protocol-relative URLs
+      if (!embedUrl.startsWith('http')) {
+        embedUrl = `https:${embedUrl}`;
+      }
+      
+      // Add necessary query parameters for proper embedding
+      if (!embedUrl.includes('?')) {
+        embedUrl = `${embedUrl}?hidecaption=1&autoplay=1`;
+      }
+      
+      console.log("Instagram embed URL:", embedUrl);
+      
       return (
         <div className="w-full h-full flex items-center justify-center">
           <iframe 
-            src={`${explanationVideoPath}/embed`}
-            className="instagram-media instagram-media-rendered w-full max-w-[400px] h-[720px] max-h-full"
+            src={embedUrl}
+            className="instagram-media w-full h-[600px] md:h-[700px]"
             frameBorder="0"
             scrolling="no"
-            allowTransparency={true}
-            allowFullScreen={true}
+            allowFullScreen
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
           ></iframe>
         </div>
       );
@@ -80,6 +100,7 @@ const DespertarExplanation = () => {
         className="w-full h-full object-cover"
         controls
         playsInline
+        autoPlay
       >
         <source src={explanationVideoPath} type="video/mp4" />
         Tu navegador no soporta la reproducción de video.
