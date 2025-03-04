@@ -34,7 +34,7 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-tight"
           >
-            Aprende a vivir<br />
+            Aprende a crear<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/80">
               una vida extraordinaria
             </span>
@@ -46,7 +46,7 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.4 }}
             className="text-xl md:text-2xl text-white max-w-2xl mt-6 mb-10"
           >
-            Aprende la mentalidad y las mejores estrategias de las mentes más brillantes del mundo para transformar tu vida
+            A través de cambiar tu subconsciente
           </motion.p>
           
           <motion.div 
