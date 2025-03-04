@@ -1,23 +1,12 @@
 
-Options -MultiViews
+# Enable rewriting
 RewriteEngine On
 RewriteBase /
 
-# Permitir acceso a todos los archivos y directorios
-<FilesMatch ".*">
-    Order Allow,Deny
-    Allow from all
-    Require all granted
-</FilesMatch>
-
-# Habilitar CORS
-Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
-
-# Si el archivo solicitado existe, úsalo directamente
-RewriteCond %{REQUEST_FILENAME} -f
+# If the requested resource exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Redirigir todas las demás solicitudes a index.html
-RewriteRule ^([^.]+)$ index.html [L]
+# Otherwise, serve index.html
+RewriteRule ^ index.html [L]
