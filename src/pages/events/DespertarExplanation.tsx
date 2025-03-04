@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,8 @@ const DespertarExplanation = () => {
   const [isInstagramUrl, setIsInstagramUrl] = useState(false);
   
   // Actualiza esta ruta después de subir tu video de explicación
-  const explanationVideoPath = "/videos/explanation-video.mp4";
+  // Para Instagram, debe ser la URL completa con el formato: https://www.instagram.com/p/CODIGO/embed
+  const explanationVideoPath = "https://www.instagram.com/reel/C6F2yMVAw_1/embed/";
   
   useEffect(() => {
     // Simular la carga del video
@@ -29,10 +29,13 @@ const DespertarExplanation = () => {
 
     // Verificar si es una URL de Instagram
     const checkIfInstagramUrl = () => {
-      setIsInstagramUrl(
+      const isInstagram = 
         explanationVideoPath.includes('instagram.com') || 
-        explanationVideoPath.includes('instagr.am')
-      );
+        explanationVideoPath.includes('instagr.am');
+      
+      setIsInstagramUrl(isInstagram);
+      console.log("¿Es video de Instagram?", isInstagram);
+      console.log("URL del video:", explanationVideoPath);
     };
     
     checkIfAdmin();
@@ -61,30 +64,12 @@ const DespertarExplanation = () => {
     }
 
     if (isInstagramUrl) {
-      // Process Instagram URL to ensure correct embedding format
-      let embedUrl = explanationVideoPath;
-      
-      // Add /embed at the end if not already present
-      if (!embedUrl.endsWith('/embed') && !embedUrl.includes('/embed/')) {
-        embedUrl = embedUrl.endsWith('/') ? `${embedUrl}embed` : `${embedUrl}/embed`;
-      }
-      
-      // Handle protocol-relative URLs
-      if (!embedUrl.startsWith('http')) {
-        embedUrl = `https:${embedUrl}`;
-      }
-      
-      // Add necessary query parameters for proper embedding
-      if (!embedUrl.includes('?')) {
-        embedUrl = `${embedUrl}?hidecaption=1&autoplay=1`;
-      }
-      
-      console.log("Instagram embed URL:", embedUrl);
+      console.log("Renderizando video de Instagram:", explanationVideoPath);
       
       return (
         <div className="w-full h-full flex items-center justify-center">
           <iframe 
-            src={embedUrl}
+            src={explanationVideoPath}
             className="instagram-media w-full h-[600px] md:h-[700px]"
             frameBorder="0"
             scrolling="no"
@@ -138,10 +123,10 @@ const DespertarExplanation = () => {
                     1. Ve a <a href="/admin/upload-hero-video" className="text-primary underline">admin/upload-hero-video</a>
                   </p>
                   <p className="text-sm text-white/80">
-                    2. Sube tu video de explicación (hasta 100MB)
+                    2. Sube tu video de explicación (hasta 100MB) o usa una URL de Instagram
                   </p>
                   <p className="text-sm text-white/80">
-                    3. Copia la ruta del video generada
+                    3. Copia la ruta o URL generada
                   </p>
                   <p className="text-sm text-white/80">
                     4. Actualiza la variable 'explanationVideoPath' en el archivo src/pages/events/DespertarExplanation.tsx
@@ -160,11 +145,11 @@ const DespertarExplanation = () => {
           )}
           
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
-            <div className={`${isInstagramUrl ? 'lg:w-1/3' : 'lg:w-2/3'} aspect-auto bg-black/40 rounded-xl overflow-hidden`}>
+            <div className={`${isInstagramUrl ? 'lg:w-2/5' : 'lg:w-2/3'} aspect-auto bg-black/40 rounded-xl overflow-hidden`}>
               {renderVideo()}
             </div>
             
-            <div className={`${isInstagramUrl ? 'lg:w-2/3' : 'lg:w-1/3'} bg-white/10 rounded-xl p-6 text-white`}>
+            <div className={`${isInstagramUrl ? 'lg:w-3/5' : 'lg:w-1/3'} bg-white/10 rounded-xl p-6 text-white`}>
               <h2 className="text-2xl font-bold mb-4">Sobre DESPERTAR 360°</h2>
               <p className="text-lg mb-4">
                 DESPERTAR 360° es un evento transformador diseñado para ayudarte a alcanzar 

@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Link as LinkIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const HeroVideoUploader = () => {
@@ -25,14 +24,12 @@ export const HeroVideoUploader = () => {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      // Validate file type
       if (!file.type.startsWith('video/')) {
         toast.error('Por favor sube un archivo de video.');
         setUploading(false);
         return;
       }
 
-      // Show file size in MB
       const fileSizeMB = file.size / (1024 * 1024);
       setVideoSize(fileSizeMB);
       console.log(`Subiendo archivo de ${fileSizeMB.toFixed(2)} MB`);
@@ -46,12 +43,11 @@ export const HeroVideoUploader = () => {
       const fileExt = file.name.split('.').pop();
       const fileName = `explanation-video-${Date.now()}.${fileExt}`;
       
-      // Upload to Supabase storage
       const { data, error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
           cacheControl: '3600',
-          upsert: true, // Change to true to overwrite existing files
+          upsert: true,
         });
 
       if (uploadError) {
@@ -59,17 +55,14 @@ export const HeroVideoUploader = () => {
         throw uploadError;
       }
 
-      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('videos')
         .getPublicUrl(fileName);
 
       const videoPath = `/videos/${fileName}`;
       
-      // Set the uploaded path
       setUploadedPath(videoPath);
 
-      // Copy the path to clipboard
       await navigator.clipboard.writeText(videoPath);
       
       toast.success('Video subido con éxito. La ruta se ha copiado al portapapeles.');
@@ -84,34 +77,54 @@ export const HeroVideoUploader = () => {
     }
   };
 
+  const formatInstagramUrl = (url: string): string => {
+    let cleanUrl = url.split('?')[0];
+    cleanUrl = cleanUrl.replace(/\/+$/, '');
+    
+    let postId = '';
+    
+    if (cleanUrl.includes('/p/')) {
+      postId = cleanUrl.split('/p/')[1].split('/')[0];
+    } else if (cleanUrl.includes('/reel/')) {
+      postId = cleanUrl.split('/reel/')[1].split('/')[0];
+    }
+    
+    if (postId) {
+      return `https://www.instagram.com/p/${postId}/embed/?cr=1&v=14&wp=540&rd=https%3A%2F%2Flocalhost`;
+    }
+    
+    if (!cleanUrl.includes('/embed')) {
+      return `${cleanUrl}/embed`;
+    }
+    
+    return cleanUrl;
+  };
+
   const handleInstagramUrl = () => {
     if (!instagramUrl) {
       toast.error('Por favor ingresa una URL de Instagram');
       return;
     }
 
-    // Clean up the Instagram URL (remove /embed if it's there)
-    let cleanUrl = instagramUrl.trim();
-    cleanUrl = cleanUrl.replace('/embed', '');
-    
-    // Ensure URL ends at the post and remove any trailing parameters
-    if (cleanUrl.includes('?')) {
-      cleanUrl = cleanUrl.substring(0, cleanUrl.indexOf('?'));
+    try {
+      const formattedUrl = formatInstagramUrl(instagramUrl.trim());
+      console.log('Formatted Instagram URL:', formattedUrl);
+      
+      setUploadedPath(formattedUrl);
+      
+      navigator.clipboard.writeText(formattedUrl);
+      toast.success('URL de Instagram procesada y copiada al portapapeles');
+    } catch (error) {
+      console.error('Error al procesar la URL de Instagram:', error);
+      toast.error('Error al procesar la URL. Verifica que sea una URL válida de Instagram');
     }
-
-    // Set the URL directly as the path
-    setUploadedPath(cleanUrl);
-    
-    // Copy to clipboard
-    navigator.clipboard.writeText(cleanUrl);
-    toast.success('URL copiada al portapapeles');
   };
 
   return (
     <div className="space-y-4 p-6 bg-card/30 backdrop-blur-md rounded-xl border border-border">
       <h3 className="text-xl font-semibold">Subir Video de Explicación</h3>
       
-      <Tabs defaultValue="upload" className="w-full">
+      <Tabs defaultValue="instagram" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="upload">Subir Archivo</TabsTrigger>
           <TabsTrigger value="instagram">URL de Instagram</TabsTrigger>
@@ -167,17 +180,24 @@ export const HeroVideoUploader = () => {
             <p className="text-sm text-muted-foreground">
               Ingresa la URL del video de Instagram que deseas usar
             </p>
-            <Input
-              type="url"
-              placeholder="https://www.instagram.com/reel/..."
-              value={instagramUrl}
-              onChange={(e) => setInstagramUrl(e.target.value)}
-            />
+            <div className="flex items-center space-x-2">
+              <LinkIcon className="text-muted-foreground h-4 w-4 flex-shrink-0" />
+              <Input
+                type="url"
+                placeholder="https://www.instagram.com/reel/..."
+                value={instagramUrl}
+                onChange={(e) => setInstagramUrl(e.target.value)}
+                className="flex-grow"
+              />
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              <p>Ejemplo: https://www.instagram.com/p/XXXX/ o https://www.instagram.com/reel/XXXX/</p>
+            </div>
             <Button 
               onClick={handleInstagramUrl}
               className="w-full"
             >
-              Usar URL de Instagram
+              Procesar URL de Instagram
             </Button>
           </div>
         </TabsContent>
