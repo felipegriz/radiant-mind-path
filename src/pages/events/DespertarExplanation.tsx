@@ -12,12 +12,14 @@ const DespertarExplanation = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isInstagramUrl, setIsInstagramUrl] = useState(false);
+  const [useDirectVideo, setUseDirectVideo] = useState(true);
   
   // Actualiza esta ruta después de subir tu video de explicación
-  // Para Instagram, debe ser la URL completa con el formato: https://www.instagram.com/p/CODIGO/embed
-  const explanationVideoPath = "https://www.instagram.com/reel/C6F2yMVAw_1/embed/";
+  // Para video directo, usa una ruta de Supabase como: /videos/tu-video.mp4
+  // Para Instagram (no recomendado), usa formato: https://www.instagram.com/p/CODIGO/
+  const explanationVideoPath = "/videos/explanation-video-1695400177777.mp4";
   
-  // Ensure the Instagram URL is properly formatted
+  // Ensure the Instagram URL is properly formatted if we're using Instagram
   const formattedVideoPath = formatInstagramUrl(explanationVideoPath);
   
   useEffect(() => {
@@ -32,21 +34,32 @@ const DespertarExplanation = () => {
       setIsAdmin(isUserAdmin);
     };
 
-    // Verificar si es una URL de Instagram
+    // Verificar si es una URL de Instagram y si debemos usarla
     const checkIfInstagramUrl = () => {
       const isInstagram = 
         explanationVideoPath.includes('instagram.com') || 
         explanationVideoPath.includes('instagr.am');
       
       setIsInstagramUrl(isInstagram);
+      
+      // Si es una URL de Instagram pero preferimos video directo, mostrar advertencia
+      if (isInstagram && useDirectVideo) {
+        console.warn("Se está usando una URL de Instagram pero se ha configurado para preferir video directo.");
+        toast.warning("Para mejor experiencia, sube un video directo en lugar de usar Instagram", {
+          duration: 6000,
+          id: "instagram-warning"
+        });
+      }
+      
       console.log("¿Es video de Instagram?", isInstagram);
       console.log("URL del video:", formattedVideoPath);
+      console.log("¿Usar video directo?", useDirectVideo);
     };
     
     checkIfAdmin();
     checkIfInstagramUrl();
     return () => clearTimeout(timer);
-  }, [formattedVideoPath]);
+  }, [formattedVideoPath, useDirectVideo]);
 
   const handleCopyInstructions = () => {
     const instructions = `
@@ -68,7 +81,8 @@ const DespertarExplanation = () => {
       );
     }
 
-    if (isInstagramUrl) {
+    // Si es Instagram pero queremos forzar video directo, intentar cargar como video normal
+    if (isInstagramUrl && !useDirectVideo) {
       console.log("Renderizando video de Instagram:", formattedVideoPath);
       
       return (
@@ -85,9 +99,10 @@ const DespertarExplanation = () => {
       );
     }
 
+    // Video directo (preferido)
     return (
       <video 
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover rounded-xl"
         controls
         playsInline
         autoPlay
@@ -128,10 +143,10 @@ const DespertarExplanation = () => {
                     1. Ve a <a href="/admin/upload-hero-video" className="text-primary underline">admin/upload-hero-video</a>
                   </p>
                   <p className="text-sm text-white/80">
-                    2. Sube tu video de explicación (hasta 100MB) o usa una URL de Instagram
+                    2. Sube tu video de explicación (hasta 100MB)
                   </p>
                   <p className="text-sm text-white/80">
-                    3. Copia la ruta o URL generada
+                    3. Copia la ruta generada (debe ser como "/videos/tu-video.mp4")
                   </p>
                   <p className="text-sm text-white/80">
                     4. Actualiza la variable 'explanationVideoPath' en el archivo src/pages/events/DespertarExplanation.tsx
@@ -150,11 +165,11 @@ const DespertarExplanation = () => {
           )}
           
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
-            <div className={`${isInstagramUrl ? 'lg:w-2/5' : 'lg:w-2/3'} aspect-auto bg-black/40 rounded-xl overflow-hidden`}>
+            <div className="lg:w-2/3 aspect-auto bg-black/40 rounded-xl overflow-hidden">
               {renderVideo()}
             </div>
             
-            <div className={`${isInstagramUrl ? 'lg:w-3/5' : 'lg:w-1/3'} bg-white/10 rounded-xl p-6 text-white`}>
+            <div className="lg:w-1/3 bg-white/10 rounded-xl p-6 text-white">
               <h2 className="text-2xl font-bold mb-4">Sobre DESPERTAR 360°</h2>
               <p className="text-lg mb-4">
                 DESPERTAR 360° es un evento transformador diseñado para ayudarte a alcanzar 

@@ -92,7 +92,7 @@ export const HeroVideoUploader = () => {
       setUploadedPath(formattedUrl);
       
       navigator.clipboard.writeText(formattedUrl);
-      toast.success('URL de Instagram procesada y copiada al portapapeles');
+      toast.warning('URL de Instagram procesada. Recomendamos subir un video directo para mejor experiencia.');
     } catch (error) {
       console.error('Error al procesar la URL de Instagram:', error);
       toast.error('Error al procesar la URL. Verifica que sea una URL válida de Instagram');
@@ -103,9 +103,9 @@ export const HeroVideoUploader = () => {
     <div className="space-y-4 p-6 bg-card/30 backdrop-blur-md rounded-xl border border-border">
       <h3 className="text-xl font-semibold">Subir Video de Explicación</h3>
       
-      <Tabs defaultValue="instagram" className="w-full">
+      <Tabs defaultValue="upload" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="upload">Subir Archivo</TabsTrigger>
+          <TabsTrigger value="upload">Subir Archivo (Recomendado)</TabsTrigger>
           <TabsTrigger value="instagram">URL de Instagram</TabsTrigger>
         </TabsList>
 
@@ -119,6 +119,11 @@ export const HeroVideoUploader = () => {
         </TabsContent>
 
         <TabsContent value="instagram">
+          <div className="bg-amber-50 border border-amber-200 p-3 rounded mb-3">
+            <p className="text-sm text-amber-700">
+              <strong>Recomendación:</strong> Para mejor experiencia y compatibilidad, recomendamos subir el video directamente en lugar de usar Instagram.
+            </p>
+          </div>
           <InstagramUrlInput 
             instagramUrl={instagramUrl}
             setInstagramUrl={setInstagramUrl}
