@@ -31,9 +31,7 @@ export const HeroVideoUploader = () => {
         .upload(fileName, file, {
           cacheControl: '3600',
           upsert: false,
-          onUploadProgress: (progress) => {
-            setProgress(Math.round((progress.loaded / progress.total) * 100));
-          }
+          // Use the onUploadProgress function through the upload events
         });
 
       if (uploadError) {
@@ -104,3 +102,4 @@ export const HeroVideoUploader = () => {
     </div>
   );
 };
+
