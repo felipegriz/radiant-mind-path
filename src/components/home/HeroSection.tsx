@@ -85,7 +85,7 @@ const HeroSection = () => {
             </Button>
             
             <Button 
-              onClick={() => navigate("/events/despertar-360")}
+              onClick={() => navigate("/events/despertar-explanation")}
               variant="outline"
               className="border-white/40 bg-transparent hover:bg-white/10 text-white px-8 py-7 text-lg rounded-full"
               size="lg"
@@ -116,6 +116,7 @@ const HeroSection = () => {
               variant="ghost" 
               size="icon" 
               className="rounded-full bg-white/10 hover:bg-white/20 text-white"
+              onClick={() => navigate("/events/despertar-explanation")}
             >
               <Play className="h-4 w-4" />
             </Button>

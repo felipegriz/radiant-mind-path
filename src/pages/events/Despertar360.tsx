@@ -13,6 +13,8 @@ import { GuaranteeSection } from "@/components/events/despertar360/GuaranteeSect
 import { FAQSection } from "@/components/events/despertar360/FAQSection";
 import { FinalCTASection } from "@/components/events/despertar360/FinalCTASection";
 import { GraduatesButton } from "@/components/events/despertar360/GraduatesButton";
+import { Button } from "@/components/ui/button";
+import { Play } from "lucide-react";
 import type { EventPrice } from "@/types/event";
 
 const Despertar360 = () => {
@@ -94,6 +96,16 @@ const Despertar360 = () => {
       <Navbar />
       
       {isAuthenticated && <GraduatesButton onNavigate={() => navigate("/student-area")} />}
+      
+      <div className="absolute top-28 right-6 z-40 md:block">
+        <Button 
+          onClick={() => navigate("/events/despertar-explanation")}
+          className="bg-primary hover:bg-primary/90 rounded-full px-4 py-2 flex items-center gap-2"
+        >
+          <Play className="h-4 w-4" />
+          Ver video explicativo
+        </Button>
+      </div>
       
       <HeroSection />
       <StorySection />

@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Despertar360 from "./pages/events/Despertar360";
+import DespertarExplanation from "./pages/events/DespertarExplanation";
 import CitaConLoImposible from "./pages/events/CitaConLoImposible";
 import MissionMastery from "./pages/events/MissionMastery";
 import StudentArea from "./pages/StudentArea";
@@ -87,6 +89,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/events/despertar-360" element={<Despertar360 />} />
+            <Route path="/events/despertar-explanation" element={<DespertarExplanation />} />
             <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
             <Route path="/events/mission-mastery" element={<MissionMastery />} />
             <Route 
