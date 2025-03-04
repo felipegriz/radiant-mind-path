@@ -3,11 +3,15 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export const HeroVideoUploader = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [videoSize, setVideoSize] = useState<number | null>(null);
+  const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   // Aumentamos el tamaño máximo a 100MB
   const MAX_FILE_SIZE_MB = 100;
 
@@ -15,6 +19,7 @@ export const HeroVideoUploader = () => {
     try {
       setUploading(true);
       setProgress(0);
+      setUploadedPath(null);
       
       const file = event.target.files?.[0];
       if (!file) return;
@@ -38,43 +43,14 @@ export const HeroVideoUploader = () => {
       }
 
       const fileExt = file.name.split('.').pop();
-      const fileName = `hero-background-${Date.now()}.${fileExt}`;
+      const fileName = `explanation-video-${Date.now()}.${fileExt}`;
       
-      // Track upload progress manually
-      const xhr = new XMLHttpRequest();
-      let uploadPromise = new Promise((resolve, reject) => {
-        xhr.upload.addEventListener('progress', (event) => {
-          if (event.lengthComputable) {
-            const percent = (event.loaded / event.total) * 100;
-            setProgress(Math.round(percent));
-            console.log(`Progreso: ${Math.round(percent)}%`);
-          }
-        });
-
-        xhr.addEventListener('error', () => {
-          reject(new Error('Upload failed'));
-        });
-
-        xhr.addEventListener('abort', () => {
-          reject(new Error('Upload aborted'));
-        });
-
-        xhr.addEventListener('load', () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            const response = JSON.parse(xhr.responseText);
-            resolve(response);
-          } else {
-            reject(new Error(`HTTP Error: ${xhr.status}`));
-          }
-        });
-      });
-
       // Upload to Supabase storage
       const { data, error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
           cacheControl: '3600',
-          upsert: false,
+          upsert: true, // Change to true to overwrite existing files
         });
 
       if (uploadError) {
@@ -87,26 +63,31 @@ export const HeroVideoUploader = () => {
         .from('videos')
         .getPublicUrl(fileName);
 
+      const videoPath = `/videos/${fileName}`;
+      
+      // Set the uploaded path
+      setUploadedPath(videoPath);
+
       // Copy the path to clipboard
-      await navigator.clipboard.writeText(`/videos/${fileName}`);
+      await navigator.clipboard.writeText(videoPath);
       
       toast.success('Video subido con éxito. La ruta se ha copiado al portapapeles.');
       console.log('Video URL:', publicUrl);
+      setProgress(100);
       
     } catch (err) {
       console.error('Error uploading video:', err);
       toast.error('Error al subir el video. Por favor, intenta de nuevo.');
     } finally {
       setUploading(false);
-      setVideoSize(null);
     }
   };
 
   return (
     <div className="space-y-4 p-6 bg-card/30 backdrop-blur-md rounded-xl border border-border">
-      <h3 className="text-xl font-semibold">Subir Video de Fondo</h3>
+      <h3 className="text-xl font-semibold">Subir Video de Explicación</h3>
       <p className="text-sm text-muted-foreground">
-        Sube un video corto para usar como fondo del hero section. Tamaño máximo: {MAX_FILE_SIZE_MB}MB.
+        Sube un video para la página de explicación de DESPERTAR 360°. Tamaño máximo: {MAX_FILE_SIZE_MB}MB.
       </p>
       
       <input
@@ -126,7 +107,7 @@ export const HeroVideoUploader = () => {
           asChild
         >
           <span>
-            {uploading ? `Subiendo video... ${progress}%` : 'Seleccionar video para el fondo'}
+            {uploading ? `Subiendo video... ${progress}%` : 'Seleccionar video para subir'}
           </span>
         </Button>
       </label>
@@ -145,19 +126,40 @@ export const HeroVideoUploader = () => {
           Tamaño del archivo: {videoSize.toFixed(2)} MB
         </div>
       )}
+
+      {uploadedPath && (
+        <Alert className="bg-green-50 border-green-200">
+          <AlertCircle className="h-4 w-4 text-green-600" />
+          <AlertTitle className="text-green-800">Video subido correctamente</AlertTitle>
+          <AlertDescription className="text-green-700">
+            <p>Usa esta ruta en la variable <code className="bg-green-100 px-1 rounded">explanationVideoPath</code> en el archivo:</p>
+            <p className="font-mono text-xs mt-1 bg-green-100 p-2 rounded break-all">{uploadedPath}</p>
+            <Button 
+              onClick={() => {
+                navigator.clipboard.writeText(uploadedPath);
+                toast.success('Ruta copiada al portapapeles');
+              }}
+              variant="outline"
+              size="sm"
+              className="mt-2 text-xs bg-white border-green-300 text-green-700 hover:bg-green-50"
+            >
+              Copiar ruta
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
       
       <div className="text-xs text-muted-foreground mt-2">
-        <p>Nota: Después de subir el video, la ruta se copiará automáticamente al portapapeles.</p>
-        <p>Actualiza la ruta del video en el componente HeroSection.tsx, en la variable backgroundVideoPath.</p>
+        <p>Después de subir el video, debes actualizar la variable <code className="bg-muted px-1 rounded">explanationVideoPath</code> en el archivo <code className="bg-muted px-1 rounded">src/pages/events/DespertarExplanation.tsx</code>.</p>
       </div>
 
       <div className="mt-4 p-3 bg-amber-100/10 border border-amber-200/20 rounded-lg">
         <h4 className="text-sm font-medium text-amber-700">Consejos para optimizar videos:</h4>
         <ul className="text-xs text-muted-foreground list-disc pl-4 mt-1 space-y-1">
           <li>Usa un formato como MP4 con códec h.264 para mejor compatibilidad.</li>
-          <li>Reduce la resolución a 720p o menos para videos de fondo.</li>
+          <li>Reduce la resolución a 720p para reducir el tamaño del archivo.</li>
           <li>Comprime el video antes de subirlo usando herramientas como <a href="https://handbrake.fr/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Handbrake</a> (gratis).</li>
-          <li>Mantén la duración del video lo más corta posible para reducir el tamaño.</li>
+          <li>Mantén la duración del video lo más corta posible.</li>
         </ul>
       </div>
     </div>
