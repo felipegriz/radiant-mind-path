@@ -15,17 +15,13 @@ Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
 Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
 
-# Redirigir HTTP a HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Redirigir non-www a www
+# Simple non-www to www redirect (only once)
 RewriteCond %{HTTP_HOST} ^felipegriz\.com$ [NC]
-RewriteRule ^(.*)$ https://www.felipegriz.com%{REQUEST_URI} [L,R=301]
+RewriteRule ^(.*)$ https://www.felipegriz.com/$1 [L,R=301]
 
 # Si el archivo solicitado existe, úsalo directamente
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]
 
 # Redirigir todas las demás solicitudes a index.html
-RewriteRule ^ index.html [L]
+RewriteRule ^([^.]+)$ index.html [L]
