@@ -46,7 +46,7 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.4 }}
             className="text-xl md:text-2xl text-white max-w-2xl mt-6 mb-10"
           >
-            A través de cambiar tu subconsciente
+            Aprende la mentalidad y las mejores estrategias de las mentes más brillantes del mundo para transformar tu vida
           </motion.p>
           
           <motion.div 
