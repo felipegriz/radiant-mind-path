@@ -34,9 +34,9 @@ const HeroSection = () => {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-tight"
           >
-            ¡Transforma tu<br />
+            Aprende a vivir<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/80">
-              vida en 4 días!
+              una vida extraordinaria
             </span>
           </motion.h1>
           
