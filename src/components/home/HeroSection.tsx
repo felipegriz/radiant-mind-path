@@ -28,17 +28,34 @@ const HeroSection = () => {
             PRÓXIMO EVENTO
           </motion.span>
           
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-tight"
-          >
-            Crea una vida<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/80">
-              extraordinaria a través de cambiar tu subconsciente
-            </span>
-          </motion.h1>
+          <div className="relative">
+            {/* Video background for the heading */}
+            <div className="absolute inset-0 overflow-hidden rounded-lg -z-10">
+              <video 
+                className="w-full h-full object-cover opacity-40"
+                autoPlay 
+                muted 
+                loop 
+                playsInline
+              >
+                <source src="/videos/background-loop.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-r from-background/70 to-background/50"></div>
+            </div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-tight"
+            >
+              Crea una vida<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/80">
+                extraordinaria a través de cambiar tu subconsciente
+              </span>
+            </motion.h1>
+          </div>
           
           <motion.p 
             initial={{ opacity: 0, y: 30 }}
