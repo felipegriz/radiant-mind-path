@@ -90,10 +90,20 @@ export const HeroVideoUploader = () => {
       return;
     }
 
+    // Clean up the Instagram URL (remove /embed if it's there)
+    let cleanUrl = instagramUrl.trim();
+    cleanUrl = cleanUrl.replace('/embed', '');
+    
+    // Ensure URL ends at the post and remove any trailing parameters
+    if (cleanUrl.includes('?')) {
+      cleanUrl = cleanUrl.substring(0, cleanUrl.indexOf('?'));
+    }
+
     // Set the URL directly as the path
-    setUploadedPath(instagramUrl);
+    setUploadedPath(cleanUrl);
+    
     // Copy to clipboard
-    navigator.clipboard.writeText(instagramUrl);
+    navigator.clipboard.writeText(cleanUrl);
     toast.success('URL copiada al portapapeles');
   };
 

@@ -10,6 +10,7 @@ const DespertarExplanation = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isInstagramUrl, setIsInstagramUrl] = useState(false);
   
   // Actualiza esta ruta después de subir tu video de explicación
   const explanationVideoPath = "/videos/explanation-video.mp4";
@@ -25,8 +26,17 @@ const DespertarExplanation = () => {
       const isUserAdmin = localStorage.getItem('is_admin') === 'true';
       setIsAdmin(isUserAdmin);
     };
+
+    // Verificar si es una URL de Instagram
+    const checkIfInstagramUrl = () => {
+      setIsInstagramUrl(
+        explanationVideoPath.includes('instagram.com') || 
+        explanationVideoPath.includes('instagr.am')
+      );
+    };
     
     checkIfAdmin();
+    checkIfInstagramUrl();
     return () => clearTimeout(timer);
   }, []);
 
@@ -39,6 +49,42 @@ const DespertarExplanation = () => {
     `;
     navigator.clipboard.writeText(instructions);
     toast.success("Instrucciones copiadas al portapapeles");
+  };
+
+  const renderVideo = () => {
+    if (isLoading) {
+      return (
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
+        </div>
+      );
+    }
+
+    if (isInstagramUrl) {
+      return (
+        <div className="w-full h-full flex items-center justify-center">
+          <iframe 
+            src={`${explanationVideoPath}/embed`}
+            className="instagram-media instagram-media-rendered w-full max-w-[400px] h-[720px] max-h-full"
+            frameBorder="0"
+            scrolling="no"
+            allowTransparency={true}
+            allowFullScreen={true}
+          ></iframe>
+        </div>
+      );
+    }
+
+    return (
+      <video 
+        className="w-full h-full object-cover"
+        controls
+        playsInline
+      >
+        <source src={explanationVideoPath} type="video/mp4" />
+        Tu navegador no soporta la reproducción de video.
+      </video>
+    );
   };
 
   return (
@@ -55,7 +101,7 @@ const DespertarExplanation = () => {
           Volver
         </Button>
         
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
             DESPERTAR 360° - Explicación Completa
           </h1>
@@ -92,40 +138,28 @@ const DespertarExplanation = () => {
             </div>
           )}
           
-          <div className="aspect-video bg-black/40 rounded-xl overflow-hidden mb-8">
-            {isLoading ? (
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
-              </div>
-            ) : (
-              <video 
-                className="w-full h-full object-cover"
-                controls
-                autoPlay
-                playsInline
+          <div className="flex flex-col lg:flex-row gap-8 mb-8">
+            <div className={`${isInstagramUrl ? 'lg:w-1/3' : 'lg:w-2/3'} aspect-auto bg-black/40 rounded-xl overflow-hidden`}>
+              {renderVideo()}
+            </div>
+            
+            <div className={`${isInstagramUrl ? 'lg:w-2/3' : 'lg:w-1/3'} bg-white/10 rounded-xl p-6 text-white`}>
+              <h2 className="text-2xl font-bold mb-4">Sobre DESPERTAR 360°</h2>
+              <p className="text-lg mb-4">
+                DESPERTAR 360° es un evento transformador diseñado para ayudarte a alcanzar 
+                tu máximo potencial a través de técnicas revolucionarias de reprogramación mental.
+              </p>
+              <p className="text-lg mb-4">
+                En este video, Felipe Griz explica detalladamente la metodología y los beneficios 
+                que obtendrás al participar en este evento único.
+              </p>
+              <Button 
+                className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full font-semibold"
+                onClick={() => navigate("/events/despertar-360")}
               >
-                <source src={explanationVideoPath} type="video/mp4" />
-                Tu navegador no soporta la reproducción de video.
-              </video>
-            )}
-          </div>
-          
-          <div className="bg-white/10 rounded-xl p-6 text-white">
-            <h2 className="text-2xl font-bold mb-4">Sobre DESPERTAR 360°</h2>
-            <p className="text-lg mb-4">
-              DESPERTAR 360° es un evento transformador diseñado para ayudarte a alcanzar 
-              tu máximo potencial a través de técnicas revolucionarias de reprogramación mental.
-            </p>
-            <p className="text-lg mb-4">
-              En este video, Felipe Griz explica detalladamente la metodología y los beneficios 
-              que obtendrás al participar en este evento único.
-            </p>
-            <Button 
-              className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full font-semibold"
-              onClick={() => navigate("/events/despertar-360")}
-            >
-              Ver detalles del evento
-            </Button>
+                Ver detalles del evento
+              </Button>
+            </div>
           </div>
         </div>
       </div>
