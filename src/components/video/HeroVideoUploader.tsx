@@ -1,11 +1,14 @@
+
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, Link as LinkIcon } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileUploadInput } from "./upload/FileUploadInput";
+import { InstagramUrlInput } from "./upload/InstagramUrlInput";
+import { UploadedPathDisplay } from "./upload/UploadedPathDisplay";
+import { formatInstagramUrl } from "./upload/VideoUrlHelpers";
+
+const MAX_FILE_SIZE_MB = 100;
 
 export const HeroVideoUploader = () => {
   const [uploading, setUploading] = useState(false);
@@ -13,7 +16,6 @@ export const HeroVideoUploader = () => {
   const [videoSize, setVideoSize] = useState<number | null>(null);
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   const [instagramUrl, setInstagramUrl] = useState('');
-  const MAX_FILE_SIZE_MB = 100;
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -77,29 +79,6 @@ export const HeroVideoUploader = () => {
     }
   };
 
-  const formatInstagramUrl = (url: string): string => {
-    let cleanUrl = url.split('?')[0];
-    cleanUrl = cleanUrl.replace(/\/+$/, '');
-    
-    let postId = '';
-    
-    if (cleanUrl.includes('/p/')) {
-      postId = cleanUrl.split('/p/')[1].split('/')[0];
-    } else if (cleanUrl.includes('/reel/')) {
-      postId = cleanUrl.split('/reel/')[1].split('/')[0];
-    }
-    
-    if (postId) {
-      return `https://www.instagram.com/p/${postId}/embed/?cr=1&v=14&wp=540&rd=https%3A%2F%2Flocalhost`;
-    }
-    
-    if (!cleanUrl.includes('/embed')) {
-      return `${cleanUrl}/embed`;
-    }
-    
-    return cleanUrl;
-  };
-
   const handleInstagramUrl = () => {
     if (!instagramUrl) {
       toast.error('Por favor ingresa una URL de Instagram');
@@ -131,99 +110,24 @@ export const HeroVideoUploader = () => {
         </TabsList>
 
         <TabsContent value="upload">
-          <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Sube un video para la página de explicación de DESPERTAR 360°. Tamaño máximo: {MAX_FILE_SIZE_MB}MB.
-            </p>
-            
-            <input
-              type="file"
-              accept="video/*"
-              onChange={handleFileUpload}
-              disabled={uploading}
-              className="hidden"
-              id="hero-video-upload"
-            />
-            
-            <label htmlFor="hero-video-upload">
-              <Button 
-                variant="outline" 
-                disabled={uploading}
-                className="cursor-pointer w-full"
-                asChild
-              >
-                <span>
-                  {uploading ? `Subiendo video... ${progress}%` : 'Seleccionar video para subir'}
-                </span>
-              </Button>
-            </label>
-            
-            {uploading && (
-              <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
-                <div 
-                  className="bg-primary h-full transition-all duration-300 ease-in-out"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            )}
-            
-            {videoSize && (
-              <div className="text-xs text-muted-foreground">
-                Tamaño del archivo: {videoSize.toFixed(2)} MB
-              </div>
-            )}
-          </div>
+          <FileUploadInput 
+            uploading={uploading}
+            progress={progress}
+            videoSize={videoSize}
+            handleFileUpload={handleFileUpload}
+          />
         </TabsContent>
 
-        <TabsContent value="instagram" className="space-y-4">
-          <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Ingresa la URL del video de Instagram que deseas usar
-            </p>
-            <div className="flex items-center space-x-2">
-              <LinkIcon className="text-muted-foreground h-4 w-4 flex-shrink-0" />
-              <Input
-                type="url"
-                placeholder="https://www.instagram.com/reel/..."
-                value={instagramUrl}
-                onChange={(e) => setInstagramUrl(e.target.value)}
-                className="flex-grow"
-              />
-            </div>
-            <div className="text-xs text-muted-foreground mt-1">
-              <p>Ejemplo: https://www.instagram.com/p/XXXX/ o https://www.instagram.com/reel/XXXX/</p>
-            </div>
-            <Button 
-              onClick={handleInstagramUrl}
-              className="w-full"
-            >
-              Procesar URL de Instagram
-            </Button>
-          </div>
+        <TabsContent value="instagram">
+          <InstagramUrlInput 
+            instagramUrl={instagramUrl}
+            setInstagramUrl={setInstagramUrl}
+            handleInstagramUrl={handleInstagramUrl}
+          />
         </TabsContent>
       </Tabs>
 
-      {uploadedPath && (
-        <Alert className="bg-green-50 border-green-200">
-          <AlertCircle className="h-4 w-4 text-green-600" />
-          <AlertTitle className="text-green-800">Video configurado correctamente</AlertTitle>
-          <AlertDescription className="text-green-700">
-            <p>Usa esta ruta en la variable <code className="bg-green-100 px-1 rounded">explanationVideoPath</code> en el archivo:</p>
-            <p className="font-mono text-xs mt-1 bg-green-100 p-2 rounded break-all">{uploadedPath}</p>
-            <Button 
-              onClick={() => {
-                navigator.clipboard.writeText(uploadedPath);
-                toast.success('Ruta copiada al portapapeles');
-              }}
-              variant="outline"
-              size="sm"
-              className="mt-2 text-xs bg-white border-green-300 text-green-700 hover:bg-green-50"
-            >
-              Copiar ruta
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
+      <UploadedPathDisplay uploadedPath={uploadedPath} />
 
       <div className="text-xs text-muted-foreground mt-2">
         <p>Después de configurar el video, debes actualizar la variable <code className="bg-muted px-1 rounded">explanationVideoPath</code> en el archivo <code className="bg-muted px-1 rounded">src/pages/events/DespertarExplanation.tsx</code>.</p>
