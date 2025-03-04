@@ -7,6 +7,9 @@ import { toast } from "sonner";
 export const HeroVideoUploader = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [videoSize, setVideoSize] = useState<number | null>(null);
+  // Aumentamos el tamaño máximo a 100MB
+  const MAX_FILE_SIZE_MB = 100;
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -19,15 +22,17 @@ export const HeroVideoUploader = () => {
       // Validate file type
       if (!file.type.startsWith('video/')) {
         toast.error('Por favor sube un archivo de video.');
+        setUploading(false);
         return;
       }
 
       // Show file size in MB
       const fileSizeMB = file.size / (1024 * 1024);
+      setVideoSize(fileSizeMB);
       console.log(`Subiendo archivo de ${fileSizeMB.toFixed(2)} MB`);
       
-      if (fileSizeMB > 50) {
-        toast.error('El archivo es demasiado grande. El límite es de 50MB.');
+      if (fileSizeMB > MAX_FILE_SIZE_MB) {
+        toast.error(`El archivo es demasiado grande. El límite es de ${MAX_FILE_SIZE_MB}MB.`);
         setUploading(false);
         return;
       }
@@ -35,17 +40,41 @@ export const HeroVideoUploader = () => {
       const fileExt = file.name.split('.').pop();
       const fileName = `hero-background-${Date.now()}.${fileExt}`;
       
-      // Upload to Supabase storage with progress tracking
+      // Track upload progress manually
+      const xhr = new XMLHttpRequest();
+      let uploadPromise = new Promise((resolve, reject) => {
+        xhr.upload.addEventListener('progress', (event) => {
+          if (event.lengthComputable) {
+            const percent = (event.loaded / event.total) * 100;
+            setProgress(Math.round(percent));
+            console.log(`Progreso: ${Math.round(percent)}%`);
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Upload failed'));
+        });
+
+        xhr.addEventListener('abort', () => {
+          reject(new Error('Upload aborted'));
+        });
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const response = JSON.parse(xhr.responseText);
+            resolve(response);
+          } else {
+            reject(new Error(`HTTP Error: ${xhr.status}`));
+          }
+        });
+      });
+
+      // Upload to Supabase storage
       const { data, error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
           cacheControl: '3600',
           upsert: false,
-          onUploadProgress: (progress) => {
-            const percent = progress.loaded / progress.total * 100;
-            setProgress(Math.round(percent));
-            console.log(`Progreso: ${Math.round(percent)}%`);
-          }
         });
 
       if (uploadError) {
@@ -69,6 +98,7 @@ export const HeroVideoUploader = () => {
       toast.error('Error al subir el video. Por favor, intenta de nuevo.');
     } finally {
       setUploading(false);
+      setVideoSize(null);
     }
   };
 
@@ -76,7 +106,7 @@ export const HeroVideoUploader = () => {
     <div className="space-y-4 p-6 bg-card/30 backdrop-blur-md rounded-xl border border-border">
       <h3 className="text-xl font-semibold">Subir Video de Fondo</h3>
       <p className="text-sm text-muted-foreground">
-        Sube un video corto para usar como fondo del hero section. Tamaño máximo: 50MB.
+        Sube un video corto para usar como fondo del hero section. Tamaño máximo: {MAX_FILE_SIZE_MB}MB.
       </p>
       
       <input
@@ -107,6 +137,12 @@ export const HeroVideoUploader = () => {
             className="bg-primary h-full transition-all duration-300 ease-in-out"
             style={{ width: `${progress}%` }}
           />
+        </div>
+      )}
+      
+      {videoSize && (
+        <div className="text-xs text-muted-foreground">
+          Tamaño del archivo: {videoSize.toFixed(2)} MB
         </div>
       )}
       
