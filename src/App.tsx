@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +20,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import OctavaArea from "./pages/courses/OctavaArea";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import { Loader2 } from "lucide-react";
+import UploadHeroVideo from "./pages/admin/UploadHeroVideo";
 
 const queryClient = new QueryClient();
 
@@ -112,6 +112,7 @@ const App = () => {
               } 
             />
             <Route path="/courses/octava-area" element={<OctavaArea />} />
+            <Route path="/admin/upload-hero-video" element={<UploadHeroVideo />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

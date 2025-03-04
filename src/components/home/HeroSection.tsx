@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  
+  // You can update this path after uploading a new video
+  const backgroundVideoPath = "/videos/background-loop.mp4";
 
   return (
     <section className="relative min-h-[100vh] overflow-hidden">
@@ -38,7 +41,7 @@ const HeroSection = () => {
                 loop 
                 playsInline
               >
-                <source src="/videos/background-loop.mp4" type="video/mp4" />
+                <source src={backgroundVideoPath} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               <div className="absolute inset-0 bg-gradient-to-r from-background/70 to-background/50"></div>
