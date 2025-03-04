@@ -15,10 +15,6 @@ Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
 Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
 
-# Simple non-www to www redirect (only once)
-RewriteCond %{HTTP_HOST} ^felipegriz\.com$ [NC]
-RewriteRule ^(.*)$ https://www.felipegriz.com/$1 [L,R=301]
-
 # Si el archivo solicitado existe, úsalo directamente
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]

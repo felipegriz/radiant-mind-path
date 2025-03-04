@@ -1,11 +1,4 @@
 
-# Simple redirect from non-www to www
-[[redirects]]
-  from = "https://felipegriz.com/*"
-  to = "https://www.felipegriz.com/:splat"
-  status = 301
-  force = true
-
 # Handle all routes with the SPA
 [[redirects]]
   from = "/*"
