@@ -1,9 +1,11 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { formatInstagramUrl } from "@/components/video/upload/VideoUrlHelpers";
 
 const DespertarExplanation = () => {
   const navigate = useNavigate();
@@ -14,6 +16,9 @@ const DespertarExplanation = () => {
   // Actualiza esta ruta después de subir tu video de explicación
   // Para Instagram, debe ser la URL completa con el formato: https://www.instagram.com/p/CODIGO/embed
   const explanationVideoPath = "https://www.instagram.com/reel/C6F2yMVAw_1/embed/";
+  
+  // Ensure the Instagram URL is properly formatted
+  const formattedVideoPath = formatInstagramUrl(explanationVideoPath);
   
   useEffect(() => {
     // Simular la carga del video
@@ -35,13 +40,13 @@ const DespertarExplanation = () => {
       
       setIsInstagramUrl(isInstagram);
       console.log("¿Es video de Instagram?", isInstagram);
-      console.log("URL del video:", explanationVideoPath);
+      console.log("URL del video:", formattedVideoPath);
     };
     
     checkIfAdmin();
     checkIfInstagramUrl();
     return () => clearTimeout(timer);
-  }, []);
+  }, [formattedVideoPath]);
 
   const handleCopyInstructions = () => {
     const instructions = `
@@ -64,13 +69,13 @@ const DespertarExplanation = () => {
     }
 
     if (isInstagramUrl) {
-      console.log("Renderizando video de Instagram:", explanationVideoPath);
+      console.log("Renderizando video de Instagram:", formattedVideoPath);
       
       return (
         <div className="w-full h-full flex items-center justify-center">
           <iframe 
-            src={explanationVideoPath}
-            className="instagram-media w-full h-[600px] md:h-[700px]"
+            src={formattedVideoPath}
+            className="instagram-media w-full h-[600px] md:h-[700px]" 
             frameBorder="0"
             scrolling="no"
             allowFullScreen
@@ -87,7 +92,7 @@ const DespertarExplanation = () => {
         playsInline
         autoPlay
       >
-        <source src={explanationVideoPath} type="video/mp4" />
+        <source src={formattedVideoPath} type="video/mp4" />
         Tu navegador no soporta la reproducción de video.
       </video>
     );
