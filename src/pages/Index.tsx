@@ -17,9 +17,7 @@ const Index = () => {
         <Navbar />
       </motion.div>
       
-      <div className="bg-gradient-to-b from-gray-800 to-background">
-        <HeroSection />
-      </div>
+      <HeroSection />
 
       <div className="container mx-auto px-4">
         <FeaturesSection />
