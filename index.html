@@ -9,13 +9,11 @@
     <meta name="author" content="Felipe Griz" />
     <meta property="og:image" content="/og-image.png" />
     <script>
-      // Redirigir de felipegriz.com a www.felipegriz.com en producción
-      if (window.location.hostname === 'felipegriz.com') {
-        window.location.href = 'https://www.felipegriz.com' + window.location.pathname + window.location.search + window.location.hash;
+      if (window.location.hostname === 'felipegriz.com' && window.location.protocol === 'https:') {
+        window.location.href = 'https://www.felipegriz.com' + window.location.pathname;
       }
     </script>
   </head>
-
   <body>
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
