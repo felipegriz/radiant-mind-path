@@ -13,6 +13,17 @@ export const useAuthForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Función para obtener la URL base del sitio
+  const getBaseUrl = () => {
+    // En desarrollo, usar localhost
+    if (window.location.hostname === "localhost") {
+      return `${window.location.protocol}//${window.location.host}`;
+    }
+    
+    // En producción, usar la URL actual (con o sin www)
+    return `${window.location.protocol}//${window.location.host}`;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -112,8 +123,13 @@ export const useAuthForm = () => {
         throw new Error("Por favor ingresa tu correo electrónico");
       }
 
+      const baseUrl = getBaseUrl();
+      const resetUrl = `${baseUrl}/auth/reset-password`;
+      
+      console.log(`Sending password reset with redirect to: ${resetUrl}`);
+
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: 'https://www.felipegriz.com/auth/reset-password'
+        redirectTo: resetUrl
       });
 
       if (error) throw error;
