@@ -1,5 +1,17 @@
 
 [[redirects]]
+  from = "http://felipegriz.com/*"
+  to = "https://www.felipegriz.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://felipegriz.com/*"
+  to = "https://www.felipegriz.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

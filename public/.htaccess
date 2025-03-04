@@ -15,12 +15,13 @@ Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
 Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept"
 
-# Asegurar que el dominio correcto se use
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://felipegriz.com/$1 [L,R=301]
+# Redirect non-www to www (only for production)
+RewriteCond %{HTTP_HOST} ^felipegriz\.com$ [NC]
+RewriteRule ^(.*)$ https://www.felipegriz.com/$1 [L,R=301]
 
-RewriteCond %{HTTP_HOST} !^felipegriz\.com$ [NC]
-RewriteRule ^(.*)$ https://felipegriz.com/$1 [L,R=301]
+# Ensure HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [L,R=301]
 
 # Si el archivo o directorio solicitado existe, úsalo directamente
 RewriteCond %{REQUEST_FILENAME} !-f
