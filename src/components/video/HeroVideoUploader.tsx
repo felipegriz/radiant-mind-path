@@ -22,19 +22,34 @@ export const HeroVideoUploader = () => {
         return;
       }
 
+      // Show file size in MB
+      const fileSizeMB = file.size / (1024 * 1024);
+      console.log(`Subiendo archivo de ${fileSizeMB.toFixed(2)} MB`);
+      
+      if (fileSizeMB > 50) {
+        toast.error('El archivo es demasiado grande. El límite es de 50MB.');
+        setUploading(false);
+        return;
+      }
+
       const fileExt = file.name.split('.').pop();
       const fileName = `hero-background-${Date.now()}.${fileExt}`;
       
-      // Upload to Supabase storage
+      // Upload to Supabase storage with progress tracking
       const { data, error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
           cacheControl: '3600',
           upsert: false,
-          // Use the onUploadProgress function through the upload events
+          onUploadProgress: (progress) => {
+            const percent = progress.loaded / progress.total * 100;
+            setProgress(Math.round(percent));
+            console.log(`Progreso: ${Math.round(percent)}%`);
+          }
         });
 
       if (uploadError) {
+        console.error('Error de carga:', uploadError);
         throw uploadError;
       }
 
@@ -61,7 +76,7 @@ export const HeroVideoUploader = () => {
     <div className="space-y-4 p-6 bg-card/30 backdrop-blur-md rounded-xl border border-border">
       <h3 className="text-xl font-semibold">Subir Video de Fondo</h3>
       <p className="text-sm text-muted-foreground">
-        Sube un video corto para usar como fondo del hero section. Se recomienda un video de menos de 10MB.
+        Sube un video corto para usar como fondo del hero section. Tamaño máximo: 50MB.
       </p>
       
       <input
@@ -97,9 +112,18 @@ export const HeroVideoUploader = () => {
       
       <div className="text-xs text-muted-foreground mt-2">
         <p>Nota: Después de subir el video, la ruta se copiará automáticamente al portapapeles.</p>
-        <p>Actualiza la ruta del video en el componente HeroSection.tsx, en la etiqueta source.</p>
+        <p>Actualiza la ruta del video en el componente HeroSection.tsx, en la variable backgroundVideoPath.</p>
+      </div>
+
+      <div className="mt-4 p-3 bg-amber-100/10 border border-amber-200/20 rounded-lg">
+        <h4 className="text-sm font-medium text-amber-700">Consejos para optimizar videos:</h4>
+        <ul className="text-xs text-muted-foreground list-disc pl-4 mt-1 space-y-1">
+          <li>Usa un formato como MP4 con códec h.264 para mejor compatibilidad.</li>
+          <li>Reduce la resolución a 720p o menos para videos de fondo.</li>
+          <li>Comprime el video antes de subirlo usando herramientas como <a href="https://handbrake.fr/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Handbrake</a> (gratis).</li>
+          <li>Mantén la duración del video lo más corta posible para reducir el tamaño.</li>
+        </ul>
       </div>
     </div>
   );
 };
-
