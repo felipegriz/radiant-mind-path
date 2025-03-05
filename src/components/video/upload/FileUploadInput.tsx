@@ -7,18 +7,20 @@ interface FileUploadInputProps {
   progress: number;
   videoSize: number | null;
   handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  maxFileSize?: number;
 }
 
 export const FileUploadInput = ({ 
   uploading, 
   progress, 
   videoSize, 
-  handleFileUpload 
+  handleFileUpload,
+  maxFileSize = 100
 }: FileUploadInputProps) => {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        Sube un video para la página de explicación de DESPERTAR 360°. Tamaño máximo: 100MB.
+        Sube un video para la página de explicación de DESPERTAR 360°. Tamaño máximo: {maxFileSize}MB.
       </p>
       
       <input

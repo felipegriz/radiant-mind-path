@@ -8,7 +8,7 @@ import { InstagramUrlInput } from "./upload/InstagramUrlInput";
 import { UploadedPathDisplay } from "./upload/UploadedPathDisplay";
 import { formatInstagramUrl } from "./upload/VideoUrlHelpers";
 
-const MAX_FILE_SIZE_MB = 100;
+const MAX_FILE_SIZE_MB = 2000; // Aumentado de 100MB a 2000MB (2GB)
 
 export const HeroVideoUploader = () => {
   const [uploading, setUploading] = useState(false);
@@ -115,6 +115,7 @@ export const HeroVideoUploader = () => {
             progress={progress}
             videoSize={videoSize}
             handleFileUpload={handleFileUpload}
+            maxFileSize={MAX_FILE_SIZE_MB}
           />
         </TabsContent>
 
