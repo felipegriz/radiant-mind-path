@@ -73,18 +73,35 @@ export const HeroVideoUploader = () => {
       const fileExt = file.name.split('.').pop();
       const fileName = `explanation-video-${Date.now()}.${fileExt}`;
       
-      // Usar el nuevo método upload con soporte para seguimiento de progreso
+      // Implementar seguimiento manual del progreso para archivos grandes
+      // Dividimos la subida en intervalos para actualizar el progreso visualmente
+      const startTime = Date.now();
+      const updateProgressInterval = setInterval(() => {
+        if (uploading) {
+          const elapsedTime = (Date.now() - startTime) / 1000; // segundos
+          // Estimamos el progreso basado en el tiempo transcurrido y tamaño del archivo
+          // Esta es una estimación aproximada
+          const estimatedProgress = Math.min(
+            Math.round((elapsedTime / (fileSizeMB / 10)) * 100), 
+            99
+          ); // Nunca llegamos a 100% hasta confirmar
+          if (estimatedProgress > progress) {
+            setProgress(estimatedProgress);
+            console.log(`Progreso estimado: ${estimatedProgress}%`);
+          }
+        }
+      }, 2000);
+      
+      // Realizar la carga del archivo
       const { data, error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
           cacheControl: '3600',
-          upsert: true,
-          onUploadProgress: (progress) => {
-            const percent = Math.round((progress.loaded / progress.total) * 100);
-            setProgress(percent);
-            console.log(`Progreso de carga: ${percent}%`);
-          }
+          upsert: true
         });
+
+      // Limpiar el intervalo una vez completada la carga
+      clearInterval(updateProgressInterval);
 
       if (uploadError) {
         console.error('Error de carga:', uploadError);
