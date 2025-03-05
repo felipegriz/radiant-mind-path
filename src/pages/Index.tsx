@@ -5,7 +5,7 @@ import StatisticsSection from "@/components/home/StatisticsSection";
 import QuoteSection from "@/components/home/QuoteSection";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const navigate = useNavigate();
