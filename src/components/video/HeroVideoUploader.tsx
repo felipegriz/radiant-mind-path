@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,6 +7,7 @@ import { FileUploadInput } from "./upload/FileUploadInput";
 import { InstagramUrlInput } from "./upload/InstagramUrlInput";
 import { UploadedPathDisplay } from "./upload/UploadedPathDisplay";
 import { formatInstagramUrl } from "./upload/VideoUrlHelpers";
+import { Progress } from "@/components/ui/progress";
 
 const MAX_FILE_SIZE_MB = 2000; // Aumentado de 100MB a 2000MB (2GB)
 
@@ -16,12 +17,39 @@ export const HeroVideoUploader = () => {
   const [videoSize, setVideoSize] = useState<number | null>(null);
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   const [instagramUrl, setInstagramUrl] = useState('');
+  const [uploadStartTime, setUploadStartTime] = useState<number | null>(null);
+  const [estimatedTimeLeft, setEstimatedTimeLeft] = useState<string | null>(null);
+
+  // Efecto para actualizar el tiempo estimado
+  useEffect(() => {
+    if (uploading && uploadStartTime && progress > 0) {
+      const elapsedTime = (Date.now() - uploadStartTime) / 1000; // en segundos
+      const totalEstimatedTime = elapsedTime * (100 / progress);
+      const timeLeft = totalEstimatedTime - elapsedTime;
+      
+      if (timeLeft > 0) {
+        // Formatear el tiempo restante
+        let timeString = '';
+        if (timeLeft > 3600) {
+          timeString = `${Math.floor(timeLeft / 3600)} horas ${Math.floor((timeLeft % 3600) / 60)} min`;
+        } else if (timeLeft > 60) {
+          timeString = `${Math.floor(timeLeft / 60)} minutos`;
+        } else {
+          timeString = `${Math.floor(timeLeft)} segundos`;
+        }
+        setEstimatedTimeLeft(timeString);
+      }
+    } else if (!uploading) {
+      setEstimatedTimeLeft(null);
+    }
+  }, [uploading, progress, uploadStartTime]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
       setUploading(true);
       setProgress(0);
       setUploadedPath(null);
+      setUploadStartTime(Date.now());
       
       const file = event.target.files?.[0];
       if (!file) return;
@@ -45,11 +73,17 @@ export const HeroVideoUploader = () => {
       const fileExt = file.name.split('.').pop();
       const fileName = `explanation-video-${Date.now()}.${fileExt}`;
       
+      // Usar el nuevo método upload con soporte para seguimiento de progreso
       const { data, error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
           cacheControl: '3600',
           upsert: true,
+          onUploadProgress: (progress) => {
+            const percent = Math.round((progress.loaded / progress.total) * 100);
+            setProgress(percent);
+            console.log(`Progreso de carga: ${percent}%`);
+          }
         });
 
       if (uploadError) {
@@ -117,6 +151,18 @@ export const HeroVideoUploader = () => {
             handleFileUpload={handleFileUpload}
             maxFileSize={MAX_FILE_SIZE_MB}
           />
+
+          {uploading && estimatedTimeLeft && (
+            <div className="mt-2 text-xs text-muted-foreground">
+              Tiempo estimado restante: {estimatedTimeLeft}
+            </div>
+          )}
+
+          {uploading && progress === 0 && (
+            <div className="mt-2 text-amber-500 text-sm">
+              La carga está en proceso pero aún no se ha registrado progreso. Para archivos grandes, esto puede tomar unos momentos.
+            </div>
+          )}
         </TabsContent>
 
         <TabsContent value="instagram">

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 interface FileUploadInputProps {
   uploading: boolean;
@@ -46,11 +47,11 @@ export const FileUploadInput = ({
       </label>
       
       {uploading && (
-        <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
-          <div 
-            className="bg-primary h-full transition-all duration-300 ease-in-out"
-            style={{ width: `${progress}%` }}
-          />
+        <div className="space-y-2">
+          <Progress value={progress} className="h-2" />
+          <div className="text-xs text-muted-foreground text-center">
+            {progress === 0 ? 'Iniciando carga...' : `${progress}% completado`}
+          </div>
         </div>
       )}
       
