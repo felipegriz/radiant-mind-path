@@ -76,7 +76,9 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
         className={`p-6 rounded-xl shadow-lg hover:shadow-xl flex flex-col h-full ${
           price.id === 'platinum' 
             ? 'bg-[#2A3456] bg-opacity-80' 
-            : 'bg-[#1A1F2C]'
+            : price.id === 'vip'
+              ? 'bg-[#32293A] bg-opacity-80'
+              : 'bg-[#243042] bg-opacity-80'
         }`}
       >
         <div className="flex flex-col items-center text-center mb-4">
