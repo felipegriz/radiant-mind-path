@@ -1,16 +1,19 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ExplanationVideoPlayer } from "@/components/video/ExplanationVideoPlayer";
-import { EventSidebar } from "@/components/events/despertar360/EventSidebar";
 import { formatVimeoUrl } from "@/components/video/upload/VimeoUrlHelpers";
+import { PricingSection } from "@/components/events/despertar360/PricingSection";
+import type { EventPrice } from "@/types/event";
 
 const DespertarExplanation = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [prices, setPrices] = useState<EventPrice[]>([]);
   
   const vimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
   const formattedVideoPath = formatVimeoUrl(vimeoUrl);
@@ -25,7 +28,43 @@ const DespertarExplanation = () => {
       setIsAdmin(isUserAdmin);
     };
     
+    // Set fixed prices
+    const loadPrices = () => {
+      const fixedPrices: EventPrice[] = [
+        {
+          id: "general",
+          event_name: "despertar-360-general",
+          price_amount: 5000,
+          currency: "USD",
+          is_active: true,
+          ticket_description: "GENERAL",
+          valid_until: new Date(2024, 11, 31).toISOString()
+        },
+        {
+          id: "vip",
+          event_name: "despertar-360-vip",
+          price_amount: 15000,
+          currency: "USD",
+          is_active: true,
+          ticket_description: "VIP",
+          valid_until: new Date(2024, 11, 31).toISOString()
+        },
+        {
+          id: "platinum",
+          event_name: "despertar-360-platinum",
+          price_amount: 30000,
+          currency: "USD",
+          is_active: true,
+          ticket_description: "VIP PLATINO",
+          valid_until: new Date(2024, 11, 31).toISOString()
+        }
+      ];
+
+      setPrices(fixedPrices);
+    };
+    
     checkIfAdmin();
+    loadPrices();
     return () => clearTimeout(timer);
   }, []);
 
@@ -88,15 +127,13 @@ const DespertarExplanation = () => {
                   Este no es un seminario más, es una experiencia transformadora que ha cambiado la 
                   vida de más de 10,000 personas en América Latina.
                 </p>
-                
-                <Button 
-                  className="mt-6 bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full font-semibold w-full"
-                  onClick={() => navigate("/events/despertar-360")}
-                >
-                  Ver fechas y precios
-                </Button>
               </div>
             </div>
+          </div>
+          
+          {/* Integrated Pricing Section */}
+          <div id="pricing-section" className="mt-16">
+            <PricingSection prices={prices} />
           </div>
           
           <div className="bg-white/5 rounded-xl p-8 text-white mt-12">
@@ -133,15 +170,6 @@ const DespertarExplanation = () => {
                 <p>Transforma tu relación con la abundancia y elimina los bloqueos que te impiden prosperar financieramente.</p>
               </div>
             </div>
-            
-            <div className="mt-10 text-center">
-              <Button 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-6 text-lg rounded-full font-semibold"
-                onClick={() => navigate("/events/despertar-360")}
-              >
-                Quiero transformar mi vida ahora
-              </Button>
-            </div>
           </div>
           
           <div className="bg-white/5 rounded-xl p-8 text-white mt-12">
@@ -165,15 +193,6 @@ const DespertarExplanation = () => {
                 </p>
                 <p className="font-semibold">María López, 42 años</p>
               </div>
-            </div>
-            
-            <div className="mt-10 text-center">
-              <Button 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground px-10 py-6 text-lg rounded-full font-semibold"
-                onClick={() => navigate("/events/despertar-360")}
-              >
-                Reserva tu lugar ahora
-              </Button>
             </div>
           </div>
         </div>
