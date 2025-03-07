@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ExplanationVideoPlayer } from "@/components/video/ExplanationVideoPlayer";
-import { VideoUploadInstructions } from "@/components/admin/VideoUploadInstructions";
 import { EventSidebar } from "@/components/events/despertar360/EventSidebar";
 import { formatVimeoUrl } from "@/components/video/upload/VimeoUrlHelpers";
 
@@ -56,8 +55,7 @@ const DespertarExplanation = () => {
             DESPERTAR 360° - Explicación Completa
           </h1>
           
-          {/* Instrucciones para subir video - visible para todos */}
-          <VideoUploadInstructions />
+          {/* Se eliminó la sección de VideoUploadInstructions */}
           
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
             <div className="lg:w-2/3 aspect-auto bg-black/40 rounded-xl overflow-hidden">
