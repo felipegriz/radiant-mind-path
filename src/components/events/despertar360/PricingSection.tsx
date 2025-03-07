@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -138,12 +137,12 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
       <h2 className="text-3xl font-bold text-primary text-center mb-8">Elige tu Entrada</h2>
       
       <div className="grid md:grid-cols-2 gap-8 mb-8">
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full">
           <h3 className="text-2xl font-bold text-white text-center mb-4">OPCIÓN 1</h3>
           {renderPriceCard(generalPrice)}
         </div>
         
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full">
           <div className="text-center mb-4">
             <h3 className="text-2xl font-bold text-white">OPCIÓN 2</h3>
             <h4 className="text-xl font-bold text-white">COMBO UPGRADE A VIP 3X1</h4>
