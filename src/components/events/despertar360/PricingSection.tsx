@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -21,7 +20,6 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
     return aOrder - bOrder;
   });
   
-  // Get ticket details for display
   const getTicketDetails = (priceId: string) => {
     switch(priceId) {
       case 'general':
@@ -56,12 +54,10 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
     }
   };
 
-  // Filter the prices by type
   const generalPrice = orderedPrices.find(price => price.id === 'general');
   const vipPrice = orderedPrices.find(price => price.id === 'vip');
   const platinumPrice = orderedPrices.find(price => price.id === 'platinum');
 
-  // Helper function to render a price card
   const renderPriceCard = (price: EventPrice | undefined, title?: string) => {
     if (!price) return null;
     
@@ -129,22 +125,21 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
     >
       <h2 className="text-3xl font-bold text-primary text-center mb-8">Elige tu Entrada</h2>
       
-      {/* First row with Option 1 and Option 2 */}
       <div className="grid md:grid-cols-2 gap-8 mb-8">
-        {/* Option 1 - General */}
         <div className="flex flex-col">
           <h3 className="text-2xl font-bold text-white text-center mb-4">OPCIÓN UNO</h3>
           {renderPriceCard(generalPrice)}
         </div>
         
-        {/* Option 2 - VIP */}
         <div className="flex flex-col">
-          <h3 className="text-2xl font-bold text-white text-center mb-4">OPCIÓN DOS - COMBO UPGRADE A VIP 3X1</h3>
+          <div className="text-center mb-4">
+            <h3 className="text-2xl font-bold text-white">OPCIÓN DOS</h3>
+            <h4 className="text-xl font-bold text-white">COMBO UPGRADE A VIP 3X1</h4>
+          </div>
           {renderPriceCard(vipPrice)}
         </div>
       </div>
       
-      {/* Second row with Platinum option */}
       <div className="md:max-w-md mx-auto">
         {renderPriceCard(platinumPrice)}
       </div>
