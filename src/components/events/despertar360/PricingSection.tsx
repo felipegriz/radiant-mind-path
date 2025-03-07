@@ -30,12 +30,12 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
         ];
       case 'vip':
         return [
-          'Escarapela Vip',
-          '3 Entradas a 3 DESPERTAR',
-          'Ubicaión VIP - Mesa',
-          'Workbook de Trabajo',
-          '1 Mes Accionadores',
-          '1 Mes de sesiones de Q&A grupales'
+          '3 Entradas VIP al evento',
+          '1 Mes del programa ACCIONADORES',
+          '1 Mes de sesiones de Q&A grupales',
+          'Ubicación VIP',
+          'Mesa cómoda para toma de apuntes',
+          'Workbook de trabajo'
         ];
       case 'platinum':
         return [
