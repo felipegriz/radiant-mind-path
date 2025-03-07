@@ -8,7 +8,7 @@ interface PricingSectionProps {
 }
 
 const STRIPE_PAYMENT_LINKS = {
-  general: "https://buy.stripe.com/4gw29F7bM4nX6l26qW",
+  general: "https://buy.stripe.com/dR6aGbcw6aMleRy2aT",
   vip: "https://buy.stripe.com/00gdSn9jU07H38Q16L",
   platinum: "https://buy.stripe.com/aEU15B1RsaMldNu9Di"
 };
