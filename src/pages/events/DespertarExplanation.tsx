@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -13,10 +12,9 @@ const DespertarExplanation = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   
-  // Actualiza esta ruta después de subir tu video de explicación
-  // Para Vimeo (recomendado), usa: https://player.vimeo.com/video/CODIGO
-  // Para Instagram (no recomendado), usa formato: https://www.instagram.com/p/CODIGO/
-  const explanationVideoPath = "/videos/explanation-video-1695400177777.mp4";
+  // IMPORTANTE: Actualiza esta URL con la que copiaste de la página de subida de videos
+  // Ejemplo de URL de Vimeo correcta: https://player.vimeo.com/video/123456789
+  const explanationVideoPath = "https://player.vimeo.com/video/123456789"; // Reemplaza este valor
   
   useEffect(() => {
     // Simular la carga del video
@@ -53,7 +51,7 @@ const DespertarExplanation = () => {
             DESPERTAR 360° - Explicación Completa
           </h1>
           
-          {/* Instrucciones para subir video - ahora visible para todos */}
+          {/* Instrucciones para subir video - visible para todos */}
           <VideoUploadInstructions />
           
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
