@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -69,7 +70,7 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-[#1A1F2C] p-6 rounded-xl shadow-lg hover:shadow-xl flex flex-col"
+        className="bg-[#1A1F2C] p-6 rounded-xl shadow-lg hover:shadow-xl flex flex-col h-full"
       >
         <div className="flex flex-col items-center text-center mb-4">
           {price.event_name.includes('platinum') ? (
@@ -127,13 +128,13 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
       
       <div className="grid md:grid-cols-2 gap-8 mb-8">
         <div className="flex flex-col">
-          <h3 className="text-2xl font-bold text-white text-center mb-4">OPCIÓN UNO</h3>
+          <h3 className="text-2xl font-bold text-white text-center mb-4">OPCIÓN 1</h3>
           {renderPriceCard(generalPrice)}
         </div>
         
         <div className="flex flex-col">
           <div className="text-center mb-4">
-            <h3 className="text-2xl font-bold text-white">OPCIÓN DOS</h3>
+            <h3 className="text-2xl font-bold text-white">OPCIÓN 2</h3>
             <h4 className="text-xl font-bold text-white">COMBO UPGRADE A VIP 3X1</h4>
           </div>
           {renderPriceCard(vipPrice)}
