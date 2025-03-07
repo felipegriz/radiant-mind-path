@@ -39,8 +39,8 @@ const DespertarExplanation = () => {
           price_amount: 5000,
           currency: "USD",
           is_active: true,
-          ticket_description: "GENERAL",
-          valid_until: new Date(2024, 11, 31).toISOString()
+          ticket_description: "ENTRADA GENERAL",
+          valid_until: new Date(2025, 2, 10).toISOString() // 10 de marzo de 2025 (mes es 0-indexado)
         },
         {
           id: "vip",

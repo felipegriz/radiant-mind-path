@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -62,6 +63,12 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
     
     const ticketDetails = getTicketDetails(price.id);
     
+    // Personalizar la fecha de validez para la opción "general"
+    let validUntilDate = new Date(price.valid_until);
+    if (price.id === 'general') {
+      validUntilDate = new Date(2025, 2, 10); // 10 de marzo de 2025 (mes es 0-indexado)
+    }
+    
     return (
       <motion.div
         key={price.id}
@@ -78,12 +85,14 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
           ) : (
             <Users className="w-12 h-12 text-accent mb-4" />
           )}
-          <h3 className="text-xl font-semibold text-white mb-2">{price.ticket_description}</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">
+            {price.id === 'general' ? "ENTRADA GENERAL" : price.ticket_description}
+          </h3>
           <p className="text-2xl font-bold text-accent mb-2">
             ${(price.price_amount / 100).toFixed(0)} {price.currency}
           </p>
           <p className="text-sm text-gray-300 mb-4">
-            Válido hasta el {new Date(price.valid_until).toLocaleDateString()}
+            Válido hasta el {validUntilDate.toLocaleDateString()}
           </p>
         </div>
         
