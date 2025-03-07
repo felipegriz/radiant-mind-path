@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -39,15 +38,13 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
         ];
       case 'platinum':
         return [
-          'Escarapela Platinum',
-          'Entradas 3 días',
-          'Ubicación privilegiada primeras filas',
-          'Foto con Felipe',
-          'Almuerzo y Networking Premium con Felipe',
-          'Mesa para tomar apuntes con comodidad',
-          'Workbook de Trabajo',
-          '1 Mes Accionadores',
-          '1 Mes de sesiones de Q&A grupales'
+          'Ubicación en las primeras filas del evento',
+          'Almuerzo VIP y consultoría de negocios con Felipe',
+          'Foto profesional con Felipe',
+          '1 Mes del programa ACCIONADORES',
+          '1 Mes de sesiones de Q&A grupales',
+          'Mesa cómoda para toma de apuntes',
+          'Workbook de trabajo'
         ];
       default:
         return [];
@@ -63,9 +60,9 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
     
     const ticketDetails = getTicketDetails(price.id);
     
-    // Personalizar la fecha de validez para la opción "general"
+    // Personalizar la fecha de validez para las opciones
     let validUntilDate = new Date(price.valid_until);
-    if (price.id === 'general') {
+    if (price.id === 'general' || price.id === 'platinum') {
       validUntilDate = new Date(2025, 2, 10); // 10 de marzo de 2025 (mes es 0-indexado)
     }
     

@@ -58,7 +58,7 @@ const DespertarExplanation = () => {
           currency: "USD",
           is_active: true,
           ticket_description: "VIP PLATINO",
-          valid_until: new Date(2024, 11, 31).toISOString()
+          valid_until: new Date(2025, 2, 10).toISOString() // Updated to March 10, 2025
         }
       ];
 
