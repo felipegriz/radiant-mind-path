@@ -32,6 +32,15 @@ export const formatVimeoUrl = (url: string): string => {
     return formattedUrl;
   }
   
+  // Handle format like vimeo.com/1062910579/05e72b4425
+  if (formattedUrl.match(/vimeo\.com\/\d+\/[a-zA-Z0-9]+/)) {
+    // Extract the main video ID (first number in the path)
+    const matches = formattedUrl.match(/vimeo\.com\/(\d+)/);
+    if (matches && matches[1]) {
+      return `https://player.vimeo.com/video/${matches[1]}`;
+    }
+  }
+  
   // Extract the Vimeo ID (should be numeric)
   const urlParts = formattedUrl.split('/');
   const lastPart = urlParts[urlParts.length - 1];

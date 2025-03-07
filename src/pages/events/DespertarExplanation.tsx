@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ExplanationVideoPlayer } from "@/components/video/ExplanationVideoPlayer";
 import { VideoUploadInstructions } from "@/components/admin/VideoUploadInstructions";
 import { EventSidebar } from "@/components/events/despertar360/EventSidebar";
+import { formatVimeoUrl } from "@/components/video/upload/VimeoUrlHelpers";
 
 const DespertarExplanation = () => {
   const navigate = useNavigate();
@@ -14,9 +15,8 @@ const DespertarExplanation = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   
   // IMPORTANTE: Actualiza esta URL con la que copiaste de la página de subida de videos
-  // Ejemplo de URL de Vimeo correcta: https://player.vimeo.com/video/123456789
-  const explanationVideoPath = "https://player.vimeo.com/video/05e72b4425".replace(/[^0-9]/g, '');
-  const formattedVideoPath = `https://player.vimeo.com/video/${explanationVideoPath}`;
+  const correctVimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
+  const formattedVideoPath = formatVimeoUrl(correctVimeoUrl);
   
   useEffect(() => {
     // Simular la carga del video
