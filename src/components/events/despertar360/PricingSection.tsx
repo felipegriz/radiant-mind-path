@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -25,8 +24,7 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
     switch(priceId) {
       case 'general':
         return [
-          'Escarapela',
-          'Entrada 3 DESPERTAR',
+          'Ubicación General',
           'Workbook de Trabajo'
         ];
       case 'vip':
