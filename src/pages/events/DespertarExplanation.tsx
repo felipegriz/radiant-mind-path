@@ -52,7 +52,7 @@ const DespertarExplanation = () => {
         
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            DESPERTAR 360° - Explicación Completa
+            DESPERTAR 360° - Aprende en 11 minutos porque es el seminario número uno de habla hispana
           </h1>
           
           {/* Se eliminó la sección de VideoUploadInstructions */}
