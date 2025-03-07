@@ -1,69 +1,22 @@
 
 import React, { useState } from 'react';
-import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InstagramUrlInput } from "./upload/InstagramUrlInput";
 import { UploadedPathDisplay } from "./upload/UploadedPathDisplay";
-import { formatInstagramUrl } from "./upload/VideoUrlHelpers";
 import { VimeoUrlInput } from "./upload/VimeoUrlInput";
+import { handleInstagramUrl, handleVimeoUrl } from "./upload/VideoUrlHandlers";
 
 export const HeroVideoUploader = () => {
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   const [instagramUrl, setInstagramUrl] = useState('');
   const [vimeoUrl, setVimeoUrl] = useState('');
 
-  const handleInstagramUrl = () => {
-    if (!instagramUrl) {
-      toast.error('Por favor ingresa una URL de Instagram');
-      return;
-    }
-
-    try {
-      const formattedUrl = formatInstagramUrl(instagramUrl.trim());
-      console.log('Formatted Instagram URL:', formattedUrl);
-      
-      setUploadedPath(formattedUrl);
-      
-      navigator.clipboard.writeText(formattedUrl);
-      toast.warning('URL de Instagram procesada. Recomendamos usar Vimeo para mejor experiencia.');
-    } catch (error) {
-      console.error('Error al procesar la URL de Instagram:', error);
-      toast.error('Error al procesar la URL. Verifica que sea una URL válida de Instagram');
-    }
+  const processInstagramUrl = () => {
+    handleInstagramUrl(instagramUrl, setUploadedPath);
   };
 
-  const handleVimeoUrl = () => {
-    if (!vimeoUrl) {
-      toast.error('Por favor ingresa una URL de Vimeo');
-      return;
-    }
-
-    try {
-      // Simple validation to ensure it's a Vimeo URL
-      if (!vimeoUrl.includes('vimeo.com')) {
-        toast.error('Por favor ingresa una URL válida de Vimeo (debe contener vimeo.com)');
-        return;
-      }
-
-      // Format URL to embed format if it's not already
-      let formattedUrl = vimeoUrl.trim();
-      if (!formattedUrl.includes('/embed')) {
-        // Extract the Vimeo ID
-        const vimeoId = formattedUrl.split('/').pop();
-        if (vimeoId) {
-          formattedUrl = `https://player.vimeo.com/video/${vimeoId}`;
-        }
-      }
-      
-      console.log('Formatted Vimeo URL:', formattedUrl);
-      setUploadedPath(formattedUrl);
-      
-      navigator.clipboard.writeText(formattedUrl);
-      toast.success('URL de Vimeo procesada. La dirección ha sido copiada al portapapeles.');
-    } catch (error) {
-      console.error('Error al procesar la URL de Vimeo:', error);
-      toast.error('Error al procesar la URL. Verifica que sea una URL válida de Vimeo');
-    }
+  const processVimeoUrl = () => {
+    handleVimeoUrl(vimeoUrl, setUploadedPath);
   };
 
   return (
@@ -85,7 +38,7 @@ export const HeroVideoUploader = () => {
           <VimeoUrlInput 
             vimeoUrl={vimeoUrl}
             setVimeoUrl={setVimeoUrl}
-            handleVimeoUrl={handleVimeoUrl}
+            handleVimeoUrl={processVimeoUrl}
           />
         </TabsContent>
 
@@ -98,7 +51,7 @@ export const HeroVideoUploader = () => {
           <InstagramUrlInput 
             instagramUrl={instagramUrl}
             setInstagramUrl={setInstagramUrl}
-            handleInstagramUrl={handleInstagramUrl}
+            handleInstagramUrl={processInstagramUrl}
           />
         </TabsContent>
       </Tabs>
