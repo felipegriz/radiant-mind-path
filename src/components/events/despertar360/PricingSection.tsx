@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Users, Crown, Star } from "lucide-react";
 import type { EventPrice } from "@/types/event";
@@ -72,7 +73,11 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-[#1A1F2C] p-6 rounded-xl shadow-lg hover:shadow-xl flex flex-col h-full"
+        className={`p-6 rounded-xl shadow-lg hover:shadow-xl flex flex-col h-full ${
+          price.id === 'platinum' 
+            ? 'bg-[#2A3456] bg-opacity-80' 
+            : 'bg-[#1A1F2C]'
+        }`}
       >
         <div className="flex flex-col items-center text-center mb-4">
           {price.event_name.includes('platinum') ? (
