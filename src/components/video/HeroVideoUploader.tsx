@@ -1,134 +1,16 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileUploadInput } from "./upload/FileUploadInput";
 import { InstagramUrlInput } from "./upload/InstagramUrlInput";
 import { UploadedPathDisplay } from "./upload/UploadedPathDisplay";
 import { formatInstagramUrl } from "./upload/VideoUrlHelpers";
-import { Progress } from "@/components/ui/progress";
-
-const MAX_FILE_SIZE_MB = 2000; // Aumentado de 100MB a 2000MB (2GB)
+import { VimeoUrlInput } from "./upload/VimeoUrlInput";
 
 export const HeroVideoUploader = () => {
-  const [uploading, setUploading] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [videoSize, setVideoSize] = useState<number | null>(null);
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
   const [instagramUrl, setInstagramUrl] = useState('');
-  const [uploadStartTime, setUploadStartTime] = useState<number | null>(null);
-  const [estimatedTimeLeft, setEstimatedTimeLeft] = useState<string | null>(null);
-
-  // Efecto para actualizar el tiempo estimado
-  useEffect(() => {
-    if (uploading && uploadStartTime && progress > 0) {
-      const elapsedTime = (Date.now() - uploadStartTime) / 1000; // en segundos
-      const totalEstimatedTime = elapsedTime * (100 / progress);
-      const timeLeft = totalEstimatedTime - elapsedTime;
-      
-      if (timeLeft > 0) {
-        // Formatear el tiempo restante
-        let timeString = '';
-        if (timeLeft > 3600) {
-          timeString = `${Math.floor(timeLeft / 3600)} horas ${Math.floor((timeLeft % 3600) / 60)} min`;
-        } else if (timeLeft > 60) {
-          timeString = `${Math.floor(timeLeft / 60)} minutos`;
-        } else {
-          timeString = `${Math.floor(timeLeft)} segundos`;
-        }
-        setEstimatedTimeLeft(timeString);
-      }
-    } else if (!uploading) {
-      setEstimatedTimeLeft(null);
-    }
-  }, [uploading, progress, uploadStartTime]);
-
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      setUploading(true);
-      setProgress(0);
-      setUploadedPath(null);
-      setUploadStartTime(Date.now());
-      
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      if (!file.type.startsWith('video/')) {
-        toast.error('Por favor sube un archivo de video.');
-        setUploading(false);
-        return;
-      }
-
-      const fileSizeMB = file.size / (1024 * 1024);
-      setVideoSize(fileSizeMB);
-      console.log(`Subiendo archivo de ${fileSizeMB.toFixed(2)} MB`);
-      
-      if (fileSizeMB > MAX_FILE_SIZE_MB) {
-        toast.error(`El archivo es demasiado grande. El límite es de ${MAX_FILE_SIZE_MB}MB.`);
-        setUploading(false);
-        return;
-      }
-
-      const fileExt = file.name.split('.').pop();
-      const fileName = `explanation-video-${Date.now()}.${fileExt}`;
-      
-      // Implementar seguimiento manual del progreso para archivos grandes
-      // Dividimos la subida en intervalos para actualizar el progreso visualmente
-      const startTime = Date.now();
-      const updateProgressInterval = setInterval(() => {
-        if (uploading) {
-          const elapsedTime = (Date.now() - startTime) / 1000; // segundos
-          // Estimamos el progreso basado en el tiempo transcurrido y tamaño del archivo
-          // Esta es una estimación aproximada
-          const estimatedProgress = Math.min(
-            Math.round((elapsedTime / (fileSizeMB / 10)) * 100), 
-            99
-          ); // Nunca llegamos a 100% hasta confirmar
-          if (estimatedProgress > progress) {
-            setProgress(estimatedProgress);
-            console.log(`Progreso estimado: ${estimatedProgress}%`);
-          }
-        }
-      }, 2000);
-      
-      // Realizar la carga del archivo
-      const { data, error: uploadError } = await supabase.storage
-        .from('videos')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: true
-        });
-
-      // Limpiar el intervalo una vez completada la carga
-      clearInterval(updateProgressInterval);
-
-      if (uploadError) {
-        console.error('Error de carga:', uploadError);
-        throw uploadError;
-      }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('videos')
-        .getPublicUrl(fileName);
-
-      const videoPath = `/videos/${fileName}`;
-      
-      setUploadedPath(videoPath);
-
-      await navigator.clipboard.writeText(videoPath);
-      
-      toast.success('Video subido con éxito. La ruta se ha copiado al portapapeles.');
-      console.log('Video URL:', publicUrl);
-      setProgress(100);
-      
-    } catch (err) {
-      console.error('Error uploading video:', err);
-      toast.error('Error al subir el video. Por favor, intenta de nuevo.');
-    } finally {
-      setUploading(false);
-    }
-  };
+  const [vimeoUrl, setVimeoUrl] = useState('');
 
   const handleInstagramUrl = () => {
     if (!instagramUrl) {
@@ -143,49 +25,74 @@ export const HeroVideoUploader = () => {
       setUploadedPath(formattedUrl);
       
       navigator.clipboard.writeText(formattedUrl);
-      toast.warning('URL de Instagram procesada. Recomendamos subir un video directo para mejor experiencia.');
+      toast.warning('URL de Instagram procesada. Recomendamos usar Vimeo para mejor experiencia.');
     } catch (error) {
       console.error('Error al procesar la URL de Instagram:', error);
       toast.error('Error al procesar la URL. Verifica que sea una URL válida de Instagram');
     }
   };
 
+  const handleVimeoUrl = () => {
+    if (!vimeoUrl) {
+      toast.error('Por favor ingresa una URL de Vimeo');
+      return;
+    }
+
+    try {
+      // Simple validation to ensure it's a Vimeo URL
+      if (!vimeoUrl.includes('vimeo.com')) {
+        toast.error('Por favor ingresa una URL válida de Vimeo (debe contener vimeo.com)');
+        return;
+      }
+
+      // Format URL to embed format if it's not already
+      let formattedUrl = vimeoUrl.trim();
+      if (!formattedUrl.includes('/embed')) {
+        // Extract the Vimeo ID
+        const vimeoId = formattedUrl.split('/').pop();
+        if (vimeoId) {
+          formattedUrl = `https://player.vimeo.com/video/${vimeoId}`;
+        }
+      }
+      
+      console.log('Formatted Vimeo URL:', formattedUrl);
+      setUploadedPath(formattedUrl);
+      
+      navigator.clipboard.writeText(formattedUrl);
+      toast.success('URL de Vimeo procesada. La dirección ha sido copiada al portapapeles.');
+    } catch (error) {
+      console.error('Error al procesar la URL de Vimeo:', error);
+      toast.error('Error al procesar la URL. Verifica que sea una URL válida de Vimeo');
+    }
+  };
+
   return (
     <div className="space-y-4 p-6 bg-card/30 backdrop-blur-md rounded-xl border border-border">
-      <h3 className="text-xl font-semibold">Subir Video de Explicación</h3>
+      <h3 className="text-xl font-semibold">Configurar Video de Explicación</h3>
       
-      <Tabs defaultValue="upload" className="w-full">
+      <Tabs defaultValue="vimeo" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="upload">Subir Archivo (Recomendado)</TabsTrigger>
+          <TabsTrigger value="vimeo">URL de Vimeo (Recomendado)</TabsTrigger>
           <TabsTrigger value="instagram">URL de Instagram</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="upload">
-          <FileUploadInput 
-            uploading={uploading}
-            progress={progress}
-            videoSize={videoSize}
-            handleFileUpload={handleFileUpload}
-            maxFileSize={MAX_FILE_SIZE_MB}
+        <TabsContent value="vimeo">
+          <div className="bg-green-50 border border-green-200 p-3 rounded mb-3">
+            <p className="text-sm text-green-700">
+              <strong>Recomendación:</strong> Usar Vimeo ofrece mejor experiencia, rendimiento y compatibilidad que subir videos directamente o usar Instagram.
+            </p>
+          </div>
+          <VimeoUrlInput 
+            vimeoUrl={vimeoUrl}
+            setVimeoUrl={setVimeoUrl}
+            handleVimeoUrl={handleVimeoUrl}
           />
-
-          {uploading && estimatedTimeLeft && (
-            <div className="mt-2 text-xs text-muted-foreground">
-              Tiempo estimado restante: {estimatedTimeLeft}
-            </div>
-          )}
-
-          {uploading && progress === 0 && (
-            <div className="mt-2 text-amber-500 text-sm">
-              La carga está en proceso pero aún no se ha registrado progreso. Para archivos grandes, esto puede tomar unos momentos.
-            </div>
-          )}
         </TabsContent>
 
         <TabsContent value="instagram">
           <div className="bg-amber-50 border border-amber-200 p-3 rounded mb-3">
             <p className="text-sm text-amber-700">
-              <strong>Recomendación:</strong> Para mejor experiencia y compatibilidad, recomendamos subir el video directamente en lugar de usar Instagram.
+              <strong>Recomendación:</strong> Para mejor experiencia y compatibilidad, recomendamos usar Vimeo en lugar de Instagram.
             </p>
           </div>
           <InstagramUrlInput 

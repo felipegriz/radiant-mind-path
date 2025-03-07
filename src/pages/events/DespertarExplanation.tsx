@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -12,15 +11,16 @@ const DespertarExplanation = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isInstagramUrl, setIsInstagramUrl] = useState(false);
-  const [useDirectVideo, setUseDirectVideo] = useState(true);
+  const [isVimeoUrl, setIsVimeoUrl] = useState(false);
   
   // Actualiza esta ruta después de subir tu video de explicación
-  // Para video directo, usa una ruta de Supabase como: /videos/tu-video.mp4
+  // Para Vimeo (recomendado), usa: https://player.vimeo.com/video/CODIGO
   // Para Instagram (no recomendado), usa formato: https://www.instagram.com/p/CODIGO/
   const explanationVideoPath = "/videos/explanation-video-1695400177777.mp4";
   
   // Ensure the Instagram URL is properly formatted if we're using Instagram
-  const formattedVideoPath = formatInstagramUrl(explanationVideoPath);
+  const formattedVideoPath = explanationVideoPath.includes('instagram') ? 
+    formatInstagramUrl(explanationVideoPath) : explanationVideoPath;
   
   useEffect(() => {
     // Simular la carga del video
@@ -34,38 +34,34 @@ const DespertarExplanation = () => {
       setIsAdmin(isUserAdmin);
     };
 
-    // Verificar si es una URL de Instagram y si debemos usarla
-    const checkIfInstagramUrl = () => {
+    // Verificar si es una URL de Instagram o Vimeo
+    const checkVideoUrlType = () => {
       const isInstagram = 
         explanationVideoPath.includes('instagram.com') || 
         explanationVideoPath.includes('instagr.am');
       
-      setIsInstagramUrl(isInstagram);
+      const isVimeo = 
+        explanationVideoPath.includes('vimeo.com') || 
+        explanationVideoPath.includes('player.vimeo.com');
       
-      // Si es una URL de Instagram pero preferimos video directo, mostrar advertencia
-      if (isInstagram && useDirectVideo) {
-        console.warn("Se está usando una URL de Instagram pero se ha configurado para preferir video directo.");
-        toast.warning("Para mejor experiencia, sube un video directo en lugar de usar Instagram", {
-          duration: 6000,
-          id: "instagram-warning"
-        });
-      }
+      setIsInstagramUrl(isInstagram);
+      setIsVimeoUrl(isVimeo);
       
       console.log("¿Es video de Instagram?", isInstagram);
+      console.log("¿Es video de Vimeo?", isVimeo);
       console.log("URL del video:", formattedVideoPath);
-      console.log("¿Usar video directo?", useDirectVideo);
     };
     
     checkIfAdmin();
-    checkIfInstagramUrl();
+    checkVideoUrlType();
     return () => clearTimeout(timer);
-  }, [formattedVideoPath, useDirectVideo]);
+  }, [formattedVideoPath]);
 
   const handleCopyInstructions = () => {
     const instructions = `
 1. Ve a /admin/upload-hero-video
-2. Sube tu video de explicación
-3. Copia la ruta del video generada
+2. Ingresa la URL de tu video de Vimeo
+3. Copia la ruta generada
 4. Actualiza la variable 'explanationVideoPath' en el archivo src/pages/events/DespertarExplanation.tsx
     `;
     navigator.clipboard.writeText(instructions);
@@ -81,8 +77,8 @@ const DespertarExplanation = () => {
       );
     }
 
-    // Si es Instagram pero queremos forzar video directo, intentar cargar como video normal
-    if (isInstagramUrl && !useDirectVideo) {
+    // Si es URL de Instagram
+    if (isInstagramUrl) {
       console.log("Renderizando video de Instagram:", formattedVideoPath);
       
       return (
@@ -98,8 +94,25 @@ const DespertarExplanation = () => {
         </div>
       );
     }
+    
+    // Si es URL de Vimeo
+    if (isVimeoUrl) {
+      console.log("Renderizando video de Vimeo:", formattedVideoPath);
+      
+      return (
+        <div className="w-full h-full">
+          <iframe 
+            src={formattedVideoPath}
+            className="w-full h-[600px] md:h-[700px]" 
+            frameBorder="0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      );
+    }
 
-    // Video directo (preferido)
+    // Video directo (si no es ni Instagram ni Vimeo)
     return (
       <video 
         className="w-full h-full object-cover rounded-xl"
@@ -143,10 +156,10 @@ const DespertarExplanation = () => {
                     1. Ve a <a href="/admin/upload-hero-video" className="text-primary underline">admin/upload-hero-video</a>
                   </p>
                   <p className="text-sm text-white/80">
-                    2. Sube tu video de explicación (hasta 100MB)
+                    2. Ingresa la URL de tu video de Vimeo
                   </p>
                   <p className="text-sm text-white/80">
-                    3. Copia la ruta generada (debe ser como "/videos/tu-video.mp4")
+                    3. Copia la ruta generada
                   </p>
                   <p className="text-sm text-white/80">
                     4. Actualiza la variable 'explanationVideoPath' en el archivo src/pages/events/DespertarExplanation.tsx
