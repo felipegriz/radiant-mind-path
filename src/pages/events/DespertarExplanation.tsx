@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,8 @@ const DespertarExplanation = () => {
   
   // IMPORTANTE: Actualiza esta URL con la que copiaste de la página de subida de videos
   // Ejemplo de URL de Vimeo correcta: https://player.vimeo.com/video/123456789
-  const explanationVideoPath = "https://player.vimeo.com/video/05e72b4425"; // URL actualizada
+  const explanationVideoPath = "https://player.vimeo.com/video/05e72b4425".replace(/[^0-9]/g, '');
+  const formattedVideoPath = `https://player.vimeo.com/video/${explanationVideoPath}`;
   
   useEffect(() => {
     // Simular la carga del video
@@ -31,6 +33,8 @@ const DespertarExplanation = () => {
     checkIfAdmin();
     return () => clearTimeout(timer);
   }, []);
+
+  console.log("Using video path:", formattedVideoPath);
 
   return (
     <div className="min-h-screen bg-[#1A1F2C]">
@@ -57,7 +61,7 @@ const DespertarExplanation = () => {
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
             <div className="lg:w-2/3 aspect-auto bg-black/40 rounded-xl overflow-hidden">
               <ExplanationVideoPlayer 
-                videoPath={explanationVideoPath} 
+                videoPath={formattedVideoPath} 
                 isLoading={isLoading}
               />
             </div>

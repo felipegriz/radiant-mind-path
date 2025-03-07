@@ -15,11 +15,29 @@ export const formatVimeoUrl = (url: string): string => {
   
   // Check if it's already a player URL
   if (formattedUrl.includes('player.vimeo.com/video/')) {
+    // Ensure there are no alphanumeric characters mixed with the video ID
+    // Vimeo IDs should be numeric only
+    const parts = formattedUrl.split('/');
+    const vimeoIdPart = parts[parts.length - 1];
+    
+    // Extract only the numeric part if there's any mix of letters
+    const numericId = vimeoIdPart.replace(/[^0-9]/g, '');
+    
+    if (numericId && numericId !== vimeoIdPart) {
+      // Reconstruct URL with cleaned ID
+      parts[parts.length - 1] = numericId;
+      return parts.join('/');
+    }
+    
     return formattedUrl;
   }
   
-  // Extract the Vimeo ID
-  const vimeoId = formattedUrl.split('/').pop();
+  // Extract the Vimeo ID (should be numeric)
+  const urlParts = formattedUrl.split('/');
+  const lastPart = urlParts[urlParts.length - 1];
+  // Extract only the numeric part
+  const vimeoId = lastPart.replace(/[^0-9]/g, '');
+  
   if (vimeoId) {
     formattedUrl = `https://player.vimeo.com/video/${vimeoId}`;
   }
