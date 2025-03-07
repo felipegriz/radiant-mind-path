@@ -3,13 +3,14 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface VideoUploadInstructionsProps {
-  isAdmin: boolean;
+  isAdmin?: boolean; // Ahora es opcional
 }
 
-export const VideoUploadInstructions: React.FC<VideoUploadInstructionsProps> = ({ isAdmin }) => {
-  if (!isAdmin) return null;
+export const VideoUploadInstructions: React.FC<VideoUploadInstructionsProps> = ({ isAdmin = false }) => {
+  const navigate = useNavigate();
 
   const handleCopyInstructions = () => {
     const instructions = `
@@ -20,6 +21,10 @@ export const VideoUploadInstructions: React.FC<VideoUploadInstructionsProps> = (
     `;
     navigator.clipboard.writeText(instructions);
     toast.success("Instrucciones copiadas al portapapeles");
+  };
+
+  const goToVideoUploader = () => {
+    navigate("/admin/upload-hero-video");
   };
 
   return (
@@ -40,14 +45,24 @@ export const VideoUploadInstructions: React.FC<VideoUploadInstructionsProps> = (
           <p className="text-sm text-white/80">
             4. Actualiza la variable 'explanationVideoPath' en el archivo src/pages/events/DespertarExplanation.tsx
           </p>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="mt-2 text-xs"
-            onClick={handleCopyInstructions}
-          >
-            Copiar instrucciones
-          </Button>
+          <div className="flex space-x-2 mt-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs"
+              onClick={handleCopyInstructions}
+            >
+              Copiar instrucciones
+            </Button>
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="text-xs"
+              onClick={goToVideoUploader}
+            >
+              Ir a subir video
+            </Button>
+          </div>
         </div>
       </div>
     </div>

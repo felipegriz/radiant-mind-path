@@ -53,8 +53,8 @@ const DespertarExplanation = () => {
             DESPERTAR 360° - Explicación Completa
           </h1>
           
-          {/* Instrucciones para administradores */}
-          <VideoUploadInstructions isAdmin={isAdmin} />
+          {/* Instrucciones para subir video - ahora visible para todos */}
+          <VideoUploadInstructions />
           
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
             <div className="lg:w-2/3 aspect-auto bg-black/40 rounded-xl overflow-hidden">
