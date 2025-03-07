@@ -19,6 +19,15 @@ export const formatVimeoUrl = (url: string): string => {
   }
   
   // Handle format like vimeo.com/1062910579/05e72b4425
+  // This is likely a private video with an access hash
+  const privateVideoMatch = formattedUrl.match(/vimeo\.com\/(\d+)\/([a-zA-Z0-9]+)/);
+  if (privateVideoMatch && privateVideoMatch[1] && privateVideoMatch[2]) {
+    const videoId = privateVideoMatch[1];
+    const accessHash = privateVideoMatch[2];
+    return `https://player.vimeo.com/video/${videoId}?h=${accessHash}`;
+  }
+  
+  // Handle standard public video format (vimeo.com/12345678)
   const videoIdMatch = formattedUrl.match(/vimeo\.com\/(\d+)/);
   if (videoIdMatch && videoIdMatch[1]) {
     const videoId = videoIdMatch[1];
