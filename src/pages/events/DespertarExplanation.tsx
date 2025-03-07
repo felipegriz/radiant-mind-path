@@ -34,7 +34,8 @@ const DespertarExplanation = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  console.log("Using video path:", formattedVideoPath);
+  console.log("Original Vimeo URL:", vimeoUrl);
+  console.log("Formatted video path:", formattedVideoPath);
 
   return (
     <div className="min-h-screen bg-[#1A1F2C]">

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { formatInstagramUrl } from "@/components/video/upload/VideoUrlHelpers";
 import { formatVimeoUrl } from "@/components/video/upload/VimeoUrlHelpers";
 
@@ -9,6 +9,11 @@ interface ExplanationVideoPlayerProps {
 }
 
 export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ videoPath, isLoading }) => {
+  // Log the video path for debugging
+  useEffect(() => {
+    console.log("ExplanationVideoPlayer received videoPath:", videoPath);
+  }, [videoPath]);
+
   // Determine video type
   const isInstagramUrl = videoPath.includes('instagram.com') || videoPath.includes('instagr.am');
   const isVimeoUrl = videoPath.includes('vimeo.com') || videoPath.includes('player.vimeo.com');
@@ -20,6 +25,10 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
       ? formatVimeoUrl(videoPath) 
       : videoPath;
   
+  useEffect(() => {
+    console.log("Formatted video path:", formattedVideoPath);
+  }, [formattedVideoPath]);
+
   if (isLoading) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -47,7 +56,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
   }
   
   // Vimeo embed
-  if (isVimeoUrl) {
+  if (isVimeoUrl || formattedVideoPath.includes('player.vimeo.com')) {
     console.log("Renderizando video de Vimeo:", formattedVideoPath);
     
     return (
