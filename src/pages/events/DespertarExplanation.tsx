@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -48,7 +49,7 @@ const DespertarExplanation = () => {
         
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            #1
+            Dale Play al video y aprende porque es el seminario número uno habla hispana
           </h1>
           
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
