@@ -15,8 +15,8 @@ const DespertarExplanation = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   
   // IMPORTANTE: Actualiza esta URL con la que copiaste de la página de subida de videos
-  const correctVimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
-  const formattedVideoPath = formatVimeoUrl(correctVimeoUrl);
+  const vimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
+  const formattedVideoPath = formatVimeoUrl(vimeoUrl);
   
   useEffect(() => {
     // Simular la carga del video

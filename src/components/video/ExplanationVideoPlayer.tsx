@@ -13,7 +13,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
   const isInstagramUrl = videoPath.includes('instagram.com') || videoPath.includes('instagr.am');
   const isVimeoUrl = videoPath.includes('vimeo.com') || videoPath.includes('player.vimeo.com');
   
-  // Format the URL appropriately
+  // Format the URL appropriately (this is redundant if already formatted in the parent component)
   const formattedVideoPath = isInstagramUrl 
     ? formatInstagramUrl(videoPath)
     : isVimeoUrl 
