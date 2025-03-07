@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -13,17 +12,14 @@ const DespertarExplanation = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   
-  // IMPORTANTE: Actualiza esta URL con la que copiaste de la página de subida de videos
   const vimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
   const formattedVideoPath = formatVimeoUrl(vimeoUrl);
   
   useEffect(() => {
-    // Simular la carga del video
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
     
-    // Verificar si el usuario es administrador (simplificado)
     const checkIfAdmin = async () => {
       const isUserAdmin = localStorage.getItem('is_admin') === 'true';
       setIsAdmin(isUserAdmin);
@@ -52,10 +48,8 @@ const DespertarExplanation = () => {
         
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            DESPERTAR 360° - Dale Play al video y aprende porque es el seminario número uno habla hispana
+            #1
           </h1>
-          
-          {/* Se eliminó la sección de VideoUploadInstructions */}
           
           <div className="flex flex-col lg:flex-row gap-8 mb-8">
             <div className="lg:w-2/3 aspect-auto bg-black/40 rounded-xl overflow-hidden">
