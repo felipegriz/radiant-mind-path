@@ -14,7 +14,7 @@ const DespertarExplanation = () => {
   
   // IMPORTANTE: Actualiza esta URL con la que copiaste de la página de subida de videos
   // Ejemplo de URL de Vimeo correcta: https://player.vimeo.com/video/123456789
-  const explanationVideoPath = "https://player.vimeo.com/video/123456789"; // Reemplaza este valor
+  const explanationVideoPath = "https://player.vimeo.com/video/05e72b4425"; // URL actualizada
   
   useEffect(() => {
     // Simular la carga del video
