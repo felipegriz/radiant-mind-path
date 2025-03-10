@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import type { EventPrice } from "@/types/event";
+import type { EventPrice, AffiliateCode, AffiliateReferral } from "@/types/event";
 
 interface PricingSectionProps {
   prices: EventPrice[];
@@ -51,8 +51,7 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
           const newCode = generateAffiliateCode(session.user.id);
           await supabase.from('affiliate_codes').insert({
             user_id: session.user.id,
-            code: newCode,
-            created_at: new Date().toISOString()
+            code: newCode
           });
           setUserAffiliateCode(newCode);
         } else {
@@ -164,12 +163,15 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
       // If there's an affiliate code, track the potential purchase
       if (isAffiliateValid && affiliateCode) {
         // Store the referral in Supabase
-        await supabase.from('affiliate_referrals').insert({
+        const referralData: Omit<AffiliateReferral, 'id' | 'completed_at'> = {
           affiliate_code: affiliateCode,
           product_id: priceId,
           status: 'pending',
+          order_id: null,
           created_at: new Date().toISOString()
-        });
+        };
+        
+        await supabase.from('affiliate_referrals').insert(referralData);
         
         // Add affiliate code as custom field to Stripe checkout
         const stripeLink = `${stripeLinkWithoutAffiliate}?client_reference_id=${affiliateCode}`;

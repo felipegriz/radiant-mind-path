@@ -9,6 +9,96 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      affiliate_codes: {
+        Row: {
+          code: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_commissions: {
+        Row: {
+          affiliate_code: string
+          affiliate_user_id: string
+          commission_amount: number
+          created_at: string | null
+          id: string
+          order_id: string
+          paid_at: string | null
+          product_id: string | null
+          purchase_amount: number
+          status: string
+        }
+        Insert: {
+          affiliate_code: string
+          affiliate_user_id: string
+          commission_amount: number
+          created_at?: string | null
+          id?: string
+          order_id: string
+          paid_at?: string | null
+          product_id?: string | null
+          purchase_amount: number
+          status?: string
+        }
+        Update: {
+          affiliate_code?: string
+          affiliate_user_id?: string
+          commission_amount?: number
+          created_at?: string | null
+          id?: string
+          order_id?: string
+          paid_at?: string | null
+          product_id?: string | null
+          purchase_amount?: number
+          status?: string
+        }
+        Relationships: []
+      }
+      affiliate_referrals: {
+        Row: {
+          affiliate_code: string
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          order_id: string | null
+          product_id: string
+          status: string
+        }
+        Insert: {
+          affiliate_code: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_id: string
+          status?: string
+        }
+        Update: {
+          affiliate_code?: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       ai_training_content: {
         Row: {
           active: boolean | null
