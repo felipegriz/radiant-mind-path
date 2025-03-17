@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import DashboardStats from "@/components/admin/DashboardStats";
 import Navbar from "@/components/layout/Navbar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import AffiliateReport from "@/components/admin/AffiliateReport";
+import { AffiliateReport } from "@/components/admin/AffiliateReport";
 
 const Dashboard = () => {
   const navigate = useNavigate();

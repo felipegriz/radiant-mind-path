@@ -53,9 +53,9 @@ export const AffiliatePanel = () => {
         }
 
         // Load referral stats
-        if (codeData?.code || newCode) {
-          const code = codeData?.code || newCode;
-          
+        const code = codeData?.code || userAffiliateCode;
+        
+        if (code) {
           // Count referrals
           const { count: referralCount, error: referralError } = await supabase
             .from('affiliate_referrals')
