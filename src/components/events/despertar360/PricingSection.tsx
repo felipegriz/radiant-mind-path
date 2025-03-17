@@ -7,7 +7,11 @@ import type { EventPrice } from "@/types/event";
 import { AffiliateCodeInput } from "./AffiliateCodeInput";
 import { AffiliateModal } from "./AffiliateModal";
 import { PriceCard } from "./PriceCard";
-import { trackAffiliateReferral, validateAffiliateCode } from "@/utils/affiliateUtils";
+import { 
+  trackAffiliateReferral, 
+  validateAffiliateCode, 
+  getStoredAffiliateCode 
+} from "@/utils/affiliateUtils";
 
 interface PricingSectionProps {
   prices: EventPrice[];
@@ -60,6 +64,13 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
     if (codeFromUrl) {
       setAffiliateCode(codeFromUrl);
       validateAffiliateCode(codeFromUrl).then(setIsAffiliateValid);
+    } else {
+      // Check if there's a stored affiliate code
+      const storedCode = getStoredAffiliateCode();
+      if (storedCode) {
+        setAffiliateCode(storedCode);
+        validateAffiliateCode(storedCode).then(setIsAffiliateValid);
+      }
     }
     
     checkAuth();
@@ -82,9 +93,15 @@ export const PricingSection = ({ prices }: PricingSectionProps) => {
         
         // Add affiliate code as custom field to Stripe checkout
         const stripeLink = `${stripeLinkWithoutAffiliate}?client_reference_id=${affiliateCode}`;
+        
+        // Show success message
+        toast.success("Redirigiendo al pago con descuento de afiliado aplicado");
+        
+        // Open Stripe checkout in a new tab
         window.open(stripeLink, '_blank');
       } else {
         // No affiliate, use regular checkout
+        toast.success("Redirigiendo al pago");
         window.open(stripeLinkWithoutAffiliate, '_blank');
       }
     } catch (error) {

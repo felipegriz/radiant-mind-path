@@ -1,10 +1,11 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardStats from "@/components/admin/DashboardStats";
 import Navbar from "@/components/layout/Navbar";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import AffiliateReport from "@/components/admin/AffiliateReport";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -33,47 +34,42 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">Panel de Administración</h1>
+      
+      <div className="container mx-auto py-8 max-w-7xl">
+        <h1 className="text-3xl font-bold mb-8">Dashboard de Administración</h1>
         
-        <DashboardStats />
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          <Button 
-            variant="outline"
-            className="p-6 h-auto flex flex-col items-center text-center"
-            onClick={() => navigate('/courses/octava-area')}
-          >
-            <h3 className="text-lg font-semibold mb-2">Gestionar La Octava Area</h3>
-            <p className="text-sm text-muted-foreground">
-              Actualizar videos y contenido del curso
-            </p>
-          </Button>
-
-          <Button 
-            variant="outline"
-            className="p-6 h-auto flex flex-col items-center text-center"
-            onClick={() => navigate('/admin/students')}
-          >
-            <h3 className="text-lg font-semibold mb-2">Gestionar Estudiantes</h3>
-            <p className="text-sm text-muted-foreground">
-              Ver y administrar estudiantes registrados
-            </p>
-          </Button>
-
-          <Button 
-            variant="outline"
-            className="p-6 h-auto flex flex-col items-center text-center"
-            onClick={() => navigate('/admin/content')}
-          >
-            <h3 className="text-lg font-semibold mb-2">Gestionar Contenido</h3>
-            <p className="text-sm text-muted-foreground">
-              Administrar contenido y recursos
-            </p>
-          </Button>
-        </div>
+        <Tabs defaultValue="stats" className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="stats">Estadísticas</TabsTrigger>
+            <TabsTrigger value="affiliates">Afiliados</TabsTrigger>
+            <TabsTrigger value="customers">Clientes</TabsTrigger>
+            <TabsTrigger value="content">Contenido</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="stats">
+            <DashboardStats />
+          </TabsContent>
+          
+          <TabsContent value="affiliates">
+            <AffiliateReport />
+          </TabsContent>
+          
+          <TabsContent value="customers">
+            <div className="grid grid-cols-1 gap-6">
+              <h2 className="text-2xl font-bold">Próximamente</h2>
+              <p>La gestión de clientes estará disponible pronto.</p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="content">
+            <div className="grid grid-cols-1 gap-6">
+              <h2 className="text-2xl font-bold">Próximamente</h2>
+              <p>La gestión de contenido estará disponible pronto.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

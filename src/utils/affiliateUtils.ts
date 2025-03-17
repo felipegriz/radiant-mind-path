@@ -13,6 +13,16 @@ export const generateAffiliateCode = (userId: string): string => {
   return userId.substring(0, 8);
 };
 
+// Check if affiliate code exists in localStorage
+export const getStoredAffiliateCode = (): string | null => {
+  return localStorage.getItem('affiliate_code');
+};
+
+// Store affiliate code in localStorage
+export const storeAffiliateCode = (code: string): void => {
+  localStorage.setItem('affiliate_code', code);
+};
+
 // Validate affiliate code
 export const validateAffiliateCode = async (code: string) => {
   if (!code) {
@@ -27,8 +37,11 @@ export const validateAffiliateCode = async (code: string) => {
       .single();
     
     if (error || !data) {
+      toast.error("Código de afiliado no válido");
       return false;
     } else {
+      // Store valid code in localStorage for future sessions
+      storeAffiliateCode(code);
       toast.success("Código de afiliado aplicado. ¡Descuento del 10% activado!");
       return true;
     }
@@ -72,5 +85,56 @@ export const trackAffiliateReferral = async (
   } catch (error) {
     console.error("Error tracking affiliate referral:", error);
     return false;
+  }
+};
+
+// Get affiliate statistics for a user
+export const getAffiliateStats = async (userId: string) => {
+  try {
+    // Get user's affiliate code
+    const { data: codeData, error: codeError } = await supabase
+      .from('affiliate_codes')
+      .select('code')
+      .eq('user_id', userId)
+      .single();
+    
+    if (codeError || !codeData) {
+      return null;
+    }
+    
+    const code = codeData.code;
+    
+    // Get referral count
+    const { count: referralCount, error: referralError } = await supabase
+      .from('affiliate_referrals')
+      .select('*', { count: 'exact' })
+      .eq('affiliate_code', code);
+    
+    if (referralError) {
+      console.error("Error getting referral count:", referralError);
+    }
+    
+    // Get commission total
+    const { data: commissionData, error: commissionError } = await supabase
+      .from('affiliate_commissions')
+      .select('commission_amount')
+      .eq('affiliate_code', code);
+    
+    if (commissionError) {
+      console.error("Error getting commissions:", commissionError);
+    }
+    
+    const totalCommission = commissionData?.reduce(
+      (sum, item) => sum + Number(item.commission_amount), 0
+    ) || 0;
+    
+    return {
+      code,
+      referralCount: referralCount || 0,
+      totalCommission
+    };
+  } catch (error) {
+    console.error("Error getting affiliate stats:", error);
+    return null;
   }
 };

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
@@ -22,6 +22,7 @@ import OctavaArea from "./pages/courses/OctavaArea";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import { Loader2 } from "lucide-react";
 import UploadHeroVideo from "./pages/admin/UploadHeroVideo";
+import AffiliateDashboard from "./pages/eventos/AffiliateDashboard";
 
 const queryClient = new QueryClient();
 
@@ -78,16 +79,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-const App = () => {
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <Router>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/events/despertar-360" element={<DespertarExplanation />} />
+            <Route path="/events/despertar-360" element={<Despertar360 />} />
             <Route path="/events/despertar-explanation" element={<DespertarExplanation />} />
             <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
             <Route path="/events/mission-mastery" element={<MissionMastery />} />
@@ -115,12 +116,13 @@ const App = () => {
             />
             <Route path="/courses/octava-area" element={<OctavaArea />} />
             <Route path="/admin/upload-hero-video" element={<UploadHeroVideo />} />
+            <Route path="/eventos/affiliate-dashboard" element={<AffiliateDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
+        </Router>
       </TooltipProvider>
     </QueryClientProvider>
   );
-};
+}
 
 export default App;

@@ -113,7 +113,11 @@ const handler = async (req: Request) => {
           // Update any pending referrals
           const { data: referralData, error: referralError } = await supabase
             .from('affiliate_referrals')
-            .update({ status: 'completed', order_id: session.id })
+            .update({ 
+              status: 'completed', 
+              order_id: session.id,
+              completed_at: new Date().toISOString()
+            })
             .eq('affiliate_code', affiliateCode)
             .eq('status', 'pending');
           
@@ -122,7 +126,31 @@ const handler = async (req: Request) => {
             // Continue processing even if referral update fails
           }
           
+          // Try to get the user's email to notify them
+          const { data: userData, error: userError } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('id', affiliateData.user_id)
+            .single();
+            
           console.log(`Affiliate commission of $${commissionAmount} recorded for ${affiliateCode}`);
+          
+          // Create a notification in the database for the affiliate user
+          try {
+            await supabase
+              .from('notifications')
+              .insert({
+                user_id: affiliateData.user_id,
+                type: 'commission',
+                title: '¡Nueva comisión generada!',
+                message: `Has ganado $${commissionAmount.toFixed(2)} USD por una venta a través de tu código de afiliado.`,
+                read: false,
+                created_at: new Date().toISOString()
+              });
+          } catch (notificationError) {
+            console.error('Error creating notification:', notificationError);
+            // Continue processing even if notification creation fails
+          }
         }
       }
     }
