@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Question } from "./types";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 interface QuestionFormProps {
   question: Question;
@@ -23,11 +24,20 @@ export const QuestionForm = ({
   isLoading,
 }: QuestionFormProps) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleClick = () => {
     if (isLastQuestion) {
       onNext(); // This will submit the form
-      navigate('/courses/octava-area');
+      
+      toast({
+        title: "¡Encuesta completada!",
+        description: "Serás redirigido al curso de La Octava Área.",
+      });
+      
+      setTimeout(() => {
+        navigate('/courses/octava-area');
+      }, 1500);
     } else {
       onNext();
     }
@@ -56,7 +66,7 @@ export const QuestionForm = ({
         {isLoading ? (
           "Enviando..."
         ) : isLastQuestion ? (
-          "¡FELICIDADES! Terminaste la encuesta! Dale click a este enlace para accesar al curso Online de LA OCTAVA AREA"
+          "¡FELICIDADES! Terminaste la encuesta! Dale click aquí para acceder al curso Online de LA OCTAVA AREA"
         ) : (
           "Siguiente"
         )}

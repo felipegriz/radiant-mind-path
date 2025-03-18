@@ -749,6 +749,36 @@ export type Database = {
         }
         Relationships: []
       }
+      webinar_leads: {
+        Row: {
+          created_at: string
+          email: string
+          funnel_stage: string
+          id: string
+          name: string
+          updated_at: string
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          funnel_stage?: string
+          id?: string
+          name: string
+          updated_at?: string
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          funnel_stage?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

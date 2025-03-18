@@ -4,15 +4,22 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const Webinar1 = () => {
   const [leadData, setLeadData] = useState<{ name: string; email: string; whatsapp: string } | null>(null);
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if user came through the lead magnet page
     const storedLead = localStorage.getItem("webinarLead");
     if (!storedLead) {
+      toast({
+        title: "Acceso denegado",
+        description: "Debes registrarte primero para acceder a este contenido.",
+        variant: "destructive",
+      });
       navigate("/cursos-gratis");
       return;
     }
@@ -21,15 +28,25 @@ const Webinar1 = () => {
     
     // Update funnel stage in Supabase
     const updateFunnelStage = async () => {
-      const parsedLead = JSON.parse(storedLead);
-      await supabase.from("webinar_leads").upsert({
-        email: parsedLead.email,
-        funnel_stage: "webinar_1"
-      }, { onConflict: "email" });
+      try {
+        const parsedLead = JSON.parse(storedLead);
+        const { error } = await supabase.from("webinar_leads").upsert({
+          email: parsedLead.email,
+          name: parsedLead.name,
+          whatsapp: parsedLead.whatsapp,
+          funnel_stage: "webinar_1"
+        }, { onConflict: "email" });
+        
+        if (error) {
+          console.error("Error updating funnel stage:", error);
+        }
+      } catch (error) {
+        console.error("Error in updateFunnelStage:", error);
+      }
     };
 
     updateFunnelStage();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   const handleNextWebinar = () => {
     navigate("/cursos-gratis/webinar-2");

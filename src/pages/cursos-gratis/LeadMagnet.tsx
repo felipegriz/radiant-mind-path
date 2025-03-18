@@ -28,7 +28,26 @@ const LeadMagnet = () => {
         funnel_stage: "lead_magnet"
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        if (error.code === "23505") {
+          toast({
+            title: "Este email ya está registrado",
+            description: "Ya tienes acceso al contenido. Serás redirigido en un momento.",
+            variant: "default",
+          });
+          
+          // Store lead info in localStorage for access throughout the funnel
+          localStorage.setItem("webinarLead", JSON.stringify({ name, email, whatsapp }));
+          
+          // Small delay before redirect
+          setTimeout(() => {
+            navigate("/cursos-gratis/webinar-1");
+          }, 2000);
+          return;
+        }
+        throw error;
+      }
 
       // Store lead info in localStorage for access throughout the funnel
       localStorage.setItem("webinarLead", JSON.stringify({ name, email, whatsapp }));
