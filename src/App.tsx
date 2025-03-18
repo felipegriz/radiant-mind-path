@@ -23,6 +23,7 @@ import ResetPassword from "@/pages/auth/ResetPassword";
 import { Loader2 } from "lucide-react";
 import UploadHeroVideo from "./pages/admin/UploadHeroVideo";
 import AffiliateDashboard from "./pages/eventos/AffiliateDashboard";
+import SobreMi from "./pages/SobreMi";
 
 const queryClient = new QueryClient();
 
@@ -117,6 +118,7 @@ function App() {
             <Route path="/courses/octava-area" element={<OctavaArea />} />
             <Route path="/admin/upload-hero-video" element={<UploadHeroVideo />} />
             <Route path="/eventos/affiliate-dashboard" element={<AffiliateDashboard />} />
+            <Route path="/sobre-mi" element={<SobreMi />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
