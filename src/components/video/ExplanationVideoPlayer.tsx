@@ -22,7 +22,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
   const isInstagramUrl = videoPath.includes('instagram.com') || videoPath.includes('instagr.am');
   const isVimeoUrl = videoPath.includes('vimeo.com') || videoPath.includes('player.vimeo.com');
   
-  // Format the URL appropriately (this is redundant if already formatted in the parent component)
+  // Format the URL appropriately
   const formattedVideoPath = isInstagramUrl 
     ? formatInstagramUrl(videoPath)
     : isVimeoUrl 
@@ -41,9 +41,9 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
     );
   }
 
-  // Instagram embed
+  // Instagram embed always shows directly (no thumbnail)
   if (isInstagramUrl) {
-    console.log("Renderizando video de Instagram:", formattedVideoPath);
+    console.log("Rendering Instagram video:", formattedVideoPath);
     
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -60,13 +60,13 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
   }
   
   // Vimeo embed with thumbnail preview
-  if (isVimeoUrl || formattedVideoPath.includes('player.vimeo.com')) {
-    console.log("Renderizando video de Vimeo:", formattedVideoPath);
+  if (isVimeoUrl) {
+    console.log("Rendering Vimeo video:", formattedVideoPath);
     
     if (!videoPlaying) {
       return (
-        <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-lg">
-          {/* Display user's face as the thumbnail */}
+        <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-lg bg-black">
+          {/* Thumbnail */}
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')" }}
@@ -91,7 +91,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
     return (
       <div className="w-full h-full">
         <iframe 
-          src={formattedVideoPath}
+          src={`${formattedVideoPath}?autoplay=1`}
           className="w-full h-[600px] md:h-[700px]" 
           frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"
@@ -104,8 +104,8 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
   // Direct video embed (default)
   if (!videoPlaying) {
     return (
-      <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-xl">
-        {/* Display user's face as the thumbnail */}
+      <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-xl bg-black">
+        {/* Thumbnail */}
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')" }}

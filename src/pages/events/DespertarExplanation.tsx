@@ -10,6 +10,7 @@ import { FAQSection } from "@/components/events/despertar360/FAQSection";
 import { FinalCTASection } from "@/components/events/despertar360/FinalCTASection";
 import { VideoHeroSection } from "@/components/events/despertar360/VideoHeroSection";
 import { LearningOutcomesSection } from "@/components/events/despertar360/LearningOutcomesSection";
+import { EventSidebar } from "@/components/events/despertar360/EventSidebar";
 import type { EventPrice } from "@/types/event";
 
 const DespertarExplanation = () => {
