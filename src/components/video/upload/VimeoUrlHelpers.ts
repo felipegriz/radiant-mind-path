@@ -10,40 +10,30 @@ export const formatVimeoUrl = (url: string): string => {
     return url; // Not a Vimeo URL, return as is
   }
 
-  // Format URL to embed format if it's not already
-  let formattedUrl = url.trim();
+  // If it's already in player format, return it
+  if (url.includes('player.vimeo.com/video/')) {
+    return url;
+  }
   
-  // Handle format like vimeo.com/1062910579/05e72b4425
-  // This is likely a private video with an access hash
-  const privateVideoMatch = formattedUrl.match(/vimeo\.com\/(\d+)\/([a-zA-Z0-9]+)/);
+  // Extract the video ID and access hash if present
+  let videoId: string | null = null;
+  let accessHash: string | null = null;
+  
+  // Handle format like vimeo.com/1062910579/05e72b4425 (private video with access hash)
+  const privateVideoMatch = url.match(/vimeo\.com\/(\d+)\/([a-zA-Z0-9]+)/);
   if (privateVideoMatch && privateVideoMatch[1] && privateVideoMatch[2]) {
-    const videoId = privateVideoMatch[1];
-    const accessHash = privateVideoMatch[2];
+    videoId = privateVideoMatch[1];
+    accessHash = privateVideoMatch[2];
     return `https://player.vimeo.com/video/${videoId}?h=${accessHash}`;
   }
   
-  // Check if it's already a player URL
-  if (formattedUrl.includes('player.vimeo.com/video/')) {
-    // Ensure it has the proper format
-    return formattedUrl;
-  }
-  
   // Handle standard public video format (vimeo.com/12345678)
-  const videoIdMatch = formattedUrl.match(/vimeo\.com\/(\d+)/);
+  const videoIdMatch = url.match(/vimeo\.com\/(\d+)/);
   if (videoIdMatch && videoIdMatch[1]) {
-    const videoId = videoIdMatch[1];
+    videoId = videoIdMatch[1];
     return `https://player.vimeo.com/video/${videoId}`;
   }
   
-  // If we couldn't extract the ID using the regex above, try a fallback approach
-  const parts = formattedUrl.split('/');
-  // Find the first part that contains only digits
-  for (const part of parts) {
-    if (/^\d+$/.test(part)) {
-      return `https://player.vimeo.com/video/${part}`;
-    }
-  }
-  
-  // If we still couldn't extract the ID, return the original URL
-  return formattedUrl;
+  // If we couldn't extract the ID, return the original URL
+  return url;
 };

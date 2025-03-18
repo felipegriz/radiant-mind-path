@@ -17,18 +17,19 @@ const DespertarExplanation = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [prices, setPrices] = useState<EventPrice[]>([]);
   
-  // Definir URL de Vimeo directamente
-  const vimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
-  const formattedVideoPath = formatVimeoUrl(vimeoUrl);
+  // Definir URL de Vimeo directamente y formatearla una sola vez
+  const rawVimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
+  const formattedVideoPath = formatVimeoUrl(rawVimeoUrl);
   
   useEffect(() => {
-    console.log("Using Vimeo URL:", vimeoUrl);
+    // Log the original and formatted URLs
+    console.log("Using Vimeo URL:", rawVimeoUrl);
     console.log("Formatted to:", formattedVideoPath);
     
-    // Set a reasonable loading time
+    // Set a short loading time
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 800);
     
     const checkIfAdmin = async () => {
       const isUserAdmin = localStorage.getItem('is_admin') === 'true';

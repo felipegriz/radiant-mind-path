@@ -25,7 +25,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({
 
   if (isLoading) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
+      <div className="aspect-video w-full bg-black flex items-center justify-center">
         <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white"></div>
       </div>
     );
@@ -35,17 +35,14 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({
   if (videoPath.includes('player.vimeo.com') || videoPath.includes('vimeo.com')) {
     if (!videoPlaying) {
       return (
-        <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-lg bg-black">
+        <div className="aspect-video w-full bg-black relative overflow-hidden">
           {/* Thumbnail background */}
           <div 
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-cover bg-center opacity-70"
             style={{ 
               backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')"
             }}
-          >
-            {/* Translucent overlay */}
-            <div className="absolute inset-0 bg-black/30"></div>
-          </div>
+          />
           
           {/* Play button */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -60,41 +57,42 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({
       );
     }
     
-    // Add autoplay parameter to the URL
+    // Process Vimeo URL to ensure autoplay works
     let vimeoSrc = videoPath;
+    
+    // Add autoplay parameter
     if (vimeoSrc.includes('?')) {
-      vimeoSrc = `${vimeoSrc}&autoplay=1`;
+      if (!vimeoSrc.includes('autoplay=')) {
+        vimeoSrc += '&autoplay=1';
+      }
     } else {
-      vimeoSrc = `${vimeoSrc}?autoplay=1`;
+      vimeoSrc += '?autoplay=1';
     }
     
     return (
-      <div className="w-full h-[600px] md:h-[700px] bg-black rounded-lg overflow-hidden">
+      <div className="aspect-video w-full bg-black">
         <iframe 
           src={vimeoSrc}
           className="w-full h-full" 
-          frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
+          frameBorder="0"
         ></iframe>
       </div>
     );
   }
 
-  // Default handling for other video types (like direct MP4)
+  // Default handling for other video types
   if (!videoPlaying) {
     return (
-      <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-lg bg-black">
+      <div className="aspect-video w-full bg-black relative overflow-hidden">
         {/* Thumbnail */}
         <div 
-          className="absolute inset-0 bg-cover bg-center"
+          className="absolute inset-0 bg-cover bg-center opacity-70"
           style={{ 
             backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')" 
           }}
-        >
-          {/* Translucent overlay */}
-          <div className="absolute inset-0 bg-black/30"></div>
-        </div>
+        />
         
         {/* Play button */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -111,7 +109,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({
 
   return (
     <video 
-      className="w-full h-full object-cover rounded-lg"
+      className="aspect-video w-full object-cover"
       controls
       autoPlay
       playsInline

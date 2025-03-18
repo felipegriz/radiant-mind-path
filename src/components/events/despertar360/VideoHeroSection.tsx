@@ -35,10 +35,16 @@ export const VideoHeroSection = ({ videoPath, isLoading }: VideoHeroSectionProps
         </div>
         
         <div className="max-w-4xl mx-auto bg-black rounded-xl overflow-hidden mb-10">
-          <ExplanationVideoPlayer 
-            videoPath={videoPath} 
-            isLoading={isLoading}
-          />
+          {videoPath ? (
+            <ExplanationVideoPlayer 
+              videoPath={videoPath} 
+              isLoading={isLoading}
+            />
+          ) : (
+            <div className="aspect-video w-full flex items-center justify-center bg-black/80">
+              <p className="text-white/70">Video no disponible</p>
+            </div>
+          )}
         </div>
         
         <div className="max-w-3xl mx-auto text-center">
