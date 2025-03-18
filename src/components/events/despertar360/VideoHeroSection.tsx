@@ -34,7 +34,7 @@ export const VideoHeroSection = ({ videoPath, isLoading }: VideoHeroSectionProps
           </h2>
         </div>
         
-        <div className="max-w-4xl mx-auto bg-black/40 rounded-xl overflow-hidden mb-10">
+        <div className="max-w-4xl mx-auto bg-black rounded-xl overflow-hidden mb-10">
           <ExplanationVideoPlayer 
             videoPath={videoPath} 
             isLoading={isLoading}

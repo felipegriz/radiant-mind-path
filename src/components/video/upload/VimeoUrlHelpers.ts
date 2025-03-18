@@ -13,11 +13,6 @@ export const formatVimeoUrl = (url: string): string => {
   // Format URL to embed format if it's not already
   let formattedUrl = url.trim();
   
-  // Check if it's already a player URL
-  if (formattedUrl.includes('player.vimeo.com/video/')) {
-    return formattedUrl;
-  }
-  
   // Handle format like vimeo.com/1062910579/05e72b4425
   // This is likely a private video with an access hash
   const privateVideoMatch = formattedUrl.match(/vimeo\.com\/(\d+)\/([a-zA-Z0-9]+)/);
@@ -25,6 +20,12 @@ export const formatVimeoUrl = (url: string): string => {
     const videoId = privateVideoMatch[1];
     const accessHash = privateVideoMatch[2];
     return `https://player.vimeo.com/video/${videoId}?h=${accessHash}`;
+  }
+  
+  // Check if it's already a player URL
+  if (formattedUrl.includes('player.vimeo.com/video/')) {
+    // Ensure it has the proper format
+    return formattedUrl;
   }
   
   // Handle standard public video format (vimeo.com/12345678)

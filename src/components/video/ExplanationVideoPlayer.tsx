@@ -1,7 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { formatInstagramUrl } from "@/components/video/upload/VideoUrlHelpers";
-import { formatVimeoUrl } from "@/components/video/upload/VimeoUrlHelpers";
 import { Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -10,33 +8,20 @@ interface ExplanationVideoPlayerProps {
   isLoading: boolean;
 }
 
-export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ videoPath, isLoading }) => {
+export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
+  videoPath, 
+  isLoading 
+}) => {
   const [videoPlaying, setVideoPlaying] = useState(false);
   
-  // Log the video path for debugging
   useEffect(() => {
     console.log("ExplanationVideoPlayer received videoPath:", videoPath);
   }, [videoPath]);
 
-  // Clean reset of player state when videoPath changes
+  // Reset player state when videoPath changes
   useEffect(() => {
     setVideoPlaying(false);
   }, [videoPath]);
-
-  // Determine video type
-  const isInstagramUrl = videoPath.includes('instagram.com') || videoPath.includes('instagr.am');
-  const isVimeoUrl = videoPath.includes('vimeo.com') || videoPath.includes('player.vimeo.com');
-  
-  // Format the URL appropriately
-  const formattedVideoPath = isInstagramUrl 
-    ? formatInstagramUrl(videoPath)
-    : isVimeoUrl 
-      ? formatVimeoUrl(videoPath) 
-      : videoPath;
-  
-  useEffect(() => {
-    console.log("Formatted video path:", formattedVideoPath);
-  }, [formattedVideoPath]);
 
   if (isLoading) {
     return (
@@ -46,37 +31,19 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
     );
   }
 
-  // Instagram embed always shows directly (no thumbnail)
-  if (isInstagramUrl) {
-    console.log("Rendering Instagram video:", formattedVideoPath);
-    
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <iframe 
-          src={formattedVideoPath}
-          className="instagram-media w-full h-[600px] md:h-[700px]" 
-          frameBorder="0"
-          scrolling="no"
-          allowFullScreen
-          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        ></iframe>
-      </div>
-    );
-  }
-  
-  // Vimeo embed with thumbnail preview
-  if (isVimeoUrl) {
-    console.log("Rendering Vimeo video:", formattedVideoPath);
-    
+  // Handle Vimeo videos
+  if (videoPath.includes('player.vimeo.com') || videoPath.includes('vimeo.com')) {
     if (!videoPlaying) {
       return (
         <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-lg bg-black">
-          {/* Thumbnail */}
+          {/* Thumbnail background */}
           <div 
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')" }}
+            style={{ 
+              backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')"
+            }}
           >
-            {/* Semi-transparent overlay */}
+            {/* Translucent overlay */}
             <div className="absolute inset-0 bg-black/30"></div>
           </div>
           
@@ -93,16 +60,19 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
       );
     }
     
-    // Generate iframe URL with autoplay parameter and force https
-    const vimeoSrc = formattedVideoPath.includes('?') 
-      ? `${formattedVideoPath}&autoplay=1` 
-      : `${formattedVideoPath}?autoplay=1`;
+    // Add autoplay parameter to the URL
+    let vimeoSrc = videoPath;
+    if (vimeoSrc.includes('?')) {
+      vimeoSrc = `${vimeoSrc}&autoplay=1`;
+    } else {
+      vimeoSrc = `${vimeoSrc}?autoplay=1`;
+    }
     
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-[600px] md:h-[700px] bg-black rounded-lg overflow-hidden">
         <iframe 
           src={vimeoSrc}
-          className="w-full h-[600px] md:h-[700px]" 
+          className="w-full h-full" 
           frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"
           allowFullScreen
@@ -111,16 +81,18 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
     );
   }
 
-  // Direct video embed (default)
+  // Default handling for other video types (like direct MP4)
   if (!videoPlaying) {
     return (
-      <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-xl bg-black">
+      <div className="w-full h-[600px] md:h-[700px] relative overflow-hidden rounded-lg bg-black">
         {/* Thumbnail */}
         <div 
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')" }}
+          style={{ 
+            backgroundImage: "url('/lovable-uploads/c3831263-4ae7-44fb-ab9a-2d7fc8cde391.png')" 
+          }}
         >
-          {/* Semi-transparent overlay */}
+          {/* Translucent overlay */}
           <div className="absolute inset-0 bg-black/30"></div>
         </div>
         
@@ -139,12 +111,12 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
 
   return (
     <video 
-      className="w-full h-full object-cover rounded-xl"
+      className="w-full h-full object-cover rounded-lg"
       controls
-      playsInline
       autoPlay
+      playsInline
     >
-      <source src={formattedVideoPath} type="video/mp4" />
+      <source src={videoPath} type="video/mp4" />
       Tu navegador no soporta la reproducción de video.
     </video>
   );
