@@ -69,7 +69,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
           {/* Display user's face as the thumbnail */}
           <div 
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/lovable-uploads/901da032-3adc-4f26-a5b8-549512d2495b.png')" }}
+            style={{ backgroundImage: "url('/lovable-uploads/4062f4d7-2ea2-4811-a3fe-64b5760c83d1.png')" }}
           >
             {/* Semi-transparent overlay */}
             <div className="absolute inset-0 bg-black/30"></div>
@@ -108,7 +108,7 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
         {/* Display user's face as the thumbnail */}
         <div 
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/lovable-uploads/901da032-3adc-4f26-a5b8-549512d2495b.png')" }}
+          style={{ backgroundImage: "url('/lovable-uploads/4062f4d7-2ea2-4811-a3fe-64b5760c83d1.png')" }}
         >
           {/* Semi-transparent overlay */}
           <div className="absolute inset-0 bg-black/30"></div>
