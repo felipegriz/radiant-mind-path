@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,6 +25,12 @@ import { Loader2 } from "lucide-react";
 import UploadHeroVideo from "./pages/admin/UploadHeroVideo";
 import AffiliateDashboard from "./pages/eventos/AffiliateDashboard";
 import SobreMi from "./pages/SobreMi";
+import CursosGratis from "./pages/cursos-gratis";
+import LeadMagnet from "./pages/cursos-gratis/LeadMagnet";
+import Webinar1 from "./pages/cursos-gratis/Webinar1";
+import Webinar2 from "./pages/cursos-gratis/Webinar2";
+import Webinar3 from "./pages/cursos-gratis/Webinar3";
+import Webinar4 from "./pages/cursos-gratis/Webinar4";
 
 const queryClient = new QueryClient();
 
@@ -119,6 +126,15 @@ function App() {
             <Route path="/admin/upload-hero-video" element={<UploadHeroVideo />} />
             <Route path="/eventos/affiliate-dashboard" element={<AffiliateDashboard />} />
             <Route path="/sobre-mi" element={<SobreMi />} />
+            
+            {/* Webinar Funnel Routes */}
+            <Route path="/cursos-gratis" element={<CursosGratis />} />
+            <Route path="/cursos-gratis/lead-magnet" element={<LeadMagnet />} />
+            <Route path="/cursos-gratis/webinar-1" element={<Webinar1 />} />
+            <Route path="/cursos-gratis/webinar-2" element={<Webinar2 />} />
+            <Route path="/cursos-gratis/webinar-3" element={<Webinar3 />} />
+            <Route path="/cursos-gratis/webinar-4" element={<Webinar4 />} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
