@@ -18,6 +18,11 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
     console.log("ExplanationVideoPlayer received videoPath:", videoPath);
   }, [videoPath]);
 
+  // Clean reset of player state when videoPath changes
+  useEffect(() => {
+    setVideoPlaying(false);
+  }, [videoPath]);
+
   // Determine video type
   const isInstagramUrl = videoPath.includes('instagram.com') || videoPath.includes('instagr.am');
   const isVimeoUrl = videoPath.includes('vimeo.com') || videoPath.includes('player.vimeo.com');
@@ -88,10 +93,15 @@ export const ExplanationVideoPlayer: React.FC<ExplanationVideoPlayerProps> = ({ 
       );
     }
     
+    // Generate iframe URL with autoplay parameter and force https
+    const vimeoSrc = formattedVideoPath.includes('?') 
+      ? `${formattedVideoPath}&autoplay=1` 
+      : `${formattedVideoPath}?autoplay=1`;
+    
     return (
       <div className="w-full h-full">
         <iframe 
-          src={`${formattedVideoPath}?autoplay=1`}
+          src={vimeoSrc}
           className="w-full h-[600px] md:h-[700px]" 
           frameBorder="0"
           allow="autoplay; fullscreen; picture-in-picture"

@@ -18,10 +18,14 @@ const DespertarExplanation = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [prices, setPrices] = useState<EventPrice[]>([]);
   
+  // Definir URL de Vimeo directamente
   const vimeoUrl = "https://vimeo.com/1062910579/05e72b4425";
   const formattedVideoPath = formatVimeoUrl(vimeoUrl);
   
   useEffect(() => {
+    console.log("Using Vimeo URL:", vimeoUrl);
+    console.log("Formatted to:", formattedVideoPath);
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -69,7 +73,7 @@ const DespertarExplanation = () => {
     checkIfAdmin();
     loadPrices();
     return () => clearTimeout(timer);
-  }, []);
+  }, [formattedVideoPath]);
 
   const scrollToPricing = () => {
     const pricingSection = document.getElementById('pricing-section');
