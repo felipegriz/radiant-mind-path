@@ -19,7 +19,8 @@ const programas = [
 const eventosInmersion = [
   { name: "DESPERTAR 360", path: "/events/despertar-360" },
   { name: "CITA CON LO IMPOSIBLE", path: "/events/cita-con-lo-imposible" },
-  { name: "MISSION MASTERY", path: "/events/mission-mastery" }
+  { name: "MISSION MASTERY", path: "/events/mission-mastery" },
+  { name: "WAKE UP TONY 2025", path: "/events/wake-up-tony-2025" }
 ];
 
 const coachingOptions = [
