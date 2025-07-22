@@ -2,9 +2,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronDown, Star, CheckCircle } from "lucide-react";
-import wakeUpHeader from "@/assets/wake-up-header.jpg";
-import speakersCollage from "@/assets/speakers-collage.jpg";
-import dateLocationCard from "@/assets/date-location-card.jpg";
+import group96 from "@/assets/group-96.png";
+import speakersHorizontal from "@/assets/speakers-horizontal.png";
+import fechaLugar2 from "@/assets/fecha-lugar-2.png";
+import fechaLugar1 from "@/assets/fecha-lugar-1.png";
+import group50 from "@/assets/group-50.png";
+import group136 from "@/assets/group-136.png";
+import group137 from "@/assets/group-137.png";
+import group138 from "@/assets/group-138.png";
+import group139 from "@/assets/group-139.png";
+import group149 from "@/assets/group-149.png";
 
 const WakeUpTony2025 = () => {
   const [expandedPackage, setExpandedPackage] = useState<string | null>(null);
@@ -13,40 +20,21 @@ const WakeUpTony2025 = () => {
     setExpandedPackage(expandedPackage === packageName ? null : packageName);
   };
 
-  const testimonials = [
-    {
-      text: "Participar en Wake Up fue transformador. Los contactos que hice y las ideas que compartimos me ayudaron a darle un giro completo a mi negocio. Ahora tengo un socio estratégico gracias a este evento.",
-      author: "Javier López"
-    },
-    {
-      text: "Lo que más destaco de Wake Up es la energía que se siente al estar rodeado de emprendedores apasionados. Salí con una red de contactos que jamás habría imaginado.",
-      author: "Andrés Gutiérrez"
-    },
-    {
-      text: "Wake Up no es solo un evento, es un cambio de perspectiva. Los contactos que hice ahí están ayudándome a llevar mi empresa al siguiente nivel. Es una inversión que vale cada centavo.",
-      author: "Gabriela Martínez"
-    },
-    {
-      text: "Lo que más me impactó de Wake Up fue la calidad de las personas que conocí. Hacer networking nunca había sido tan fácil y efectivo. Me llevo grandes amigos y aliados estratégicos.",
-      author: "Luis Rodríguez"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-gray-900 to-black text-white overflow-x-hidden">
       {/* Fixed Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex space-x-8">
-              <a href="#tony" className="text-sm font-medium hover:text-purple-400 transition-colors">
-                ¿Quién es Felipe Griz?
+            <div className="flex space-x-8 text-sm">
+              <a href="#tony" className="font-medium hover:text-purple-400 transition-colors">
+                ¿Quien es Tony Robbins?
               </a>
-              <a href="#mentes" className="text-sm font-medium hover:text-purple-400 transition-colors">
+              <a href="#mentes" className="font-medium hover:text-purple-400 transition-colors">
                 MENTES MAESTRAS
               </a>
-              <a href="#es" className="text-sm font-medium hover:text-purple-400 transition-colors">
-                ¿ES WAKE UP CONFERENCES PARA MÍ?
+              <a href="#es" className="font-medium hover:text-purple-400 transition-colors">
+                ¿es WAKE UP CONFERENCES PARA MI?
               </a>
             </div>
             <Button className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-full px-6">
@@ -57,49 +45,28 @@ const WakeUpTony2025 = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${wakeUpHeader})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-gray-900/70 to-black/80"></div>
-        </div>
+      <section className="relative min-h-screen flex items-center justify-center pt-20 bg-gradient-to-br from-purple-900 via-gray-900 to-black">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width=%2260%22%20height=%2260%22%20viewBox=%220%200%2060%2060%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg%20fill=%22none%22%20fill-rule=%22evenodd%22%3E%3Cg%20fill=%22%23ffffff%22%20fill-opacity=%220.03%22%3E%3Ccircle%20cx=%227%22%20cy=%227%22%20r=%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
         
         <div className="relative z-10 container mx-auto px-4 text-center">
           {/* Logo */}
           <div className="mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-12 h-12 bg-white mr-4 transform rotate-45"></div>
-              <div className="w-8 h-8 bg-white mr-2 transform rotate-45"></div>
-              <div className="w-6 h-6 bg-white transform rotate-45"></div>
-            </div>
-            <h1 className="text-6xl md:text-8xl font-black mb-4">
-              WAKE UP
-            </h1>
-            <p className="text-2xl md:text-3xl font-light italic mb-2">
-              CONFERENCES INTERNACIONAL 2025
-            </p>
-            <p className="text-lg md:text-xl text-cyan-400 font-medium">
-              Con Felipe Griz
-            </p>
+            <img src={group96} alt="Wake Up Logo" className="mx-auto mb-8 max-w-md" />
           </div>
 
           <img 
-            src={speakersCollage} 
+            src={speakersHorizontal} 
             alt="Speakers" 
             className="mx-auto mb-8 rounded-lg max-w-4xl w-full"
           />
 
-          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold text-lg px-8 py-4 rounded-full">
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold text-lg px-8 py-4 rounded-full mb-12">
             QUIERO MI ENTRADA
           </Button>
 
-          <div className="mt-12 flex justify-center">
-            <img 
-              src={dateLocationCard} 
-              alt="03 y 04 de Octubre" 
-              className="max-w-md w-full rounded-lg"
-            />
+          <div className="flex justify-center space-x-8">
+            <img src={fechaLugar2} alt="Fecha y Lugar" className="max-w-xs" />
+            <img src={fechaLugar1} alt="Fecha y Lugar" className="max-w-xs" />
           </div>
         </div>
       </section>
@@ -110,13 +77,15 @@ const WakeUpTony2025 = () => {
           <h2 className="text-lg uppercase tracking-wider text-gray-300 mb-4">haz posible</h2>
           <h3 className="text-5xl md:text-6xl font-bold mb-8">lo imposible</h3>
           <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12">
-            Felipe Griz tiene un mensaje directo para ti. Descubre por qué ser parte de Wake Up Conferences 
+            Tony Robbins tiene un mensaje directo para ti. Descubre por qué ser parte de Wake Up Conferences 
             y cómo puede marcar un antes y un después en tu vida y tus negocios.
           </p>
           
           <div className="text-4xl md:text-5xl font-bold mb-8">
-            03 <span className="text-purple-400">y</span> 04 de Octubre
+            03 <span className="font-black">y</span> 04 de Octubre
           </div>
+          
+          <img src={group50} alt="Group 50" className="mx-auto mb-8 max-w-sm" />
           
           <Button className="bg-green-600 hover:bg-green-700 text-white font-bold text-lg px-8 py-4 rounded-full">
             QUIERO MI ENTRADA
@@ -124,22 +93,31 @@ const WakeUpTony2025 = () => {
         </div>
       </section>
 
-      {/* Felipe Griz Section */}
+      {/* Tony Robbins Section */}
       <section id="tony" className="py-20">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-12">
-            FELIPE <span className="font-black">GRIZ</span>
+            TONY <span className="font-black">ROBBINS</span>
           </h2>
-          <div className="max-w-4xl mx-auto text-lg text-gray-300 leading-relaxed">
+          <div className="max-w-4xl mx-auto text-lg text-gray-300 leading-relaxed mb-8">
             <p className="mb-6">
-              <strong className="text-white">Felipe Griz</strong> es un mentor, emprendedor y conferencista internacional 
-              reconocido por su enfoque en la <strong className="text-white">transformación personal y empresarial</strong>. 
-              Es ampliamente reconocido por su metodología en <strong className="text-white">desarrollo de liderazgo</strong>, 
-              estrategias de negocio y cambios organizacionales radicales.
+              <strong className="text-white">Tony Robbins</strong> (nacido como Anthony Jay Robbins el 29 de febrero de 1960) 
+              <strong className="text-white"> es un autor, coach, y orador</strong> estadounidense, conocido por sus seminarios y 
+              libros de autoayuda como <strong className="text-white">«Unlimited Power» y «Awaken the Giant Within».</strong> 
+              Es ampliamente reconocido por su enfoque en la <strong className="text-white">psicología del liderazgo,</strong> 
+              las negociaciones, y los cambios organizativos radicales. Robbins también es un emprendedor, escritor de éxito, 
+              <strong className="text-white">filántropo</strong>, y se le considera uno de los principales estrategas de la vida y los 
+              <strong className="text-white">negocios en Estados Unidos.</strong>
             </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto text-lg text-gray-300 leading-relaxed">
             <p>
-              Felipe también es un emprendedor exitoso, escritor y <strong className="text-white">filántropo</strong>, 
-              considerado uno de los principales estrategas de la vida y los negocios en Latinoamérica.
+              Tony Robbins (nacido como Anthony Jay Robbins el 29 de febrero de 1960) es un autor, coach, y orador estadounidense, 
+              conocido por sus seminarios y libros de autoayuda como «Unlimited Power» y «Awaken the Giant Within». Es ampliamente 
+              reconocido por su enfoque en la psicología del liderazgo, las negociaciones, y los cambios organizativos radicales. 
+              Robbins también es un emprendedor, escritor de éxito, filántropo, y se le considera uno de los principales estrategas 
+              de la vida y los negocios en Estados Unidos.
             </p>
           </div>
         </div>
@@ -153,14 +131,16 @@ const WakeUpTony2025 = () => {
           <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12">
             Durante dos días completos, cargados de energía, más de 10,000 emprendedores conectarán 
             en un espacio único para interactuar con los líderes, empresarios y mentores que están 
-            marcando la pauta y fortaleciendo el ecosistema empresarial en Latinoamérica.
+            marcando la pauta y fortaleciendo el ecosistema empresarial en Perú y Latinoamérica.
           </p>
 
-          {/* Image Gallery Placeholder */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white/10 rounded-lg h-64 flex items-center justify-center">
-                <span className="text-gray-400">Imagen del evento {i}</span>
+          <div className="w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mb-12 rounded"></div>
+
+          {/* Image Gallery */}
+          <div className="flex overflow-x-auto space-x-4 mb-12 pb-4">
+            {[...Array(9)].map((_, i) => (
+              <div key={i} className="bg-white/10 rounded-lg min-w-[200px] h-32 flex items-center justify-center">
+                <span className="text-gray-400 text-sm">Imagen {i + 1}</span>
               </div>
             ))}
           </div>
@@ -175,23 +155,102 @@ const WakeUpTony2025 = () => {
       {/* Cinco Mentes Section */}
       <section className="py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
             CINCO MENTES QUE TRANSFORMAN NEGOCIOS
           </h2>
           
+          <h3 className="text-6xl font-black mb-12 text-purple-400">SHARKS</h3>
+          
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
-            {["Speaker 1", "Speaker 2", "Speaker 3", "Speaker 4", "Speaker 5"].map((speaker, index) => (
-              <div key={index} className="bg-white/10 rounded-lg p-6 h-32 flex items-center justify-center">
-                <span className="text-sm">{speaker}</span>
-              </div>
-            ))}
+            <img src={group136} alt="Shark 1" className="mx-auto" />
+            <img src={group137} alt="Shark 2" className="mx-auto" />
+            <img src={group138} alt="Shark 3" className="mx-auto" />
+            <img src={group139} alt="Shark 4" className="mx-auto" />
+            <img src={group149} alt="Shark 5" className="mx-auto" />
           </div>
 
-          <p className="text-xl mb-8">El panel más influyente de Latinoamérica llega a Wake up conferences 2025</p>
+          <p className="text-xl mb-8">El panel más influyente de Colombia llega a Wake up conferences 2025</p>
           
           <Button className="bg-green-600 hover:bg-green-700 text-white font-bold text-lg px-8 py-4 rounded-full">
             QUIERO MI ENTRADA
           </Button>
+        </div>
+      </section>
+
+      {/* Jorge Loza Section */}
+      <section className="py-20 bg-gradient-to-r from-purple-900/30 to-gray-900/50">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold mb-4">¿Quién es Jorge Loza?</h2>
+              <p className="text-xl text-purple-400 mb-6">La visión detrás de Wake Up Conferences</p>
+              <p className="text-gray-300 leading-relaxed">
+                Jorge Loza es empresario, conferencista internacional y fundador de Ciudapolis y Wake Up Conferences, 
+                reconocidas plataformas de desarrollo inmobiliario y transformación personal en Latinoamérica. Con una 
+                visión estratégica y enfoque espiritual aplicado a los negocios, ha inspirado a miles de emprendedores 
+                a construir con propósito, liderazgo y resultados sostenibles.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-8 mt-8">
+                <div className="text-center">
+                  <div className="text-4xl font-bold">+10</div>
+                  <div className="text-sm text-gray-400">Años de experiencia</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold">+500</div>
+                  <div className="text-sm text-gray-400">Empresarios impactados</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold">+50</div>
+                  <div className="text-sm text-gray-400">Eventos realizados</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-bold">+100</div>
+                  <div className="text-sm text-gray-400">Millones generados</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white/10 rounded-lg h-96 flex items-center justify-center">
+              <span className="text-gray-400">Imagen de Jorge Loza</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Jenny Barrera Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="bg-white/10 rounded-lg h-96 flex items-center justify-center">
+              <span className="text-gray-400">Imagen de Jenny Barrera</span>
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold mb-4">¿Quién es Jenny Barrera?</h2>
+              <p className="text-xl text-purple-400 mb-6">La estrategia detrás de Wake Up Conferences</p>
+              <ul className="space-y-4 text-gray-300">
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                  <span>Cofundadora de Ciudapolis, la primera franquicia inmobiliaria del Perú, y de Wake Up Conferences, 
+                    la conferencia de transformación más impactante de la región.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                  <span>Lidera el desarrollo de comunidades sostenibles, generando impacto social real y oportunidades 
+                    de libertad financiera para miles de personas</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                  <span>Inspira desde el escenario y ejecuta en el campo, empoderando a líderes con alma y guiando 
+                    especialmente a mujeres a construir negocios con propósito.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                  <span>Su misión es abrir caminos donde antes no los había, impulsando una nueva generación de 
+                    liderazgo consciente, humano y próspero.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -204,61 +263,69 @@ const WakeUpTony2025 = () => {
             <Card className="bg-white/5 border-white/10 text-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">Experiencia <span className="font-black">FOUNDATION</span></h3>
-                <div className="text-3xl font-bold mb-6">USD $ 127</div>
+                <div className="bg-white/10 rounded-lg h-20 mb-4 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm">Icono Foundation</span>
+                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-700 mb-4">
+                  COMPRAR ENTRADA
+                </Button>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Acceso a la conferencia 2 días</span>
+                    <span>Acceso a la conferencia 2 días.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Asiento presencial en categoría Foundation</span>
+                    <span>Asiento presencial en categoría Foundation.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>10 raciones de alimentos donados</span>
+                    <span>10 raciones de alimentos donados a la Fundación Ciudapolis para personas en situación de necesidad.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Traducción simultánea</span>
+                    <span>Traducción simultánea.</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  COMPRAR ENTRADA
-                </Button>
+                <div className="text-3xl font-bold text-center">USD $ 127</div>
+                <div className="bg-white/10 rounded-lg h-8 mt-4"></div>
               </CardContent>
             </Card>
 
             {/* Executive Package */}
             <Card className="bg-white/5 border-white/10 text-white">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-4">Experiencia <span className="font-black">EJECUTIVA</span></h3>
-                <div className="text-3xl font-bold mb-6">USD $ 332</div>
+                <h3 className="text-2xl font-bold mb-4">Experiencia <span className="font-black">ejecutiva</span></h3>
+                <div className="bg-white/10 rounded-lg h-20 mb-4 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm">Icono Ejecutiva</span>
+                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-700 mb-4">
+                  COMPRAR ENTRADA
+                </Button>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Acceso a la conferencia 2 días</span>
+                    <span>Acceso a la conferencia 2 días.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Asiento presencial en categoría Ejecutiva</span>
+                    <span>Asiento presencial en categoría Ejectutiva.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Welcome Kit exclusivo ZONA EJECUTIVA</span>
+                    <span>Welcome Kit exclusivo ZONA EJECUTIVA.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>20 raciones de alimentos donados</span>
+                    <span>20 raciones de alimentos donados a la Fundación Ciudapolis, para personas en situación de necesidad.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Traducción simultánea</span>
+                    <span>Traducción simultánea.</span>
                   </li>
                 </ul>
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  COMPRAR ENTRADA
-                </Button>
+                <div className="text-3xl font-bold text-center">USD $ 332</div>
+                <div className="bg-white/10 rounded-lg h-8 mt-4"></div>
               </CardContent>
             </Card>
 
@@ -266,27 +333,32 @@ const WakeUpTony2025 = () => {
             <Card className="bg-white/5 border-white/10 text-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">Experiencia <span className="font-black">LIFE MASTERY</span></h3>
-                <div className="text-3xl font-bold mb-6">USD $ 612</div>
+                <div className="bg-white/10 rounded-lg h-20 mb-4 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm">Icono Life Mastery</span>
+                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-700 mb-4">
+                  COMPRAR ENTRADA
+                </Button>
                 <ul className="space-y-3 mb-4">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Acceso a la conferencia 2 días</span>
+                    <span>Acceso a la conferencia 2 días.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Asiento presencial categoría LIFE MASTERY</span>
+                    <span>Asiento presencial en categoría LIFE MASTERY (3ra zona en explanada).</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Certificado digital de participación</span>
+                    <span>Certificado digital de participación.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Welcome Kit exclusivo zona LIFE MASTERY</span>
+                    <span>Welcome Kit exclusivo zona LIFE MASTERY.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>40 raciones de alimentos donados</span>
+                    <span>40 raciones de alimentos donados a la Fundación Ciudapolis, para personas en situación de necesidad.</span>
                   </li>
                 </ul>
                 
@@ -304,11 +376,19 @@ const WakeUpTony2025 = () => {
                   <div className="space-y-2 mb-4 text-sm">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>1 Master class con Felipe Griz (virtual)</span>
+                      <span>1 Master class con ISMAEL CALA (virtual).</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Acceso a grabación de ponencias por 30 días</span>
+                      <span>1 Master class con JORGE LOZA (virtual).</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>1 Master class con SUSI VEREECKEN (virtual).</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>Acceso a grabación de ponencias de speaker seleccionados durante 30 días.</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
@@ -321,9 +401,8 @@ const WakeUpTony2025 = () => {
                   </div>
                 )}
 
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  COMPRAR ENTRADA
-                </Button>
+                <div className="text-3xl font-bold text-center">USD $ 612</div>
+                <div className="bg-white/10 rounded-lg h-8 mt-4"></div>
               </CardContent>
             </Card>
 
@@ -331,27 +410,32 @@ const WakeUpTony2025 = () => {
             <Card className="bg-white/5 border-white/10 text-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">Experiencia <span className="font-black">PLATINUM</span></h3>
-                <div className="text-3xl font-bold mb-6">USD $ 1060</div>
+                <div className="bg-white/10 rounded-lg h-20 mb-4 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm">Icono Platinum</span>
+                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-700 mb-4">
+                  COMPRAR ENTRADA
+                </Button>
                 <ul className="space-y-3 mb-4">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Acceso a la conferencia 2 días</span>
+                    <span>Acceso a la conferencia 2 días.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Asiento presencial categoría PLATINUM</span>
+                    <span>Asiento presencial en categoría PLATINUM(1ra zona en explanada).</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Certificado digital de participación</span>
+                    <span>Certificado digital de participación.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Welcome Kit exclusivo zona PLATINUM</span>
+                    <span>Welcome Kit exclusivo zona PLATINUM.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>80 raciones de alimentos donados</span>
+                    <span>80 raciones de alimentos donados a la Fundación Ciudapolis, para personas en situación de necesidad.</span>
                   </li>
                 </ul>
                 
@@ -369,11 +453,23 @@ const WakeUpTony2025 = () => {
                   <div className="space-y-2 mb-4 text-sm">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>2 Master classes con Felipe Griz (virtual)</span>
+                      <span>2 Master class con ISMAEL CALA (virtual).</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Acceso a grabación de ponencias por 60 días</span>
+                      <span>2 Master class con JORGE LOZA (virtual).</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>2 Master class con SUSI VEREECKEN (virtual).</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>Acceso a grabación de ponencias de speaker seleccionados durante 60 días.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>Traducción simultánea</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
@@ -381,18 +477,25 @@ const WakeUpTony2025 = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>10% de descuento en merch WUC</span>
+                      <span>10% de descuento en compra</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>1 libro de Felipe Griz</span>
+                      <span>10% de descuento en compras de merch WUC.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>1 libro de Jorge Loza.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>1 libro de Tony Robbins.</span>
                     </div>
                   </div>
                 )}
 
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  COMPRAR ENTRADA
-                </Button>
+                <div className="text-3xl font-bold text-center">USD $ 1060</div>
+                <div className="bg-white/10 rounded-lg h-8 mt-4"></div>
               </CardContent>
             </Card>
 
@@ -400,27 +503,32 @@ const WakeUpTony2025 = () => {
             <Card className="bg-white/5 border-white/10 text-white">
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-4">Experiencia <span className="font-black">DIAMOND</span></h3>
-                <div className="text-3xl font-bold mb-6">USD $ 1356</div>
+                <div className="bg-white/10 rounded-lg h-20 mb-4 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm">Icono Diamond</span>
+                </div>
+                <Button className="w-full bg-green-600 hover:bg-green-700 mb-4">
+                  COMPRAR ENTRADA
+                </Button>
                 <ul className="space-y-3 mb-4">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Acceso a la conferencia 2 días</span>
+                    <span>Acceso a la conferencia 2 días.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Asiento presencial categoría DIAMOND</span>
+                    <span>Asiento presencial en categoría DIAMOND (1ra zona en explanada).</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Welcome Kit exclusivo zona DIAMOND</span>
+                    <span>Welcome Kit exclusivo zona DIAMOND.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>100 raciones de alimentos donados</span>
+                    <span>100 raciones de alimentos donados a la Fundación Ciudapolis, para personas en situación de necesidad.</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
-                    <span>Traducción simultánea</span>
+                    <span>Traducción simultánea.</span>
                   </li>
                 </ul>
                 
@@ -438,53 +546,95 @@ const WakeUpTony2025 = () => {
                   <div className="space-y-2 mb-4 text-sm">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Certificado digital de participación</span>
+                      <span>Certificado digital de participación.</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>2 Master classes con Felipe Griz (virtual)</span>
+                      <span>2 Master class con ISMAEL CALA (virtual).</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Acceso a grabación de ponencias por 120 días</span>
+                      <span>2 Master class con JORGE LOZA (virtual).</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Almuerzo 2 días (3 y 4 de octubre)</span>
+                      <span>2 Master class con SUSI VEREECKEN (virtual).</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Acceso a Coffee break</span>
+                      <span>Acceso a grabación de ponencias de speaker seleccionados durante 120 días.</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Acceso a after party VIP</span>
+                      <span>Almuerzo 2 días (3 y 4 de octubre).</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>Networking entre empresarios LATAM</span>
+                      <span>Acceso a Coffee break.</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span>1 libro de Felipe Griz</span>
+                      <span>Acceso a after party VIP al cierre del evento.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>Oportunidad de networking entre empresarios LATAM.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>10% de descuento en compras de merch WUC.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>1 libro de Jorge Loza.</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <span>1 libro de Tony Robbins.</span>
                     </div>
                   </div>
                 )}
 
-                <Button className="w-full bg-green-600 hover:bg-green-700">
-                  COMPRAR ENTRADA
-                </Button>
+                <div className="text-3xl font-bold text-center">USD $ 1356</div>
+                <div className="bg-white/10 rounded-lg h-8 mt-4"></div>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
-      {/* Mentes Maestras Section */}
-      <section id="mentes" className="py-20">
+      {/* Experiencia Wake Up */}
+      <section className="py-20">
         <div className="container mx-auto px-4 text-center">
+          <div className="bg-white/10 rounded-lg h-64 mb-8 flex items-center justify-center">
+            <span className="text-gray-400">Imagen Experiencia Wake Up</span>
+          </div>
+          
+          <p className="text-lg mb-4">Disfruta de este y más beneficios en la exclusiva <em>Experiencia Wake Up.</em></p>
+          
+          <h2 className="text-4xl font-bold mb-4">EXPERIENCIA</h2>
+          <h3 className="text-6xl font-black mb-4">WAKE UP</h3>
+          <h4 className="text-2xl mb-8">UNA VIVENCIA TRANSFORMADORA</h4>
+          
+          <div className="bg-white/10 rounded-lg h-32 mb-8 flex items-center justify-center">
+            <span className="text-gray-400">Imagen adicional</span>
+          </div>
+          
+          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold text-lg px-8 py-4 rounded-full">
+            QUIERO MI ENTRADA
+          </Button>
+        </div>
+      </section>
+
+      {/* Mentes Maestras */}
+      <section id="mentes" className="py-20 bg-gradient-to-r from-purple-900/30 to-gray-900/50">
+        <div className="container mx-auto px-4 text-center">
+          <div className="w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mb-8 rounded"></div>
+          
           <h2 className="text-lg uppercase tracking-wider text-gray-300 mb-4">mentes</h2>
           <h3 className="text-5xl md:text-6xl font-bold mb-8">maestras</h3>
+          
+          <div className="w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mb-8 rounded"></div>
           
           <p className="text-xl text-gray-300 max-w-4xl mx-auto mb-12">
             <strong className="text-white">Wake Up Conferences</strong> va más allá de un evento de crecimiento. 
@@ -495,7 +645,7 @@ const WakeUpTony2025 = () => {
 
           {/* Speakers Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-12">
-            {Array.from({ length: 12 }, (_, i) => (
+            {Array.from({ length: 13 }, (_, i) => (
               <div key={i} className="bg-white/10 rounded-lg p-4 h-32 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer">
                 <span className="text-sm">Speaker {i + 1}</span>
               </div>
@@ -509,22 +659,34 @@ const WakeUpTony2025 = () => {
       </section>
 
       {/* Conexiones de Por Vida */}
-      <section className="py-20 bg-gradient-to-r from-purple-900/30 to-gray-900/50">
+      <section className="py-20">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-lg uppercase tracking-wider text-gray-300 mb-4">CONEXIONES</h2>
           <h3 className="text-5xl md:text-6xl font-bold mb-8">DE POR VIDA</h3>
           
-          <div className="max-w-4xl mx-auto mb-12">
-            <div className="bg-white/10 rounded-lg h-64 mb-8 flex items-center justify-center">
-              <span className="text-gray-400">Imagen de networking</span>
-            </div>
-            
-            <p className="text-lg text-gray-300 mb-6">
-              Wake Up Conferences va más allá de un evento de crecimiento. Es una experiencia de élite 
-              diseñada para expandir tu visión, multiplicar tu impacto y conectarte con líderes que ya 
-              están viviendo lo que tú estás construyendo.
-            </p>
+          <div className="w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mb-8 rounded"></div>
+          
+          <div className="bg-white/10 rounded-lg h-64 mb-8 flex items-center justify-center">
+            <span className="text-gray-400">Imagen de networking</span>
           </div>
+          
+          <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+            Wake Up Conferences va más allá de un evento de crecimiento. Es una experiencia de élite 
+            diseñada para expandir tu visión, multiplicar tu impacto y conectarte con líderes que ya 
+            están viviendo lo que tú estás construyendo.
+          </p>
+          
+          <p className="text-lg text-gray-300 mb-6 max-w-2xl mx-auto">
+            Wake Up Conferences va más allá de un evento de crecimiento. Es una experiencia de élite 
+            diseñada para expandir tu visión, multiplicar tu impacto y conectarte con líderes que ya 
+            están viviendo lo que tú estás construyendo.
+          </p>
+          
+          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+            Wake Up Conferences va más allá de un evento de crecimiento. Es una experiencia de élite 
+            diseñada para expandir tu visión, multiplicar tu impacto y conectarte con líderes que ya 
+            están viviendo lo que tú estás construyendo.
+          </p>
 
           <Button className="bg-green-600 hover:bg-green-700 text-white font-bold text-lg px-8 py-4 rounded-full">
             QUIERO MI ENTRADA
@@ -533,20 +695,21 @@ const WakeUpTony2025 = () => {
       </section>
 
       {/* ¿Es Wake Up Para Mí? */}
-      <section id="es" className="py-20">
+      <section id="es" className="py-20 bg-gradient-to-r from-gray-900/50 to-purple-900/30">
         <div className="container mx-auto px-4 text-center">
+          <div className="bg-white/10 rounded-lg h-32 mb-8 flex items-center justify-center">
+            <span className="text-gray-400">Imagen decorativa</span>
+          </div>
+          
           <h2 className="text-lg uppercase tracking-wider text-gray-300 mb-4">¿es wake up conferences</h2>
-          <h3 className="text-5xl md:text-6xl font-bold mb-12">PARA MÍ?</h3>
+          <h3 className="text-5xl md:text-6xl font-bold mb-12">PARA MI?</h3>
+          
+          <div className="w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto mb-8 rounded"></div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            {[
-              "Si buscas transformar tu mindset empresarial",
-              "Si quieres conectar con líderes de alto nivel",
-              "Si estás listo para expandir tu red de contactos",
-              "Si quieres llevar tu negocio al siguiente nivel"
-            ].map((text, index) => (
+            {["C1", "C2", "C3", "C4"].map((image, index) => (
               <div key={index} className="bg-white/10 rounded-lg p-6 h-40 flex items-center justify-center text-center">
-                <p className="text-lg">{text}</p>
+                <span className="text-gray-400">{image}</span>
               </div>
             ))}
           </div>
@@ -558,46 +721,66 @@ const WakeUpTony2025 = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-gradient-to-r from-gray-900/50 to-purple-900/30">
+      <section className="py-20">
         <div className="container mx-auto px-4">
+          <div className="bg-white/10 rounded-lg h-4 mb-12"></div>
+          
           <div className="grid md:grid-cols-2 gap-12">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="text-center">
-                <div className="flex justify-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-lg text-gray-300 mb-4 italic">
-                  "{testimonial.text}"
-                </p>
-                <p className="text-white font-semibold">– {testimonial.author}</p>
+            <div className="text-center">
+              <div className="flex justify-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                ))}
               </div>
-            ))}
+              <p className="text-lg text-gray-300 mb-4 italic">
+                "Participar en Wake Up fue transformador. Los contactos que hice y las ideas que compartimos me ayudaron a darle un giro completo a mi negocio. Ahora tengo un socio estratégico gracias a este evento."
+              </p>
+              <p className="text-white font-semibold">– Javier López</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex justify-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-lg text-gray-300 mb-4 italic">
+                "Lo que más destaco de Wake Up es la energía que se siente al estar rodeado de emprendedores apasionados. Salí con una red de contactos que jamás habría imaginado."
+              </p>
+              <p className="text-white font-semibold">– Andrés Gutiérrez</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex justify-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-lg text-gray-300 mb-4 italic">
+                "Wake Up no es solo un evento, es un cambio de perspectiva. Los contactos que hice ahí están ayudándome a llevar mi empresa al siguiente nivel. Es una inversión que vale cada centavo."
+              </p>
+              <p className="text-white font-semibold">– Gabriela Martínez</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="flex justify-center mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                ))}
+              </div>
+              <p className="text-lg text-gray-300 mb-4 italic">
+                "Lo que más me impactó de Wake Up fue la calidad de las personas que conocí. Hacer networking nunca había sido tan fácil y efectivo. Me llevo grandes amigos y aliados estratégicos."
+              </p>
+              <p className="text-white font-semibold">– Luis Rodríguez</p>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Footer CTA */}
-      <section className="py-20 bg-gradient-to-r from-purple-800 to-blue-800">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-8">
-            ¿Estás Listo Para Despertar Tu Potencial?
-          </h2>
-          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-            Únete a miles de emprendedores que ya transformaron sus vidas y negocios. 
-            Los cupos son limitados.
-          </p>
-          <Button className="bg-green-600 hover:bg-green-700 text-white font-bold text-xl px-12 py-6 rounded-full">
-            RESERVAR MI LUGAR AHORA
-          </Button>
         </div>
       </section>
 
       {/* WhatsApp Float Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Button className="bg-green-500 hover:bg-green-600 rounded-full w-16 h-16 shadow-lg">
-          <span className="text-2xl">💬</span>
+        <Button className="bg-green-500 hover:bg-green-600 rounded-full w-16 h-16 shadow-lg flex items-center justify-center">
+          <span className="text-white text-sm">Reserva tu entrada aquí</span>
         </Button>
       </div>
     </div>
