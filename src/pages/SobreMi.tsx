@@ -17,8 +17,14 @@ const SobreMi = () => {
         >
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 uppercase">Felipe Griz</h1>
-            <p className="text-xl text-gray-300">
-              Mentor, Coach y Especialista en Desarrollo Personal
+            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              COACH, CONSULTOR Y CONFERENCISTA INTERNACIONAL.
+            </p>
+            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mt-4">
+              EXPERTO EN CRECIMIENTO PERSONAL Y COMPORTAMIENTO HUMANO, CON DOS DÉCADAS DE EXPERIENCIA IMPACTANDO MILES DE PERSONAS EN LATINOAMÉRICA, ESPAÑA Y ESTADOS UNIDOS.
+            </p>
+            <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mt-4">
+              Y DISCÍPULO PRINCIPAL DE TONY ROBBINS EN HABLA HISPANA CON MÁS DE 50 EVENTOS DE FORMACIÓN CON ÉL Y DE COACHING PRIVADO.
             </p>
           </div>
 
