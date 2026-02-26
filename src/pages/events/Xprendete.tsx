@@ -25,9 +25,9 @@ const Xprendete = () => {
           <img
             src={xprendeteHero}
             alt="XPRÉNDETE"
-            className="w-full h-full object-cover object-top opacity-40"
+            className="w-full h-full object-cover object-center opacity-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1008]/60 via-[#1a1008]/40 to-[#1a1008]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1008]/30 via-transparent to-[#1a1008]" />
         </div>
 
         <div className="container relative z-10 mx-auto px-4 text-center py-20">
