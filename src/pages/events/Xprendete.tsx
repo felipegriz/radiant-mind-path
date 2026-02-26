@@ -96,7 +96,7 @@ const Xprendete = () => {
             transition={{ duration: 0.6, delay: 0.7 }}
           >
             <a
-              href="https://wa.me/18333104753"
+              href="https://wa.me/18333104753?text=Quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20XPRÉNDETE"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -200,7 +200,7 @@ const Xprendete = () => {
               Bogotá · Marzo 6 al 8 · Cupos limitados
             </p>
             <a
-              href="https://wa.me/18333104753"
+              href="https://wa.me/18333104753?text=Quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20XPRÉNDETE"
               target="_blank"
               rel="noopener noreferrer"
             >
