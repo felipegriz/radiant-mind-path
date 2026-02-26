@@ -87,14 +87,14 @@ const calendar: CalendarMonth[] = [
     month: "AGOSTO",
     events: [
       { title: "Códigos de Libertad", dates: "8 agosto", location: "Ciudad de Panamá", color: "bg-blue-500" },
-      { title: "Business Mastery – Tony Robbins", dates: "12 – 16 agosto", color: "bg-red-500" },
+      { title: "Business Mastery", dates: "12 – 16 agosto", color: "bg-red-500" },
       { title: "Despertar 360° #2", dates: "28 – 30 agosto", location: "Bogotá", color: "bg-red-500" },
     ],
   },
   {
     month: "SEPTIEMBRE",
     events: [
-      { title: "UPW – Tony Robbins", dates: "3 – 6 septiembre", location: "Colonia, Alemania", color: "bg-red-500" },
+      { title: "UPW", dates: "3 – 6 septiembre", location: "Colonia, Alemania", color: "bg-red-500" },
       { title: "Mission Mastery", dates: "24 – 28 septiembre", location: "Peñón", color: "bg-purple-500" },
     ],
   },
@@ -108,14 +108,14 @@ const calendar: CalendarMonth[] = [
   {
     month: "NOVIEMBRE",
     events: [
-      { title: "UPW Miami – Tony Robbins", dates: "5 – 8 noviembre", location: "Miami", color: "bg-red-500" },
+      { title: "UPW Miami", dates: "5 – 8 noviembre", location: "Miami", color: "bg-red-500" },
       { title: "Cita con lo Imposible", dates: "20 – 22 noviembre", location: "Miami", color: "bg-orange-500" },
     ],
   },
   {
     month: "DICIEMBRE",
     events: [
-      { title: "Date With Destiny – Tony Robbins", dates: "4 – 9 diciembre", location: "West Palm Beach", color: "bg-red-500" },
+      { title: "Date With Destiny", dates: "4 – 9 diciembre", location: "West Palm Beach", color: "bg-red-500" },
       { title: "AYA RETREAT", dates: "17 – 21 diciembre", color: "bg-emerald-500" },
     ],
   },
