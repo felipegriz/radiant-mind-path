@@ -51,7 +51,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-tight"
+              className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white leading-tight"
             >
               Crea una vida<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/90 to-white/80">
