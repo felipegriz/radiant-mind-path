@@ -1,26 +1,31 @@
 
 import { motion } from "framer-motion";
 import { Brain, Target, Map } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   {
     icon: Brain,
     title: "SEMINARIOS DE INMERSIÓN",
     description: "Formato de alto impacto que garantiza la retención de la información y tu transformación",
+    link: "/events/seminarios",
   },
   {
     icon: Target,
     title: "RE-CONDICIONAMIENTO MENTAL",
     description: "Aprende a reprogramar tu mente para cambiar tu vida para siempre",
+    link: null,
   },
   {
     icon: Map,
     title: "MENTORÍA & COACHING AVANZADO",
     description: "Trabaja de la mano de uno de los Top 10 Coaches de habla hispana para transformar tu vida y tu negocio",
+    link: null,
   },
 ];
 
 const FeaturesSection = () => {
+  const navigate = useNavigate();
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -36,7 +41,8 @@ const FeaturesSection = () => {
           whileInView="animate"
           variants={fadeInUp}
           viewport={{ once: true }}
-          className="glass-card rounded-2xl p-8 hover-lift"
+          className={`glass-card rounded-2xl p-8 hover-lift ${feature.link ? "cursor-pointer" : ""}`}
+          onClick={() => feature.link && navigate(feature.link)}
         >
           <feature.icon className="w-12 h-12 text-white mb-4" />
           <h3 className="text-2xl font-semibold mb-5 text-white">{feature.title}</h3>
