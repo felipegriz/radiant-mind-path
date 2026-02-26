@@ -95,13 +95,19 @@ const Xprendete = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
           >
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-[#c9a84c] to-[#f5d780] text-[#1a1008] hover:from-[#f5d780] hover:to-[#c9a84c] text-lg px-10 py-7 rounded-full font-bold shadow-[0_0_30px_rgba(201,168,76,0.4)] transition-all hover:shadow-[0_0_50px_rgba(201,168,76,0.6)]"
+            <a
+              href="https://wa.me/18333104753"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Reserva Tu Lugar
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-[#c9a84c] to-[#f5d780] text-[#1a1008] hover:from-[#f5d780] hover:to-[#c9a84c] text-lg px-10 py-7 rounded-full font-bold shadow-[0_0_30px_rgba(201,168,76,0.4)] transition-all hover:shadow-[0_0_50px_rgba(201,168,76,0.6)]"
+              >
+                Reserva Tu Lugar
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
           </motion.div>
         </div>
       </section>
@@ -193,13 +199,19 @@ const Xprendete = () => {
             <p className="text-white/60 text-lg mb-8 max-w-xl mx-auto">
               Bogotá · Marzo 6 al 8 · Cupos limitados
             </p>
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-[#c9a84c] to-[#f5d780] text-[#1a1008] hover:from-[#f5d780] hover:to-[#c9a84c] text-lg px-10 py-7 rounded-full font-bold shadow-[0_0_30px_rgba(201,168,76,0.4)] transition-all hover:shadow-[0_0_50px_rgba(201,168,76,0.6)]"
+            <a
+              href="https://wa.me/18333104753"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Reserva Tu Lugar Ahora
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-[#c9a84c] to-[#f5d780] text-[#1a1008] hover:from-[#f5d780] hover:to-[#c9a84c] text-lg px-10 py-7 rounded-full font-bold shadow-[0_0_30px_rgba(201,168,76,0.4)] transition-all hover:shadow-[0_0_50px_rgba(201,168,76,0.6)]"
+              >
+                Reserva Tu Lugar Ahora
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </a>
           </motion.div>
         </div>
       </section>
