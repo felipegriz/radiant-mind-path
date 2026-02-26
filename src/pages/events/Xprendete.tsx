@@ -18,98 +18,39 @@ const Xprendete = () => {
     <div className="min-h-screen bg-[#1a1008]">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        {/* Background image */}
-        <div className="absolute inset-0 z-0">
+      {/* Hero - Image as protagonist */}
+      <section className="relative overflow-hidden">
+        <div className="relative w-full">
           <img
             src={xprendeteHero}
-            alt="XPRÉNDETE"
-            className="w-full h-full object-cover object-center opacity-80"
+            alt="XPRÉNDETE - Seminario de Alto Impacto"
+            className="w-full h-auto object-contain"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1008]/30 via-transparent to-[#1a1008]" />
+          {/* Bottom gradient fade into page */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#1a1008] to-transparent" />
         </div>
 
-        <div className="container relative z-10 mx-auto px-4 text-center py-20">
-          <motion.p
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-[#c9a84c] uppercase tracking-[0.3em] text-sm md:text-base mb-4"
+        {/* CTA overlaid at the bottom of the image */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="absolute bottom-12 left-0 right-0 z-10 text-center"
+        >
+          <a
+            href="https://wa.me/18333104753?text=Quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20XPRÉNDETE"
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Por primera vez en Bogotá
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center justify-center gap-3 mb-8"
-          >
-            <CalendarDays className="w-5 h-5 text-[#c9a84c]" />
-            <span className="text-[#c9a84c] text-lg md:text-xl font-bold tracking-wider">
-              MARZO 6 AL 8
-            </span>
-            <span className="text-[#c9a84c]/60 mx-2">|</span>
-            <MapPin className="w-5 h-5 text-[#c9a84c]" />
-            <span className="text-[#c9a84c] text-lg md:text-xl font-bold tracking-wider">
-              BOGOTÁ
-            </span>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-white/70 uppercase tracking-widest text-sm mb-2"
-          >
-            Seminario de alto impacto:
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black uppercase mb-4"
-            style={{
-              background: "linear-gradient(180deg, #f5d780 0%, #c9a84c 40%, #8b6914 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              textShadow: "0 0 60px rgba(201, 168, 76, 0.3)",
-            }}
-          >
-            XPRÉNDETE
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-xl md:text-2xl lg:text-3xl font-bold text-white/90 tracking-wide mb-10"
-          >
-            CÓMO GANAR EL JUEGO DEL DINERO
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-          >
-            <a
-              href="https://wa.me/18333104753?text=Quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20XPRÉNDETE"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-[#c9a84c] to-[#f5d780] text-[#1a1008] hover:from-[#f5d780] hover:to-[#c9a84c] text-lg px-10 py-7 rounded-full font-bold shadow-[0_0_30px_rgba(201,168,76,0.4)] transition-all hover:shadow-[0_0_50px_rgba(201,168,76,0.6)]"
             >
-              <Button
-                size="lg"
-                className="bg-gradient-to-r from-[#c9a84c] to-[#f5d780] text-[#1a1008] hover:from-[#f5d780] hover:to-[#c9a84c] text-lg px-10 py-7 rounded-full font-bold shadow-[0_0_30px_rgba(201,168,76,0.4)] transition-all hover:shadow-[0_0_50px_rgba(201,168,76,0.6)]"
-              >
-                Reserva Tu Lugar
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </a>
-          </motion.div>
-        </div>
+              Reserva Tu Lugar
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </a>
+        </motion.div>
       </section>
 
       {/* Features Section */}
