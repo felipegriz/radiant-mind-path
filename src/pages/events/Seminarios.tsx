@@ -94,6 +94,7 @@ const calendar: CalendarMonth[] = [
   {
     month: "SEPTIEMBRE",
     events: [
+      { title: "UPW – Tony Robbins", dates: "3 – 6 septiembre", location: "Colonia, Alemania", color: "bg-red-500" },
       { title: "Mission Mastery", dates: "24 – 28 septiembre", location: "Peñón", color: "bg-purple-500" },
     ],
   },
