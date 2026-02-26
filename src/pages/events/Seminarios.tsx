@@ -80,7 +80,7 @@ const calendar: CalendarMonth[] = [
     month: "JULIO",
     events: [
       { title: "Códigos de Libertad", dates: "11 julio", location: "Lima, Perú", color: "bg-blue-500" },
-      { title: "Mindvalley University", dates: "22 julio – 2 agosto", color: "bg-cyan-500" },
+      { title: "Coaching Sessions", dates: "22 julio – 2 agosto", location: "Tallin, Estonia", color: "bg-cyan-500" },
     ],
   },
   {
