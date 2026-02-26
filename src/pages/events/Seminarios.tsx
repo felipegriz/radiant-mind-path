@@ -55,7 +55,7 @@ const calendar: CalendarMonth[] = [
     month: "MARZO",
     events: [
       { title: "XPRÉNDETE", dates: "6 – 8 marzo", color: "bg-purple-500" },
-      { title: "Códigos de Libertad #1", dates: "26 marzo", location: "Bogotá", color: "bg-blue-500" },
+      { title: "Códigos de Libertad", dates: "26 marzo", location: "Bogotá", color: "bg-blue-500" },
     ],
   },
   {
@@ -72,21 +72,21 @@ const calendar: CalendarMonth[] = [
   {
     month: "JUNIO",
     events: [
-      { title: "Códigos de Libertad #3", dates: "4 junio", location: "Ciudad de México", color: "bg-blue-500" },
+      { title: "Códigos de Libertad", dates: "4 junio", location: "Ciudad de México", color: "bg-blue-500" },
       { title: "Cita con lo Imposible", dates: "11 – 15 junio", location: "Cartagena", color: "bg-orange-500" },
     ],
   },
   {
     month: "JULIO",
     events: [
-      { title: "Códigos de Libertad #4", dates: "11 julio", location: "Lima, Perú", color: "bg-blue-500" },
+      { title: "Códigos de Libertad", dates: "11 julio", location: "Lima, Perú", color: "bg-blue-500" },
       { title: "Mindvalley University", dates: "22 julio – 2 agosto", color: "bg-cyan-500" },
     ],
   },
   {
     month: "AGOSTO",
     events: [
-      { title: "Códigos de Libertad #5", dates: "8 agosto", location: "Ciudad de Panamá", color: "bg-blue-500" },
+      { title: "Códigos de Libertad", dates: "8 agosto", location: "Ciudad de Panamá", color: "bg-blue-500" },
       { title: "Business Mastery – Tony Robbins", dates: "12 – 16 agosto", color: "bg-red-500" },
       { title: "Despertar 360° #2", dates: "28 – 30 agosto", location: "Bogotá", color: "bg-red-500" },
     ],
