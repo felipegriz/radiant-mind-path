@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,52 @@ const seminars = [
   },
 ];
 
+type CalendarEvent = {
+  title: string;
+  dates: string;
+  location?: string;
+  color: string;
+};
+
+type CalendarMonth = {
+  month: string;
+  events: CalendarEvent[];
+};
+
+const calendar: CalendarMonth[] = [
+  {
+    month: "MARZO",
+    events: [
+      { title: "XPRÉNDETE X", dates: "6 – 8 marzo", color: "bg-purple-500" },
+      { title: "Códigos de Libertad", dates: "26 marzo", color: "bg-blue-500" },
+    ],
+  },
+  {
+    month: "ABRIL",
+    events: [
+      { title: "Retiro AYA", dates: "9 – 13 abril", location: "Tulum", color: "bg-emerald-500" },
+      { title: "Despertar 360°", dates: "17 – 19 abril", location: "Bogotá", color: "bg-red-500" },
+    ],
+  },
+  {
+    month: "MAYO",
+    events: [],
+  },
+  {
+    month: "JUNIO",
+    events: [
+      { title: "Códigos de Libertad #3", dates: "4 junio", color: "bg-blue-500" },
+      { title: "Cita con lo Imposible", dates: "11 – 15 junio", location: "Cartagena", color: "bg-orange-500" },
+    ],
+  },
+  {
+    month: "SEPTIEMBRE",
+    events: [
+      { title: "Mission Mastery", dates: "24 – 28 septiembre", location: "Peñón", color: "bg-purple-500" },
+    ],
+  },
+];
+
 const Seminarios = () => {
   const navigate = useNavigate();
 
@@ -46,6 +92,7 @@ const Seminarios = () => {
       <Navbar />
 
       <div className="container mx-auto px-4 py-16">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -60,14 +107,15 @@ const Seminarios = () => {
           </p>
         </motion.div>
 
-        <div className="grid gap-6 max-w-4xl mx-auto">
+        {/* Seminars list */}
+        <div className="grid gap-6 max-w-4xl mx-auto mb-24">
           {seminars.map((seminar, index) => (
             <motion.div
               key={seminar.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-card rounded-2xl p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover-lift cursor-pointer"
+              className={`glass-card rounded-2xl p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover-lift ${seminar.available ? "cursor-pointer" : ""}`}
               onClick={() => seminar.available && navigate(seminar.path)}
             >
               <div className="flex-1">
@@ -96,6 +144,72 @@ const Seminarios = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Calendar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="flex items-center gap-3 mb-10 justify-center">
+            <CalendarDays className="w-8 h-8 text-foreground" />
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground uppercase">
+              Calendario 2026
+            </h2>
+          </div>
+
+          <div className="space-y-8">
+            {calendar.map((month, mIndex) => (
+              <motion.div
+                key={month.month}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: mIndex * 0.08 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="text-xl font-bold text-muted-foreground mb-3 tracking-widest">
+                  {month.month}
+                </h3>
+
+                {month.events.length === 0 ? (
+                  <p className="text-muted-foreground/60 italic pl-4 border-l-2 border-border">
+                    Sin eventos presenciales
+                  </p>
+                ) : (
+                  <div className="grid gap-3">
+                    {month.events.map((event) => (
+                      <div
+                        key={event.title + event.dates}
+                        className="glass-card rounded-xl p-5 flex flex-col sm:flex-row sm:items-center gap-3"
+                      >
+                        <div className={`w-3 h-3 rounded-full ${event.color} shrink-0 mt-1 sm:mt-0`} />
+                        <div className="flex-1">
+                          <span className="text-lg font-semibold text-foreground">
+                            {event.title}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-4 text-muted-foreground text-sm">
+                          <span className="flex items-center gap-1.5">
+                            <CalendarDays className="w-4 h-4" />
+                            {event.dates}
+                          </span>
+                          {event.location && (
+                            <span className="flex items-center gap-1.5">
+                              <MapPin className="w-4 h-4" />
+                              {event.location}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
