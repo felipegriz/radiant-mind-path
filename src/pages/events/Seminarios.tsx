@@ -109,8 +109,8 @@ const calendar: CalendarMonth[] = [
     month: "NOVIEMBRE",
     events: [
       { title: "UPW Miami – Tony Robbins", dates: "5 – 8 noviembre", location: "Miami", color: "bg-red-500" },
-      { title: "Cita con lo Imposible (tentativa)", dates: "20 – 22 noviembre", location: "Miami", color: "bg-orange-500" },
-      { title: "Cita con lo Imposible (tentativa)", dates: "27 – 29 noviembre", location: "Miami", color: "bg-orange-500" },
+      { title: "Cita con lo Imposible", dates: "20 – 22 noviembre", location: "Miami", color: "bg-orange-500" },
+      { title: "Cita con lo Imposible", dates: "27 – 29 noviembre", location: "Miami", color: "bg-orange-500" },
     ],
   },
   {
