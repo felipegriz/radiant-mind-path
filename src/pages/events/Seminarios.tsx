@@ -22,7 +22,7 @@ const seminars = [
     title: "XPRÉNDETE",
     description: "Un seminario diseñado para sorprenderte y sacarte de tu zona de confort hacia resultados extraordinarios.",
     path: "/events/xprendete",
-    available: false,
+    available: true,
   },
   {
     title: "CITA CON LO IMPOSIBLE",

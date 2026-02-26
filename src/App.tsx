@@ -33,6 +33,7 @@ import Webinar3 from "./pages/cursos-gratis/Webinar3";
 import Webinar4 from "./pages/cursos-gratis/Webinar4";
 import WakeUpTony2025 from "./pages/events/WakeUpTony2025";
 import Seminarios from "./pages/events/Seminarios";
+import Xprendete from "./pages/events/Xprendete";
 
 const queryClient = new QueryClient();
 
@@ -104,6 +105,7 @@ function App() {
             <Route path="/events/mission-mastery" element={<MissionMastery />} />
             <Route path="/events/wake-up-tony-2025" element={<WakeUpTony2025 />} />
             <Route path="/events/seminarios" element={<Seminarios />} />
+            <Route path="/events/xprendete" element={<Xprendete />} />
             <Route 
               path="/student-area" 
               element={
