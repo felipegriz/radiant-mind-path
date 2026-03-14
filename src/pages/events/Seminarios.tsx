@@ -54,7 +54,6 @@ const calendar: CalendarMonth[] = [
   {
     month: "MARZO",
     events: [
-      { title: "XPRÉNDETE", dates: "22 – 24 mayo", color: "bg-purple-500" },
       { title: "Códigos de Libertad", dates: "26 marzo", location: "Bogotá", color: "bg-blue-500" },
     ],
   },
@@ -67,7 +66,9 @@ const calendar: CalendarMonth[] = [
   },
   {
     month: "MAYO",
-    events: [],
+    events: [
+      { title: "XPRÉNDETE", dates: "22 – 24 mayo", color: "bg-purple-500" },
+    ],
   },
   {
     month: "JUNIO",
