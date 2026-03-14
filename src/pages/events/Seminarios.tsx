@@ -60,6 +60,7 @@ const calendar: CalendarMonth[] = [
   {
     month: "ABRIL",
     events: [
+      { title: "Códigos de Libertad", dates: "8 abril", color: "bg-blue-500" },
       { title: "AYA RETREAT", dates: "9 – 13 abril", location: "Tulum", color: "bg-emerald-500" },
       { title: "Despertar 360°", dates: "17 – 19 abril", location: "Bogotá", color: "bg-red-500" },
     ],
