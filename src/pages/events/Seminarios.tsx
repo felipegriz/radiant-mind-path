@@ -53,9 +53,7 @@ type CalendarMonth = {
 const calendar: CalendarMonth[] = [
   {
     month: "MARZO",
-    events: [
-      { title: "Códigos de Libertad", dates: "26 marzo", location: "Bogotá", color: "bg-blue-500" },
-    ],
+    events: [],
   },
   {
     month: "ABRIL",
