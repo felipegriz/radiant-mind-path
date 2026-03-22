@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MessageCircle, ArrowDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ExplanationVideoPlayer } from "@/components/video/ExplanationVideoPlayer";
 import { CheckCircle } from "lucide-react";
