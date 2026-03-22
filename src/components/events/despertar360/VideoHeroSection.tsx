@@ -46,6 +46,37 @@ export const VideoHeroSection = ({ videoPath, isLoading }: VideoHeroSectionProps
             </div>
           )}
         </div>
+
+        {/* Two CTA buttons */}
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-4 justify-center mb-10">
+          <Button
+            onClick={() => {
+              const pricingSection = document.getElementById('pricing-section');
+              if (pricingSection) {
+                pricingSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg rounded-full font-semibold"
+            size="lg"
+          >
+            <ArrowDown className="mr-2 h-5 w-5" />
+            Quiero mi entrada con el descuento
+          </Button>
+          
+          <a
+            href="https://wa.me/18333104753?text=Hola%2C%20quiero%20más%20información%20sobre%20Despertar%20360"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-8 py-6 text-lg rounded-full font-semibold w-full"
+              size="lg"
+            >
+              <MessageCircle className="mr-2 h-5 w-5" />
+              Quiero hablar con alguien del equipo
+            </Button>
+          </a>
+        </div>
         
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xl mb-6">
