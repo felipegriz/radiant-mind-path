@@ -101,6 +101,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/events/despertar-360" element={<Despertar360 />} />
             <Route path="/events/despertar-explanation" element={<DespertarExplanation />} />
+            <Route path="/events/codigos-de-libertad" element={<Navigate to="/events/seminarios" replace />} />
             <Route path="/events/cita-con-lo-imposible" element={<CitaConLoImposible />} />
             <Route path="/events/mission-mastery" element={<MissionMastery />} />
             <Route path="/events/wake-up-tony-2025" element={<WakeUpTony2025 />} />
