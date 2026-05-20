@@ -122,6 +122,11 @@ const Navbar = () => {
             <Link to="/contacto" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Contacto
             </Link>
+
+            <Link to="/terminos-y-condiciones" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Términos y Condiciones
+            </Link>
+
           </div>
         </div>
       </div>

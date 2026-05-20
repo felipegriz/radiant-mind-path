@@ -34,6 +34,8 @@ import Webinar4 from "./pages/cursos-gratis/Webinar4";
 import WakeUpTony2025 from "./pages/events/WakeUpTony2025";
 import Seminarios from "./pages/events/Seminarios";
 import Xprendete from "./pages/events/Xprendete";
+import TerminosYCondiciones from "./pages/TerminosYCondiciones";
+
 
 const queryClient = new QueryClient();
 
@@ -142,7 +144,10 @@ function App() {
             <Route path="/cursos-gratis/webinar-3" element={<Webinar3 />} />
             <Route path="/cursos-gratis/webinar-4" element={<Webinar4 />} />
             
+            <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones />} />
+
             <Route path="*" element={<NotFound />} />
+
           </Routes>
         </Router>
       </TooltipProvider>
