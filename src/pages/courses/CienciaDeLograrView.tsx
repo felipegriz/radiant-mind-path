@@ -82,22 +82,6 @@ const CienciaDeLograrView = () => {
             />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            {[
-              "Módulo 1 — Fundamentos",
-              "Módulo 2 — El sistema",
-              "Módulo 3 — Aplicación práctica",
-              "Módulo 4 — Maestría",
-            ].map((m) => (
-              <div
-                key={m}
-                className="bg-white/5 p-5 rounded border border-white/10"
-              >
-                <h3 className="font-semibold mb-1">{m}</h3>
-                <p className="text-sm text-gray-400">Contenido próximamente</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
