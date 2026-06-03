@@ -71,10 +71,15 @@ const CienciaDeLograrView = () => {
             Bienvenido. Aquí encontrarás todo el contenido del curso.
           </p>
 
-          <div className="aspect-video bg-black/60 rounded-lg border border-white/10 flex items-center justify-center mb-8">
-            <p className="text-gray-400">
-              Próximamente: video principal del curso
-            </p>
+          <div className="aspect-video bg-black rounded-lg border border-white/10 overflow-hidden mb-8">
+            <iframe
+              src="https://player.vimeo.com/video/672437080?title=0&byline=0&portrait=0"
+              className="w-full h-full"
+              frameBorder={0}
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              title="La Ciencia de Lograr"
+            />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
