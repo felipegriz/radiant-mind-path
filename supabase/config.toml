@@ -1,3 +1,6 @@
 
 [functions.create-checkout]
 verify_jwt = false
+
+[functions.enroll-course]
+verify_jwt = false
