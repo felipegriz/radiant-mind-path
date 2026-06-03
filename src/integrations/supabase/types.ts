@@ -134,6 +134,81 @@ export type Database = {
         }
         Relationships: []
       }
+      course_access: {
+        Row: {
+          amount_paid: number
+          course_slug: string
+          created_at: string
+          discount_code: string | null
+          email: string
+          full_name: string | null
+          id: string
+          payment_method: string
+          status: string
+          stripe_session_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_paid?: number
+          course_slug: string
+          created_at?: string
+          discount_code?: string | null
+          email: string
+          full_name?: string | null
+          id?: string
+          payment_method?: string
+          status?: string
+          stripe_session_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_paid?: number
+          course_slug?: string
+          created_at?: string
+          discount_code?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          payment_method?: string
+          status?: string
+          stripe_session_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      course_leads: {
+        Row: {
+          amount_paid: number
+          course_slug: string
+          created_at: string
+          discount_code: string | null
+          email: string
+          full_name: string
+          id: string
+          status: string
+        }
+        Insert: {
+          amount_paid?: number
+          course_slug: string
+          created_at?: string
+          discount_code?: string | null
+          email: string
+          full_name: string
+          id?: string
+          status?: string
+        }
+        Update: {
+          amount_paid?: number
+          course_slug?: string
+          created_at?: string
+          discount_code?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       enrollments: {
         Row: {
           created_at: string | null
