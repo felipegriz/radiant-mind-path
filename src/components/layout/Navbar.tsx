@@ -80,9 +80,6 @@ const Navbar = () => {
                     Cursos Gratis
                   </Link>
 
-                  <Link to="/cursos" onClick={closeMobile} className="px-3 py-3 text-gray-200 hover:bg-white/5 rounded-md text-base font-medium">
-                    Cursos
-                  </Link>
 
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="eventos" className="border-white/10">
