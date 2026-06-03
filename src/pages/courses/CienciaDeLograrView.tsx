@@ -68,7 +68,7 @@ const CienciaDeLograrView = () => {
             La Ciencia de Lograr
           </h1>
           <p className="text-gray-300 mb-8">
-            Bienvenido. Aquí encontrarás todo el contenido del curso.
+            FELIPE GRIZ te va a enseñar la habilidad maestra número uno que Tony Robbins dice que garantiza una vida extraordinaria, y que Felipe lleva más de 50 eventos, masterizándola con él.
           </p>
 
           <div className="aspect-video bg-black rounded-lg border border-white/10 overflow-hidden mb-8">
