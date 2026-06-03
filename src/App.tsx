@@ -146,6 +146,7 @@ function App() {
             <Route path="/cursos-gratis/webinar-4" element={<Webinar4 />} />
             
             <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones />} />
+            <Route path="/cursos" element={<Cursos />} />
 
             <Route path="*" element={<NotFound />} />
 
