@@ -252,6 +252,7 @@ const StudentArea = () => {
                         Próximamente
                       </Button>
                     )}
+                    </div>
                   </div>
                 );
               })}
