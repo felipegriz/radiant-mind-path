@@ -13,15 +13,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
+import cienciaDeLograrImg from "@/assets/ciencia-de-lograr.jpeg.asset.json";
+
 const cursos = [
-  {
-    title: "La Octava Área",
-    description:
-      "Descubre el área oculta que influye en todas las demás áreas de tu vida y aprende a dominarla.",
-    path: "/courses/octava-area",
-    slug: "octava-area",
-    available: true,
-  },
   {
     title: "La Ciencia de Lograr",
     description:
@@ -29,6 +23,15 @@ const cursos = [
     path: "/courses/ciencia-de-lograr",
     viewPath: "/courses/ciencia-de-lograr/view",
     slug: "ciencia-de-lograr",
+    image: cienciaDeLograrImg.url,
+    available: true,
+  },
+  {
+    title: "La Octava Área",
+    description:
+      "Descubre el área oculta que influye en todas las demás áreas de tu vida y aprende a dominarla.",
+    path: "/courses/octava-area",
+    slug: "octava-area",
     available: true,
   },
   {
@@ -211,10 +214,18 @@ const StudentArea = () => {
                 return (
                   <div
                     key={curso.title}
-                    className={`bg-white/5 p-6 rounded-lg border border-white/10 transition-all ${
+                    className={`bg-white/5 rounded-lg border border-white/10 transition-all overflow-hidden ${
                       curso.available ? "hover:border-accent/50" : "opacity-70"
                     }`}
                   >
+                    {(curso as any).image && (
+                      <img
+                        src={(curso as any).image}
+                        alt={curso.title}
+                        className="w-full aspect-square object-cover"
+                      />
+                    )}
+                    <div className="p-6">
                     <h3 className="text-xl font-bold mb-3 text-accent">
                       {curso.title}
                     </h3>
@@ -241,6 +252,7 @@ const StudentArea = () => {
                         Próximamente
                       </Button>
                     )}
+                    </div>
                   </div>
                 );
               })}
