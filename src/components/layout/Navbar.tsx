@@ -80,6 +80,10 @@ const Navbar = () => {
                     Cursos Gratis
                   </Link>
 
+                  <Link to="/cursos" onClick={closeMobile} className="px-3 py-3 text-gray-200 hover:bg-white/5 rounded-md text-base font-medium">
+                    Cursos
+                  </Link>
+
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="eventos" className="border-white/10">
                       <AccordionTrigger className="px-3 text-gray-200 hover:text-white text-base font-medium">
@@ -179,6 +183,10 @@ const Navbar = () => {
 
             <Link to="/cursos-gratis" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Cursos Gratis
+            </Link>
+
+            <Link to="/cursos" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Cursos
             </Link>
             
             <DropdownMenu>
