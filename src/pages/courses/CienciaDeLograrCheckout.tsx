@@ -6,15 +6,50 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { CheckCircle2, Loader2, XCircle } from "lucide-react";
+
+const BASE_PRICE = 250;
+const VALID_CODES: Record<string, number> = { TIGRE: 100 };
 
 const CienciaDeLograrCheckout = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [discountCode, setDiscountCode] = useState("");
+  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const [discountPct, setDiscountPct] = useState(0);
+  const [codeError, setCodeError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const finalPrice = BASE_PRICE - (BASE_PRICE * discountPct) / 100;
+  const isFree = finalPrice <= 0;
+
+  const handleValidateCode = () => {
+    const normalized = discountCode.trim().toUpperCase();
+    if (!normalized) {
+      setCodeError("Ingresa un código");
+      return;
+    }
+    const pct = VALID_CODES[normalized];
+    if (!pct) {
+      setAppliedCode(null);
+      setDiscountPct(0);
+      setCodeError("Código no válido");
+      return;
+    }
+    setAppliedCode(normalized);
+    setDiscountPct(pct);
+    setCodeError(null);
+    toast({ title: "Código aplicado", description: `Descuento del ${pct}%` });
+  };
+
+  const handleRemoveCode = () => {
+    setAppliedCode(null);
+    setDiscountPct(0);
+    setDiscountCode("");
+    setCodeError(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +70,7 @@ const CienciaDeLograrCheckout = () => {
           courseSlug: "ciencia-de-lograr",
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
-          discountCode: discountCode.trim(),
+          discountCode: appliedCode || "",
           successUrl: `${origin}/courses/ciencia-de-lograr/view`,
           cancelUrl: `${origin}/courses/ciencia-de-lograr/checkout`,
         },
@@ -45,7 +80,6 @@ const CienciaDeLograrCheckout = () => {
       if (data?.error) throw new Error(data.error);
 
       if (data?.free) {
-        // Store access info for confirmation page
         sessionStorage.setItem(
           "course_access_info",
           JSON.stringify({
@@ -124,21 +158,67 @@ const CienciaDeLograrCheckout = () => {
               <Label htmlFor="discount" className="text-white mb-2 block">
                 Código de descuento (opcional)
               </Label>
-              <Input
-                id="discount"
-                type="text"
-                value={discountCode}
-                onChange={(e) => setDiscountCode(e.target.value)}
-                placeholder="Ingresa tu código"
-                maxLength={50}
-                className="bg-white/10 border-white/20 text-white uppercase"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="discount"
+                  type="text"
+                  value={discountCode}
+                  onChange={(e) => {
+                    setDiscountCode(e.target.value);
+                    if (appliedCode) {
+                      setAppliedCode(null);
+                      setDiscountPct(0);
+                    }
+                    setCodeError(null);
+                  }}
+                  placeholder="Ingresa tu código"
+                  maxLength={50}
+                  disabled={!!appliedCode}
+                  className="bg-white/10 border-white/20 text-white uppercase flex-1"
+                />
+                {appliedCode ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleRemoveCode}
+                  >
+                    Quitar
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleValidateCode}
+                  >
+                    Validar
+                  </Button>
+                )}
+              </div>
+              {appliedCode && (
+                <p className="text-sm text-accent mt-2 flex items-center gap-1">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Código "{appliedCode}" aplicado ({discountPct}% de descuento)
+                </p>
+              )}
+              {codeError && (
+                <p className="text-sm text-red-400 mt-2 flex items-center gap-1">
+                  <XCircle className="w-4 h-4" />
+                  {codeError}
+                </p>
+              )}
             </div>
 
             <div className="border-t border-white/10 pt-5">
               <div className="flex justify-between text-lg mb-4">
                 <span className="text-gray-300">Total</span>
-                <span className="font-bold text-accent">$250 USD</span>
+                <span className="font-bold text-accent">
+                  {discountPct > 0 && (
+                    <span className="text-gray-500 line-through mr-2 text-base font-normal">
+                      ${BASE_PRICE}
+                    </span>
+                  )}
+                  ${finalPrice} USD
+                </span>
               </div>
               <Button
                 type="submit"
@@ -150,12 +230,16 @@ const CienciaDeLograrCheckout = () => {
                     <Loader2 className="w-5 h-5 animate-spin mr-2" />
                     Procesando...
                   </>
+                ) : isFree ? (
+                  "Acceder al Curso Gratis"
                 ) : (
                   "Pagar y Acceder al Curso"
                 )}
               </Button>
               <p className="text-xs text-gray-400 text-center mt-3">
-                Si tienes un código válido, el precio se ajustará automáticamente.
+                {isFree
+                  ? "Tu código cubre el 100% del valor del curso."
+                  : "Pago seguro procesado por Stripe."}
               </p>
             </div>
           </form>
