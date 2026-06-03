@@ -114,14 +114,7 @@ function App() {
             <Route path="/events/wake-up-tony-2025" element={<WakeUpTony2025 />} />
             <Route path="/events/seminarios" element={<Seminarios />} />
             <Route path="/events/xprendete" element={<Xprendete />} />
-            <Route 
-              path="/student-area" 
-              element={
-                <ProtectedRoute>
-                  <StudentArea />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/student-area" element={<StudentArea />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/reset-password" element={<ResetPassword />} />
             <Route path="/contacto" element={<Contacto />} />
