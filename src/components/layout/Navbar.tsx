@@ -184,6 +184,10 @@ const Navbar = () => {
             <Link to="/cursos-gratis" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
               Cursos Gratis
             </Link>
+
+            <Link to="/cursos" className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium">
+              Cursos
+            </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger className="px-4 py-2 text-gray-300 hover:text-white transition-colors rounded-md text-sm font-medium inline-flex items-center flex-col leading-tight">
