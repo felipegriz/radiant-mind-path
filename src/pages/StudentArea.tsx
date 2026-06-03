@@ -13,15 +13,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
+import cienciaDeLograrImg from "@/assets/ciencia-de-lograr.jpeg.asset.json";
+
 const cursos = [
-  {
-    title: "La Octava Área",
-    description:
-      "Descubre el área oculta que influye en todas las demás áreas de tu vida y aprende a dominarla.",
-    path: "/courses/octava-area",
-    slug: "octava-area",
-    available: true,
-  },
   {
     title: "La Ciencia de Lograr",
     description:
@@ -29,6 +23,15 @@ const cursos = [
     path: "/courses/ciencia-de-lograr",
     viewPath: "/courses/ciencia-de-lograr/view",
     slug: "ciencia-de-lograr",
+    image: cienciaDeLograrImg.url,
+    available: true,
+  },
+  {
+    title: "La Octava Área",
+    description:
+      "Descubre el área oculta que influye en todas las demás áreas de tu vida y aprende a dominarla.",
+    path: "/courses/octava-area",
+    slug: "octava-area",
     available: true,
   },
   {
