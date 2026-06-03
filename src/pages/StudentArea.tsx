@@ -214,10 +214,18 @@ const StudentArea = () => {
                 return (
                   <div
                     key={curso.title}
-                    className={`bg-white/5 p-6 rounded-lg border border-white/10 transition-all ${
+                    className={`bg-white/5 rounded-lg border border-white/10 transition-all overflow-hidden ${
                       curso.available ? "hover:border-accent/50" : "opacity-70"
                     }`}
                   >
+                    {(curso as any).image && (
+                      <img
+                        src={(curso as any).image}
+                        alt={curso.title}
+                        className="w-full aspect-square object-cover"
+                      />
+                    )}
+                    <div className="p-6">
                     <h3 className="text-xl font-bold mb-3 text-accent">
                       {curso.title}
                     </h3>
