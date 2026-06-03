@@ -12,6 +12,14 @@ const cursos = [
     available: true,
   },
   {
+    title: "La Ciencia de Lograr",
+    description:
+      "La habilidad maestra número uno que Tony Robbins dice que garantiza una vida extraordinaria.",
+    path: "/courses/ciencia-de-lograr",
+    cta: "Ver Curso",
+    available: true,
+  },
+  {
     title: "ACCIONADORES",
     description:
       "Programa online en vivo para pasar a la acción y crear resultados reales en tu vida.",

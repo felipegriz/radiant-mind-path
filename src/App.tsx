@@ -36,6 +36,10 @@ import Seminarios from "./pages/events/Seminarios";
 import Xprendete from "./pages/events/Xprendete";
 import TerminosYCondiciones from "./pages/TerminosYCondiciones";
 import Cursos from "./pages/Cursos";
+import CienciaDeLograr from "./pages/courses/CienciaDeLograr";
+import CienciaDeLograrCheckout from "./pages/courses/CienciaDeLograrCheckout";
+import CienciaDeLograrAccess from "./pages/courses/CienciaDeLograrAccess";
+import CienciaDeLograrView from "./pages/courses/CienciaDeLograrView";
 
 
 const queryClient = new QueryClient();
@@ -147,6 +151,10 @@ function App() {
             
             <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones />} />
             <Route path="/cursos" element={<Cursos />} />
+            <Route path="/courses/ciencia-de-lograr" element={<CienciaDeLograr />} />
+            <Route path="/courses/ciencia-de-lograr/checkout" element={<CienciaDeLograrCheckout />} />
+            <Route path="/courses/ciencia-de-lograr/access" element={<CienciaDeLograrAccess />} />
+            <Route path="/courses/ciencia-de-lograr/view" element={<CienciaDeLograrView />} />
 
             <Route path="*" element={<NotFound />} />
 
