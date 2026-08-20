@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Copy } from "lucide-react";
+import { CheckCircle2, Copy, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -15,18 +15,53 @@ interface AccessInfo {
 
 const CienciaDeLograrAccess = () => {
   const [info, setInfo] = useState<AccessInfo | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [autoLoggingIn, setAutoLoggingIn] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
-    const raw = sessionStorage.getItem("course_access_info");
-    if (!raw) {
-      navigate("/courses/ciencia-de-lograr/checkout");
-      return;
-    }
-    setInfo(JSON.parse(raw));
-  }, [navigate]);
+    const run = async () => {
+      if (sessionId) {
+        setLoading(true);
+        try {
+          const { data, error } = await supabase.functions.invoke(
+            "fulfill-course-payment",
+            { body: { sessionId } }
+          );
+          if (error) throw error;
+          if (data?.error) throw new Error(data.error);
+
+          const payload: AccessInfo = {
+            email: data.email,
+            password: data.password ?? null,
+            userExisted: !!data.userExisted,
+            courseSlug: data.courseSlug || "ciencia-de-lograr",
+          };
+          sessionStorage.setItem("course_access_info", JSON.stringify(payload));
+          setInfo(payload);
+        } catch (e: any) {
+          setErrorMsg(
+            e.message || "No pudimos confirmar tu pago. Escríbenos y lo resolvemos."
+          );
+        } finally {
+          setLoading(false);
+        }
+        return;
+      }
+
+      const raw = sessionStorage.getItem("course_access_info");
+      if (!raw) {
+        navigate("/courses/ciencia-de-lograr/checkout");
+        return;
+      }
+      setInfo(JSON.parse(raw));
+    };
+    run();
+  }, [navigate, sessionId]);
 
   const copy = (txt: string) => {
     navigator.clipboard.writeText(txt);
@@ -51,7 +86,38 @@ const CienciaDeLograrAccess = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-8 h-8 animate-spin text-accent" />
+        <p className="text-gray-300">Confirmando tu pago...</p>
+      </div>
+    );
+  }
+
+  if (errorMsg) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
+        <Navbar />
+        <div className="container mx-auto px-4 py-20 text-center max-w-xl">
+          <h1 className="text-2xl font-bold mb-4">No pudimos confirmar tu acceso</h1>
+          <p className="text-gray-300 mb-6">{errorMsg}</p>
+          <a
+            href="https://wa.me/18333104753?text=Pagu%C3%A9%20La%20Ciencia%20de%20Lograr%20y%20no%20puedo%20acceder"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button className="bg-accent hover:bg-accent/80 text-black">
+              Hablar con el equipo
+            </Button>
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   if (!info) return null;
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
