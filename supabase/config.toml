@@ -4,3 +4,7 @@ verify_jwt = false
 
 [functions.enroll-course]
 verify_jwt = false
+
+[functions.fulfill-course-payment]
+verify_jwt = false
+

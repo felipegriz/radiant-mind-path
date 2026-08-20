@@ -71,7 +71,7 @@ const CienciaDeLograrCheckout = () => {
           fullName: fullName.trim(),
           email: email.trim().toLowerCase(),
           discountCode: appliedCode || "",
-          successUrl: `${origin}/courses/ciencia-de-lograr/view`,
+          successUrl: `${origin}/courses/ciencia-de-lograr/access?session_id={CHECKOUT_SESSION_ID}`,
           cancelUrl: `${origin}/courses/ciencia-de-lograr/checkout`,
         },
       });
