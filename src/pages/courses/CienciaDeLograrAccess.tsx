@@ -26,6 +26,20 @@ const CienciaDeLograrAccess = () => {
   useEffect(() => {
     const run = async () => {
       if (sessionId) {
+        // If we already fulfilled this session, reuse the stored credentials so
+        // a refresh doesn't wipe the generated password.
+        const cachedRaw = localStorage.getItem(`course_access_info_${sessionId}`);
+        if (cachedRaw) {
+          try {
+            const cached: AccessInfo = JSON.parse(cachedRaw);
+            setInfo(cached);
+            sessionStorage.setItem("course_access_info", cachedRaw);
+            return;
+          } catch {
+            // fall through and re-fulfill
+          }
+        }
+
         setLoading(true);
         try {
           const { data, error } = await supabase.functions.invoke(
@@ -41,7 +55,9 @@ const CienciaDeLograrAccess = () => {
             userExisted: !!data.userExisted,
             courseSlug: data.courseSlug || "ciencia-de-lograr",
           };
-          sessionStorage.setItem("course_access_info", JSON.stringify(payload));
+          const serialized = JSON.stringify(payload);
+          sessionStorage.setItem("course_access_info", serialized);
+          localStorage.setItem(`course_access_info_${sessionId}`, serialized);
           setInfo(payload);
         } catch (e: any) {
           setErrorMsg(
